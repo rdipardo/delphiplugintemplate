@@ -1,0 +1,20 @@
+[repository]
+native = CRLF
+
+[patterns]
+*.dfm     = native
+*.dpr     = native
+*.dproj   = native
+*.inc     = native
+*.lfm     = native
+*.lpr     = native
+*.lpi     = native
+*.pas     = native
+*.cfg     = native
+*.dof     = native
+*.ini     = native
+*.bat     = native
+*.cmd     = native
+*.bmp     = BIN
+*.ico     = BIN
+*.*res    = BIN

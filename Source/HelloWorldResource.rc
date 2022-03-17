@@ -1,0 +1,3 @@
+TB_BMP BITMAP "Resources\\tbtest.bmp"
+TB_ICON ICON "Resources\\tbtest.ico"
+TB_DM_ICON ICON "Resources\\tbtestdm.ico"
