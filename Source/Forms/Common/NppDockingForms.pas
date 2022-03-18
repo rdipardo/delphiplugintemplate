@@ -136,40 +136,44 @@ begin
 
   self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ADDINFO;
 
-  GetMem(self.ToolbarData.Title, 500 * sizeof(nppPChar));
-  GetMem(self.ToolbarData.ModuleName, 1000 * sizeof(nppPChar));
-  GetMem(self.ToolbarData.AdditionalInfo, 1000 * sizeof(nppPChar));
+  GetMem(self.ToolbarData.Title, MAX_PATH * sizeof(nppPChar));
+  GetMem(self.ToolbarData.ModuleName, MAX_PATH * sizeof(nppPChar));
+  GetMem(self.ToolbarData.AdditionalInfo, MAX_PATH * sizeof(nppPChar));
 
 {$IFDEF NPPUNICODE}
-  StringToWideChar(self.Caption, self.ToolbarData.Title, 500);
-  GetModuleFileNameW(HInstance, self.ToolbarData.ModuleName, 1000);
-  StringToWideChar(ExtractFileName(self.ToolbarData.ModuleName),
-    self.ToolbarData.ModuleName, 1000);
-  StringToWideChar('', self.ToolbarData.AdditionalInfo, 1);
-  SendMessageW(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0,
-    Integer(@self.ToolbarData));
+  StringToWideChar(self.Caption, self.ToolbarData.Title, MAX_PATH);
+  SetLastError(0);
+  GetModuleFileNameW(HInstance, self.ToolbarData.ModuleName, MAX_PATH);
+  if GetLastError = ERROR_SUCCESS then
+  begin
+    StringToWideChar(ExtractFileName(self.ToolbarData.ModuleName),
+      self.ToolbarData.ModuleName, MAX_PATH);
+    StringToWideChar('', self.ToolbarData.AdditionalInfo, 1);
+  end;
 {$ELSE}
   StrCopy(self.ToolbarData.Title, PChar(self.Caption));
   GetModuleFileNameA(HInstance, self.ToolbarData.ModuleName, 1000);
   StrLCopy(self.ToolbarData.ModuleName,
     PChar(ExtractFileName(self.ToolbarData.ModuleName)), 1000);
   StrCopy(self.ToolbarData.AdditionalInfo, PChar(''));
-  SendMessageA(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0,
-    Integer(@self.ToolbarData));
 {$ENDIF}
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0,
+    LPARAM(@self.ToolbarData));
   self.Visible := true;
 end;
 
 procedure TNppDockingForm.Show;
 begin
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_DMMSHOW, 0, LPARAM(self.Handle));
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMSHOW, 0,
+    LPARAM(self.Handle));
   inherited;
   self.DoShow;
 end;
 
 procedure TNppDockingForm.Hide;
 begin
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_DMMHIDE, 0, LPARAM(self.Handle));
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMHIDE, 0,
+    LPARAM(self.Handle));
   self.DoHide;
 end;
 
@@ -208,13 +212,13 @@ end;
 procedure TNppDockingForm.UpdateDisplayInfo(Info: String);
 begin
 {$IFDEF NPPUNICODE}
-  StringToWideChar(Info, self.ToolbarData.AdditionalInfo, 1000);
-  SendMessageW(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
-    self.Handle);
+  StringToWideChar(Info, self.ToolbarData.AdditionalInfo, MAX_PATH);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
+    LPARAM(self.Handle));
 {$ELSE}
   StrLCopy(self.ToolbarData.AdditionalInfo, PChar(Info), 1000);
-  SendMessageA(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
-    self.Handle);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
+    LPARAM(self.Handle));
 {$ENDIF}
 end;
 

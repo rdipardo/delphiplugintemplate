@@ -3,7 +3,7 @@ unit helloworlddockingforms;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, NppDockingForms, NppPlugin,
+  Messages, SysUtils, Variants, Classes, NppDockingForms, NppPlugin,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
@@ -70,23 +70,23 @@ end;
 procedure THelloWorldDockingForm.FormHide(Sender: TObject);
 begin
   inherited;
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 0);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 0);
 end;
 
 procedure THelloWorldDockingForm.FormDock(Sender: TObject);
 begin
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
 end;
 
 procedure THelloWorldDockingForm.FormFloat(Sender: TObject);
 begin
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
 end;
 
 procedure THelloWorldDockingForm.FormShow(Sender: TObject);
 begin
   inherited;
-  SendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
 end;
 
 end.

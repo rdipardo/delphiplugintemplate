@@ -9,8 +9,15 @@
 }
 type
   { scintilla/include/Sci_Position.h }
+{$IF DEFINED(NPP_NO_HUGE_FILES) AND DEFINED(CPUx64)}
+{$MESSAGE 'Plugin will be compatibile with Npp <= 8.2.1 *only*'}
+  Sci_Position = Integer;
+  Sci_PositionU = UINT;
+{$ELSE}
+{$IFDEF CPUx64}{$MESSAGE 'Plugin will be compatibile with Npp 8.3+ *only*'}{$ENDIF}
   Sci_Position = NativeInt;
   Sci_PositionU = SIZE_T;
+{$ENDIF}
 
  { scintilla/include/Scintilla.h }
   uptr_t = NativeUInt;

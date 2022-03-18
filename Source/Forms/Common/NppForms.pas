@@ -26,10 +26,15 @@ uses
   Vcl.Dialogs;
 
 type
+  TWinApiMsgProc = function(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
+    _LParam: LPARAM): LRESULT; stdcall;
+
   TNppForm = class(TForm)
   private
     { Private declarations }
   protected
+    function SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
+      _LParam: LPARAM): LRESULT;
     procedure RegisterForm();
     procedure UnregisterForm();
     procedure DoClose(var Action: TCloseAction); override;
@@ -55,8 +60,6 @@ begin
   self.Npp := NppParent;
   self.DefaultCloseAction := caNone;
   inherited Create(nil);
-  // We figure right now this does more damage than good.
-  // So let the main transalte and dispatch do it's thing instead of isdialogmessage
   self.RegisterForm();
 end;
 
@@ -65,7 +68,6 @@ begin
   self.Npp := AOwner.Npp;
   self.DefaultCloseAction := caNone;
   inherited Create(AOwner);
-  // self.RegisterForm();
 end;
 
 destructor TNppForm.Destroy;
@@ -77,36 +79,37 @@ begin
   inherited;
 end;
 
-procedure TNppForm.RegisterForm();
+function TNppForm.SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
+  _LParam: LPARAM): LRESULT;
 var
-  r: Integer;
+  _MsgProc: TWinApiMsgProc;
 begin
-  r := SendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
-    MODELESSDIALOGADD, self.Handle);
-  {
-    if (r = 0) then
-    begin
-    ShowMessage('Failed reg of form '+form.Name);
-    exit;
-    end;
-  }
+{$IFDEF CPUx64}
+  _MsgProc := SendMessageW;
+{$ELSE}
+  _MsgProc := SendMessage;
+{$ENDIF}
+  Result := _MsgProc(Hndl, Msg, _WParam, _LParam);
+end;
+
+procedure TNppForm.RegisterForm();
+begin
+  // "For each created dialog in your plugin, you should register it (and
+  // unregister while destroy it) to Notepad++ by using this message. If
+  // this message is ignored, then your dialog won't react with the key
+  // stroke messages such as TAB key. For the good functioning of your
+  // plugin dialog, you're recommended to not ignore this message"
+  // https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_modelessdialogage
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
+    MODELESSDIALOGADD, LPARAM(self.Handle));
 end;
 
 procedure TNppForm.UnregisterForm();
-var
-  r: Integer;
 begin
   if (not self.HandleAllocated) then
     exit;
-  r := SendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
-    MODELESSDIALOGREMOVE, self.Handle);
-  {
-    if (r = 0) then
-    begin
-    ShowMessage('Failed unreg form '+form.Name);
-    exit;
-    end;
-  }
+  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
+    MODELESSDIALOGREMOVE, LPARAM(self.Handle));
 end;
 
 procedure TNppForm.DoClose(var Action: TCloseAction);

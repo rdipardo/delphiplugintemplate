@@ -57,7 +57,26 @@ begin
 end;
 
 procedure _FuncHolaMundo; cdecl;
+const
+  Msg = 'This function requires %s!'#13#10'It has been disabled to prevent a crash.';
 begin
+{$IFDEF CPUx64}
+{$IFNDEF NPP_NO_HUGE_FILES}
+  if not Npp.SupportsBigFiles then
+  begin
+    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.3 or newer'])),
+      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    Exit;
+  end;
+{$ELSE}
+  if Npp.SupportsBigFiles then
+  begin
+    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.2.1 or older'])),
+      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    Exit;
+  end;
+{$ENDIF}
+{$ENDIF}
   Npp.FuncHolaMundo;
 end;
 
