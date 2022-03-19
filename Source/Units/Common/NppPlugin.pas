@@ -108,12 +108,7 @@ var
 begin
   i := Length(self.FuncArray);
   SetLength(self.FuncArray, i + 1);
-{$IFDEF NPPUNICODE}
   StringToWideChar(Name, self.FuncArray[i].ItemName, 1000);
-  // @todo: change to constant
-{$ELSE}
-  StrCopy(self.FuncArray[i].ItemName, PChar(Name));
-{$ENDIF}
   self.FuncArray[i].Func := Func;
   self.FuncArray[i].ShortcutKey := nil;
   Result := i;

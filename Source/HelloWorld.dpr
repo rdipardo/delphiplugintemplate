@@ -34,11 +34,7 @@ uses
   HelloWorldPlugin in 'Units\HelloWorldPlugin.pas';
 
 exports
-  setInfo, getName, getFuncsArray, beNotified, messageProc;
-{$IFDEF NPPUNICODE}
-exports
-  isUnicode;
-{$ENDIF}
+  setInfo, getName, getFuncsArray, beNotified, messageProc, isUnicode;
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;

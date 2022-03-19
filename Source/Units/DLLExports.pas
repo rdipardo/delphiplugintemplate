@@ -7,9 +7,7 @@ uses
 
 /// *NOTE*
 /// exported function names must be EXACTLY these: Pascal is case insensitive, not C++
-{$IFDEF NPPUNICODE}
 function isUnicode: BOOL; cdecl; export;
-{$ENDIF}
 function getName: NppPChar; cdecl; export;
 function getFuncsArray(var nFuncs: integer): Pointer; cdecl; export;
 function messageProc(Msg: integer; _wParam: WPARAM; _lParam: LPARAM): LRESULT;
