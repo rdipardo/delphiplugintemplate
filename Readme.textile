@@ -1,0 +1,139 @@
+h1. Notepad++ Delphi Plugin Template
+
+An updated version of the "Delphi plugin template":upstream by "Damjan Zobo Cvetko":https://github.com/zobo, developer of the popular "DBGP":DBGP plugin for the Xdebug server.
+
+Since Delphi 2009 added "Unicode support":D2009, and ANSI plugins can't be loaded in current versions of Notepad++, compiling for Unicode is now the only option.
+
+Compatibility with 64-bit Notepad++ has also been added (requires "Delphi XE2":DXE2 or newer).
+
+
+h2. Usage
+
+Run the install script with the name of a project directory, e.g.:
+
+bc. install MyPlugin
+
+*Note*
+Remember to edit the DLL attach hook in 'Units/DLLExports.pas' with the actual name of your plugin class instance and type:
+
+bc[pascal]. case dwReason of
+DLL_PROCESS_ATTACH:
+  begin
+    // create the main 'Npp' object
+    // Npp := THelloWorldPlugin.Create;
+    MyPlugin := TMyPlugin.Create;
+  end;
+// ...
+end;
+
+
+h2. Supported Features
+
+h3. Dark Mode (Notepad++ 8.0 and later)
+
+Plugin API messages provided by 'Include/Npp.inc':
+
+* NPPM_ADDTOOLBARICON_FORDARKMODE[1]
+* NPPM_ADDTOOLBARICON_DEPRECATED[2]
+
+*Note*
+@NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
+
+Types provided by 'Include/Npp.inc':
+
+* TTbIconsDarkMode[3]
+
+Methods provided by 'Units/Common/NppPlugin.pas'
+
+* TNppPlugin.SupportsDarkMode - returns @true@ if the running editor is at least version 8.0
+
+
+h3. Huge File Support (64-bit Notepad++ 8.3 and later)
+
+Since "version 8.3":8.3, x64 builds of Notepad++ can open files of >2GiB.
+To support these Notepad++ versions, 64-bit plugins that call any Scintilla APIs _*must*_ be able to handle 64-bit character positions.
+
+The definitions provided in 'Include/Scintilla.inc' will support huge files without any configuration.
+
+h4. 64-bit DLLs compiled with the default Scintilla definitions are compatible with Notepad++ >= 8.3 _*ONLY!*_
+
+There may be cases where huge file support can be disabled, for example:
+
+* your plugin is only offered in 32-bit versions
+* your plugin does not call any "Scintilla APIs":sci like @SCI_GETTEXTRANGE@, @SCI_GETLENGTH@, etc.
+* you intend to only support 8.2.1 and earlier versions of Notepad++. Read the "documented instructions":docs on how to indicate a plugin's maximum supported Notepad++ version
+
+The template provides two (very basic) options to configure huge file support:
+
+#1 Set the @NPP_NO_HUGE_FILES@ compiler definition to limit character positions to the size of @System.Integer@, even on x64 architecture
+
+bq. In the IDE, select 'Project > Options', or press Ctrl + Shift + F11.
+Go to 'Building > Delphi Compiler > Conditional Defines' and add 'NPP_NO_HUGE_FILES'.
+
+#2 The @TNppPlugin@ base class implements a @SupportsBigFiles@ method that returns @true@ if the running editor is version 8.3 or greater.
+Note that it _does not_ check CPU architecture; you still need to use conditional expressions, for example:
+
+bc[pascal]. {$IFDEF CPUx64}
+{$IFNDEF NPP_NO_HUGE_FILES}
+  if MyPlugin.SupportsBigFiles then
+  begin
+    // code for Npp 8.3+
+  end;
+{$ENDIF}
+{$ENDIF}
+
+
+h3. Optional Scintilla Features (as of v4.4.6)[4]
+
+Use these compiler definitions to enable or disable features.
+
+- INCLUDE_DEPRECATED_FEATURES := Exposes the following API messages
+
+bc. SCI_SETKEYSUNICODE
+SCI_GETKEYSUNICODE
+SCI_GETTWOPHASEDRAW
+SCI_SETTWOPHASEDRAW
+SCI_SETSTYLEBITS
+SCI_GETSTYLEBITS
+SCI_GETSTYLEBITSNEEDED
+INDIC0_MASK
+INDIC1_MASK
+INDIC2_MASK
+INDICS_MASK
+
+- SCI_DISABLE_PROVISIONAL := _Hides_ the following API messages
+
+bc. SC_BIDIRECTIONAL_DISABLED
+SC_BIDIRECTIONAL_L2R
+SC_BIDIRECTIONAL_R2L
+SCI_GETBIDIRECTIONAL
+SCI_SETBIDIRECTIONAL
+SC_LINECHARACTERINDEX_NONE
+SC_LINECHARACTERINDEX_UTF32
+SC_LINECHARACTERINDEX_UTF16
+SCI_GETLINECHARACTERINDEX
+SCI_ALLOCATELINECHARACTERINDEX
+SCI_RELEASELINECHARACTERINDEX
+SCI_LINEFROMINDEXPOSITION
+SCI_INDEXPOSITIONFROMLINE
+
+
+h2. Plugin API Reference
+
+fn1. "NPPM_ADDTOOLBARICON_FORDARKMODE":https://community.notepad-plus-plus.org/topic/21652/add-new-api-nppm_addtoolbaricon_fordarkmode-for-dark-mode
+
+fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_addtoolbaricon-nppm_addtoolbaricon_deprecated-in-v80
+
+fn3. "TTbIconsDarkMode":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/8a898bae3f84c03c44aaed25001e9fa1ddfa09aa
+
+fn4. "Scintilla 4.4.6 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/d7819cf601051510b7fa1640ca17fedad297e1f8/scintilla/include/Scintilla.h
+
+
+
+[upstream]https://sourceforge.net/projects/npp-plugins/files/DelphiPluginTemplate
+[DBGP]https://github.com/zobo/dbgpPlugin
+[D2009]https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
+[DXE2]https://community.embarcadero.com/blogs/entry/delphi-64bit-code
+[sci]https://www.scintilla.org/ScintillaDoc.html#TextRetrievalAndModification
+[8.3]https://community.notepad-plus-plus.org/topic/22492/notepad-v8-3-release
+[docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
