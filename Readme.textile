@@ -1,5 +1,7 @@
 h1. Notepad++ Delphi Plugin Template
 
+!{border: 0}https://i.ibb.co/BGGB7Tb/npp-8-3-3-x64-docked.png(npp_8.3.3_x64_docked)!
+
 An updated version of the "Delphi plugin template":upstream by "Damjan Zobo Cvetko":https://github.com/zobo, developer of the popular "DBGP":DBGP plugin for the Xdebug server.
 
 Since Delphi 2009 added "Unicode support":D2009, and ANSI plugins can't be loaded in current versions of Notepad++, compiling for Unicode is now the only option.
@@ -29,7 +31,9 @@ end;
 
 h2. Supported Features
 
-h3. Dark Mode (Notepad++ 8.0 and later)
+h3. Dark Mode Icons (Notepad++ 8.0 and later)
+
+!{border: 0}https://i.ibb.co/GdYYz8c/npp-8-3-3-x64-dark-detail.png(npp_8.3.3_x64_dark_detail)!
 
 Plugin API messages provided by 'Include/Npp.inc':
 
