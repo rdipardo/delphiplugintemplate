@@ -287,16 +287,32 @@ end;
 /// A return value of `true` means that x64 editors return 64-bit character and line positions,
 /// i.e., sizeof(Sci_Position) == sizeof(NativeInt), and sizeof(Sci_PositionU) == sizeof(SIZE_T)
 /// https://community.notepad-plus-plus.org/topic/22471/recompile-your-x64-plugins-with-new-header
+{$HINTS off}
 function TNppPlugin.SupportsBigFiles: Boolean;
+const
+  // Also check for N++ versions 8.1.9.1, 8.1.9.2 and 8.1.9.3
+  PatchReleases: Array[0..2] of Word = ( 191, 192, 193 );
 var
   NppVersion: Cardinal;
+  IsPatchRelease: Boolean;
+  i: Byte;
 begin
   NppVersion := SendMessage(self.NppData.NppHandle, NPPM_GETNPPVERSION, 0, 0);
+  IsPatchRelease := False;
+
+  for i := 0 to Length(PatchReleases) - 1 do
+  begin
+    IsPatchRelease := (LOWORD(NppVersion) = PatchReleases[i]);
+    if IsPatchRelease then Break;
+  end;
+
   Result :=
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and
       // 8.3 => 8,3 *not* 8,30
-      ((LOWORD(NppVersion) = 3) or (LOWORD(NppVersion) > 21)));
+      ((LOWORD(NppVersion) = 3) or
+       ((LOWORD(NppVersion) > 21) and not IsPatchRelease)));
 end;
+{$HINTS on}
 
 end.
