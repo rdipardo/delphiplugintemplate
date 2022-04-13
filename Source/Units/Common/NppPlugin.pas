@@ -310,7 +310,7 @@ begin
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and
       // 8.3 => 8,3 *not* 8,30
-      ((LOWORD(NppVersion) = 3) or
+      (((LOWORD(NppVersion) >= 3) and (LOWORD(NppVersion) <= 9)) or
        ((LOWORD(NppVersion) > 21) and not IsPatchRelease)));
 end;
 {$HINTS on}
