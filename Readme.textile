@@ -11,6 +11,15 @@ Compatibility with 64-bit Notepad++ has also been added (requires "Delphi XE2":D
 
 h2. Usage
 
+Using git, checkout an appropriate API level by choosing one of these tags:
+
+|_. Tag     |_. Scintilla API version |_. Supported Notepad++ versions |
+|/4. api-v4 |/4. 4.4.6                |\4. * 7.9.4 - 8.3.3 (32-bit)    |
+| * 8.3 - 8.3.3 (64-bit)                                               |
+|=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_             |
+| * 7.9.4 - 8.2.1 (64-bit)                                             |
+| api-v5    |  5.2.2                  | * 8.4+ (all builds)            |
+
 Run the install script with the name of a project directory, e.g.:
 
 bc. install MyPlugin
