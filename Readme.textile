@@ -87,7 +87,24 @@ bc[pascal]. {$IFDEF CPUx64}
 {$ENDIF}
 
 
-h3. Optional Scintilla Features (as of v4.4.6)[4]
+h3. Breaking Changes in Scintilla 5
+
+h4. Loading an external lexer from a plugin
+
+An overview of the new Lexilla protocol is provided "here":https://www.scintilla.org/Scintilla5Migration.html.
+Note that the following messages are no longer provided:
+
+* @SCI_SETLEXER@
+* @SCI_SETLEXERLANGUAGE@
+* @SCI_LOADLEXERLIBRARY@
+
+h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
+
+Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
+Code paths depending on the old implementation should add 1 to the return value.
+
+
+h3. Optional Scintilla Features (as of v5.2.2)[4]
 
 Use these compiler definitions to enable or disable features.
 
@@ -105,6 +122,16 @@ INDIC1_MASK
 INDIC2_MASK
 INDICS_MASK
 
+_The following type aliases will also become available:_
+
+|_. Alias        |_. Type             |
+| CharacterRange | TSciCharacterRange |
+| TextRange      | TSciTextRange      |
+| TextToFind     | TSciTextToFind     |
+| RangeToFormat  | TSciRangeToFormat  |
+| NotifyHeader   | TNotifyHeader      |
+
+
 - SCI_DISABLE_PROVISIONAL := _Hides_ the following API messages
 
 bc. SC_BIDIRECTIONAL_DISABLED
@@ -112,14 +139,6 @@ SC_BIDIRECTIONAL_L2R
 SC_BIDIRECTIONAL_R2L
 SCI_GETBIDIRECTIONAL
 SCI_SETBIDIRECTIONAL
-SC_LINECHARACTERINDEX_NONE
-SC_LINECHARACTERINDEX_UTF32
-SC_LINECHARACTERINDEX_UTF16
-SCI_GETLINECHARACTERINDEX
-SCI_ALLOCATELINECHARACTERINDEX
-SCI_RELEASELINECHARACTERINDEX
-SCI_LINEFROMINDEXPOSITION
-SCI_INDEXPOSITIONFROMLINE
 
 
 h2. Plugin API Reference
@@ -130,7 +149,7 @@ fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://github.com/notepad-plus-plus/npp-u
 
 fn3. "TTbIconsDarkMode":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/8a898bae3f84c03c44aaed25001e9fa1ddfa09aa
 
-fn4. "Scintilla 4.4.6 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/d7819cf601051510b7fa1640ca17fedad297e1f8/scintilla/include/Scintilla.h
+fn4. "Scintilla 5.2.2 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/100d45f7cf02812eebf8dbfb8af5a261e95750c5/scintilla/include/Scintilla.h
 
 
 
@@ -139,5 +158,6 @@ fn4. "Scintilla 4.4.6 definitions":https://github.com/notepad-plus-plus/notepad-
 [D2009]https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
 [DXE2]https://community.embarcadero.com/blogs/entry/delphi-64bit-code
 [sci]https://www.scintilla.org/ScintillaDoc.html#TextRetrievalAndModification
+[sci515]https://sourceforge.net/p/scintilla/code/ci/483efdbe6facf2d9a4f10a8ec1f049bfae7723ae/tree/doc/ScintillaHistory.html?diff=2a700fc24c59a47fa6b29b0bb6c556dcc39c5b31
 [8.3]https://community.notepad-plus-plus.org/topic/22492/notepad-v8-3-release
 [docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list

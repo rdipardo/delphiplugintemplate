@@ -55,7 +55,7 @@ type
     procedure Hide;
     /// NOTE.
     /// dock position is saved in config.xml as a GUIConfig element with the
-    /// DockingManager attribute; you should delete this between lauches when
+    /// DockingManager attribute; you should delete this between launches when
     /// testing different configurations
     procedure RegisterDockingForm(MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
     procedure UpdateDisplayInfo; overload;
@@ -170,7 +170,7 @@ begin
 end;
 
 // This hack prevents the Win Dialog default procedure from an endless loop while
-// looking for the prevoius component, while in a floating state.
+// looking for the previous component, while in a floating state.
 // I still don't know why the pointer climbs up to the docking dialog that holds this one
 // but this works for now.
 procedure TNppDockingForm.RemoveControlParent(control: TControl);
