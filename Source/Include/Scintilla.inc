@@ -1,8 +1,8 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.2.2
-  https://github.com/notepad-plus-plus/notepad-plus-plus/commit/100d45f7cf02812eebf8dbfb8af5a261e95750c5
+  Object Pascal definitions for Scintilla 5.2.3
+  https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ed4bb1a93e763001aac842698fcde0856ba8b0bc
 
   Copyright (c) 2022 Robert Di Pardo <dipardo.r@gmail.com>
   Distributed under the terms of the GNU Lesser General Public License Version 3.0 or later
@@ -59,6 +59,12 @@ type
   end;
   PSciNotification = ^TSciNotification;
 
+// v8.4.3 added the option to highlight just one find result per line:
+// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/08128ee36a31fdb0b3d72d1d7342f50e8103ea47
+// The implementation uses a std::pair to contain each highlight range, and collects them in a std::vector.
+// There's no viable equivalent for STL containers in Object Pascal (yet), so these structures can be considered
+// obsolete as of N++ 8.4.3
+{
   TSearchResultMarking = Record
     _start: Sci_Position;
     _end: Sci_Position;
@@ -69,11 +75,13 @@ type
     _length: Sci_Position;
     _markings: PTSearchResultMarking;
   end;
+}
 
   TSciCharacterRange = Record
     cpMin : Sci_Position;
     cpMax : Sci_Position;
   end;
+  TSciCharacterRangeFull = TSciCharacterRange;
 
   TSciTextRange = Record
     chrg : TSciCharacterRange;
@@ -81,12 +89,25 @@ type
   end;
   PSciTextRange = ^TSciTextRange;
 
+  TSciTextRangeFull = Record
+    chrg : TSciCharacterRangeFull;
+    lpstrText : LPSTR;
+  end;
+  PSciTextRangeFull = ^TSciTextRangeFull;
+
   TSciTextToFind  = Record
     chrg : TSciCharacterRange;
     lpstrText : LPSTR;
     chrgText : TSciCharacterRange;
   end;
   PSciTextToFind = ^TSciTextToFind;
+
+  TSciTextToFindFull  = Record
+    chrg : TSciCharacterRangeFull;
+    lpstrText : LPSTR;
+    chrgText : TSciCharacterRangeFull;
+  end;
+  PSciTextToFindFull = ^TSciTextToFindFull;
 
   TSciSurfaceID = Pointer;
   TSciRectangle = Record
@@ -104,6 +125,14 @@ type
     rc: TSciRectangle;
     rcPage: TSciRectangle;
     chrg: TSciCharacterRange;
+  end;
+
+  TSciRangeToFormatFull = Record
+    hdc: TSciSurfaceID;
+    hdcTarget: TSciSurfaceID;
+    rc: TSciRectangle;
+    rcPage: TSciRectangle;
+    chrg: TSciCharacterRangeFull;
   end;
 
 const
@@ -563,7 +592,9 @@ const
   SCFIND_POSIX = $00400000;
   SCFIND_CXX11REGEX = $00800000;
   SCI_FINDTEXT = 2150;
+  SCI_FINDTEXTFULL = 2196;
   SCI_FORMATRANGE = 2151;
+  SCI_FORMATRANGEFULL = 2777;
   SCI_GETFIRSTVISIBLELINE = 2152;
   SCI_GETLINE = 2153;
   SCI_GETLINECOUNT = 2154;
@@ -576,6 +607,7 @@ const
   SCI_SETSEL = 2160;
   SCI_GETSELTEXT = 2161;
   SCI_GETTEXTRANGE = 2162;
+  SCI_GETTEXTRANGEFULL = 2039;
   SCI_HIDESELECTION = 2163;
   SCI_POINTXFROMPOSITION = 2164;
   SCI_POINTYFROMPOSITION = 2165;

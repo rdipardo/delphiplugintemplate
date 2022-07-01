@@ -96,7 +96,42 @@ bc[pascal]. {$IFDEF CPUx64}
 {$ENDIF}
 
 
-h3. Breaking Changes in Scintilla 5
+h3. 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
+
+Scintilla began supporting 64-bit character positions on the Windows platform in "version 5.2.3":sci523.
+Notepad++ added these APIs in 8.4.3:
+
+* @SCI_FINDTEXTFULL@
+* @SCI_FORMATRANGEFULL@
+* @SCI_GETTEXTRANGEFULL@
+
+Note that, "since Notepad++ 8.3":8.3, all of the _former_ APIs return 64-bit values also; these are:
+
+* @SCI_FINDTEXT@
+* @SCI_FORMATRANGE@
+* @SCI_GETTEXTRANGE@
+
+Calling any of the above APIs is functionally equivalent in Notepad++ 8.4.3 or later.
+However, a future version of Scintilla will "deprecate the former APIs":sciNext (the ones without the @*FULL@ suffix).
+For forward compatibility, the following types are provided by 'Include/Scintilla.inc':
+
+* @TSciTextRangeFull@
+* @TSciTextToFindFull@
+* @TSciRangeToFormatFull@
+
+Methods provided by 'Units/Common/NppPlugin.pas':
+
+* TNppPlugin.HasFullRangeApis - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGE@ APIs are available
+
+
+h3. Breaking Changes in Notepad++ 8.4.3 and later
+
+'Include/Scintilla.inc' no longer provides the @TSearchResultMarking@ type.
+
+Notepad++ replaced the underlying Scintilla structure with "a custom type":oneMatch that can't be implemented in Object Pascal.
+
+
+h3. Breaking Changes in Notepad++ 8.4 and later
 
 h4. Loading an external lexer from a plugin
 
@@ -113,7 +148,7 @@ Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an 
 Code paths depending on the old implementation should add 1 to the return value.
 
 
-h3. Optional Scintilla Features (as of v5.2.2)[4]
+h3. Optional Scintilla Features (as of v5.2.3)[4]
 
 Use these compiler definitions to enable or disable features.
 
@@ -158,7 +193,7 @@ fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://github.com/notepad-plus-plus/npp-u
 
 fn3. "TTbIconsDarkMode":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/8a898bae3f84c03c44aaed25001e9fa1ddfa09aa
 
-fn4. "Scintilla 5.2.2 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/100d45f7cf02812eebf8dbfb8af5a261e95750c5/scintilla/include/Scintilla.h
+fn4. "Scintilla 5.2.3 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/ed4bb1a93e763001aac842698fcde0856ba8b0bc/scintilla/include/Scintilla.h
 
 
 
@@ -168,5 +203,8 @@ fn4. "Scintilla 5.2.2 definitions":https://github.com/notepad-plus-plus/notepad-
 [DXE2]https://community.embarcadero.com/blogs/entry/delphi-64bit-code
 [sci]https://www.scintilla.org/ScintillaDoc.html#TextRetrievalAndModification
 [sci515]https://sourceforge.net/p/scintilla/code/ci/483efdbe6facf2d9a4f10a8ec1f049bfae7723ae/tree/doc/ScintillaHistory.html?diff=2a700fc24c59a47fa6b29b0bb6c556dcc39c5b31
-[8.3]https://community.notepad-plus-plus.org/topic/22492/notepad-v8-3-release
+[sci523]https://sourceforge.net/p/scintilla/code/ci/241398a1d33bb7644596826f61639bdff477b32c/tree/doc/ScintillaHistory.html?diff=1c48196154f5d39fcd70f02d71344c6707543b8f
+[sciNext]https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE#:~:text=SCI_GETTEXTRANGE%20will%20be%20deprecated%20at%20some%20point
+[8.3]https://community.notepad-plus-plus.org/topic/22471/prevent-plugin-from-crash-on-v8-3-and-later-version-recompile-x64-plugins-with-new-header
+[oneMatch]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/08128ee36a31fdb0b3d72d1d7342f50e8103ea47#diff-41f42d8960fb90330ea7a19c8e7f35d0575fe12eb976cb95f4971106c48329b4
 [docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
