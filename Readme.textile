@@ -11,14 +11,23 @@ Compatibility with 64-bit Notepad++ has also been added (requires "Delphi XE2":D
 
 h2. Usage
 
-Using git, checkout an appropriate API level by choosing one of these tags:
+Download one of these tagged revisions to target an appropriate API level:
 
-|_. Tag     |_. Scintilla API version |_. Supported Notepad++ versions |
-|/4. api-v4 |/4. 4.4.6                |\4. * 7.9.4 - 8.3.3 (32-bit)    |
-| * 8.3 - 8.3.3 (64-bit)                                               |
-|=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_             |
-| * 7.9.4 - 8.2.1 (64-bit)                                             |
-| api-v5    |  5.2.2                  | * 8.4+ (all builds)            |
+|_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
+| *"api-v5.2.3":v5.2.3*    |  5.2.3                  |  8.4.3+ (all builds)           |
+| *"api-v5.2.2":v5.2.2*    |  5.2.2                  |  8.4 - 8.4.2 (all builds)      |
+|/4. *"api-v4":v4*         |/4. 4.4.6                | * 7.9.4 - 8.3.3 (32-bit)       |
+| * 8.3 - 8.3.3 (64-bit)                                                              |
+|=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
+| * 7.9.4 - 8.2.1 (64-bit)                                                            |
+
+[v5.2.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.3.zip
+[v5.2.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
+[v4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v4.zip
+
+Or, clone the repository and checkout out a tag, for example:
+
+bc. git checkout -f api-v5.2.3
 
 Run the install script with the name of a project directory, e.g.:
 
@@ -46,19 +55,19 @@ h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
 Plugin API messages provided by 'Include/Npp.inc':
 
-* NPPM_ADDTOOLBARICON_FORDARKMODE[1]
-* NPPM_ADDTOOLBARICON_DEPRECATED[2]
+* @NPPM_ADDTOOLBARICON_FORDARKMODE@[1]
+* @NPPM_ADDTOOLBARICON_DEPRECATED@[2]
 
 *Note*
 @NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
 Types provided by 'Include/Npp.inc':
 
-* TTbIconsDarkMode[3]
+* @TTbIconsDarkMode@[3]
 
 Methods provided by 'Units/Common/NppPlugin.pas'
 
-* TNppPlugin.SupportsDarkMode - returns @true@ if the running editor is at least version 8.0
+* @TNppPlugin.SupportsDarkMode@ - returns @true@ if the running editor is at least version 8.0
 
 
 h3. Huge File Support (64-bit Notepad++ 8.3 and later)
@@ -121,7 +130,7 @@ For forward compatibility, the following types are provided by 'Include/Scintill
 
 Methods provided by 'Units/Common/NppPlugin.pas':
 
-* TNppPlugin.HasFullRangeApis - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGE@ APIs are available
+* @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGE@ APIs are available
 
 
 h3. Breaking Changes in Notepad++ 8.4.3 and later
