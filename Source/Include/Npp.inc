@@ -396,6 +396,7 @@ const
   //    COLORREF linkText = 0;
   //    COLORREF edge = 0;
   //    COLORREF hotEdge = 0;
+  //    COLORREF disabledEdge = 0;
   //  };
   // }
   //
@@ -409,8 +410,13 @@ const
   // Returns the number of TCHAR copied/to copy.
   // Users should call it with commandLineStr as NULL to get the required number of TCHAR (not including the terminating nul character),
   // allocate commandLineStr buffer with the return value + 1, then call it again to get the current command line string.
-  // (unreleased)
+  // since 8.4.2
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/0f8d5724afb0a540e8b4024252945ab60bc88c71
+  NPPM_CREATELEXER = (NPPMSG + 110);
+  // void* NPPN_CREATELEXER(0, const TCHAR *lexer_name)
+  // Returns the ILexer pointer created by Lexilla
+  // since 8.4.3
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/f1ed4de78dbe8f5d85f4d199bae2970148cca8ed
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
