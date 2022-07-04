@@ -1,3 +1,34 @@
 TB_BMP BITMAP "Resources\\tbtest.bmp"
 TB_ICON ICON "Resources\\tbtest.ico"
 TB_DM_ICON ICON "Resources\\tbtestdm.ico"
+
+#define PLUGIN_VERSION "1.0.0.0\0"
+#define PLUGIN_VERSION_WORDS 1,0,0,0
+
+1 VERSIONINFO
+  FILEVERSION PLUGIN_VERSION_WORDS
+  FILEFLAGSMASK 0x3FL
+  FILEFLAGS 0x0L
+  FILEOS 0x4L
+  FILETYPE 0x1L
+  FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "LegalCopyright", "Copyright \251 2008 Damjan Zobo Cvetko\0"
+      VALUE "Comments", "Updated for x64 Notepad++ by Robert Di Pardo, Copyright \251 2022\0"
+      VALUE "LegalTrademarks", "GPLv2, using library code under the GPLv3 and LGPLv3\0"
+      VALUE "FileDescription", "Notepad++ Plugin Template for Delphi\0"
+      VALUE "OriginalFilename", "HelloWorld.dll\0"
+      VALUE "InternalName", "HelloWorld\0"
+      VALUE "ProductName", "HelloWorld Notepad++ Plugin\0"
+      VALUE "ProductVersion", PLUGIN_VERSION "\0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END

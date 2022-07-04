@@ -25,7 +25,7 @@ Download one of these tagged revisions to target an appropriate API level:
 [v5.2.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
 [v4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v4.zip
 
-Or, clone the repository and checkout out a tag, for example:
+Or, clone the repository and check out a tag, for example:
 
 bc. git checkout -f api-v5.2.3
 
@@ -130,7 +130,7 @@ For forward compatibility, the following types are provided by 'Include/Scintill
 
 Methods provided by 'Units/Common/NppPlugin.pas':
 
-* @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGE@ APIs are available
+* @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
 
 
 h3. Breaking Changes in Notepad++ 8.4.3 and later
