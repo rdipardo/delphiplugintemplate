@@ -19,11 +19,17 @@
 
 unit NppDockingForms;
 
+{$IFDEF FPC}{$mode delphi}{$ENDIF}
+
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, NppPlugin, NppForms, Vcl.Forms,
-  Vcl.Dialogs, Vcl.Controls;
+  Windows, Messages, SysUtils, Classes, NppPlugin, NppForms,
+{$IFNDEF FPC}
+  Vcl.Forms, Vcl.Dialogs, Vcl.Controls
+{$ELSE}
+  Forms, Dialogs, Controls, LCLIntf, LCLType
+{$ENDIF};
 
 {$I '..\..\Include\Docking.inc'}
 {$I '..\..\Include\DockingResource.inc'}
@@ -32,7 +38,6 @@ type
   TNppDockingForm = class(TNppForm)
   private
     { Private declarations }
-    FDlgId: Integer;
     FOnDock: TNotifyEvent;
     FOnFloat: TNotifyEvent;
     procedure RemoveControlParent(control: TControl);
@@ -46,12 +51,12 @@ type
     property OnFloat: TNotifyEvent read FOnFloat write FOnFloat;
   public
     { Public declarations }
-    CmdId: Integer;
-    constructor Create(NppParent: TNppPlugin; DlgId: Integer); reintroduce;
-      overload; virtual;
-    constructor Create(AOwner: TNppForm; DlgId: Integer); reintroduce;
-      overload; virtual;
-    procedure Show;
+    CmdId, DlgId: Integer;
+    constructor Create(const NppParent: TNppPlugin; const DlgId: Integer); reintroduce; overload; virtual;
+    constructor Create(AOwner: TNppForm; const DlgId: Integer); reintroduce; overload; virtual;
+    destructor Destroy; override;
+    procedure Show; overload;
+    procedure Show(const Plugin: TNppPlugin; const DlgMenuId: integer); overload;
     procedure Hide;
     /// NOTE.
     /// dock position is saved in config.xml as a GUIConfig element with the
@@ -60,7 +65,6 @@ type
     procedure RegisterDockingForm(MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
     procedure UpdateDisplayInfo; overload;
     procedure UpdateDisplayInfo(Info: String); overload;
-    property DlgId: Integer read FDlgId;
   published
     { Published declarations }
   end;
@@ -70,23 +74,41 @@ var
 
 implementation
 
+{$IFDEF FPC}
+{$R *.lfm}
+{$ELSE}
 {$R *.dfm}
+{$ENDIF}
 
-constructor TNppDockingForm.Create(NppParent: TNppPlugin; DlgId: Integer);
+constructor TNppDockingForm.Create(const NppParent: TNppPlugin; const DlgId: Integer);
 begin
   inherited Create(NppParent);
-  self.FDlgId := DlgId;
+  self.DlgId := DlgId;
   self.CmdId := self.Npp.CmdIdFromDlgId(DlgId);
   self.RegisterDockingForm(self.NppDefaultDockingMask);
   self.RemoveControlParent(self);
 end;
 
-constructor TNppDockingForm.Create(AOwner: TNppForm; DlgId: Integer);
+constructor TNppDockingForm.Create(AOwner: TNppForm; const DlgId: Integer);
 begin
   inherited Create(AOwner);
-  self.FDlgId := DlgId;
+  self.DlgId := DlgId;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
   self.RemoveControlParent(self);
+end;
+
+destructor TNppDockingForm.Destroy;
+begin
+  with (self.ToolbarData) do
+  begin
+    if Assigned(Title) then
+      Dispose(Title);
+    if Assigned(ModuleName) then
+      Dispose(ModuleName);
+    if Assigned(AdditionalInfo) then
+      Dispose(AdditionalInfo);
+  end;
+  inherited;
 end;
 
 procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
@@ -120,6 +142,9 @@ end;
 procedure TNppDockingForm.RegisterDockingForm
   (MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
 begin
+  if (not Assigned(self.Npp)) then
+    exit;
+
   self.HandleNeeded;
   FillChar(self.ToolbarData, sizeof(TToolbarData), 0);
 
@@ -131,7 +156,7 @@ begin
 
   self.ToolbarData.ClientHandle := self.Handle;
 
-  self.ToolbarData.DlgId := self.FDlgId;
+  self.ToolbarData.DlgId := self.DlgId;
   self.ToolbarData.Mask := MaskStyle;
 
   self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ADDINFO;
@@ -145,8 +170,8 @@ begin
   GetModuleFileNameW(HInstance, self.ToolbarData.ModuleName, MAX_PATH);
   if GetLastError = ERROR_SUCCESS then
   begin
-    StringToWideChar(ExtractFileName(self.ToolbarData.ModuleName),
-      self.ToolbarData.ModuleName, MAX_PATH);
+    StrPLCopy(self.ToolbarData.ModuleName,
+      ExtractFileName(self.ToolbarData.ModuleName), MAX_PATH);
     StringToWideChar('', self.ToolbarData.AdditionalInfo, 1);
   end;
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0,
@@ -156,14 +181,32 @@ end;
 
 procedure TNppDockingForm.Show;
 begin
+  if (not Assigned(self.Npp)) then
+    exit;
+
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMSHOW, 0,
     LPARAM(self.Handle));
   inherited;
   self.DoShow;
 end;
 
+procedure TNppDockingForm.Show(const Plugin: TNppPlugin; const DlgMenuId: integer);
+begin
+  with self do begin
+    Npp := Plugin;
+    DlgId := DlgMenuId;
+    CmdId := Plugin.CmdIdFromDlgId(DlgMenuId);
+  end;
+  self.RegisterDockingForm(self.NppDefaultDockingMask);
+  self.RemoveControlParent(self);
+  self.Show;
+end;
+
 procedure TNppDockingForm.Hide;
 begin
+  if (not Assigned(self.Npp)) then
+    exit;
+
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMHIDE, 0,
     LPARAM(self.Handle));
   self.DoHide;
@@ -203,6 +246,9 @@ end;
 
 procedure TNppDockingForm.UpdateDisplayInfo(Info: String);
 begin
+  if (not Assigned(self.Npp)) then
+    exit;
+
   StringToWideChar(Info, self.ToolbarData.AdditionalInfo, MAX_PATH);
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
     LPARAM(self.Handle));

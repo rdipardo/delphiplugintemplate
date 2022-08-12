@@ -1,9 +1,28 @@
-﻿unit HelloWorldPlugin;
+{
+  Original unit (c) 2008 Damjan Zobo Cvetko
+  Revisions (c) 2022 Robert Di Pardo <dipardo.r@gmail.com>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+}
+
+unit HelloWorldPlugin;
 
 interface
 
 uses
-  SysUtils, Windows, NppPlugin, AboutForms, HelloWorldDockingForms;
+  SysUtils, Windows, NppPlugin, HelloWorldDockingForms;
 
 const
   /// menu index of the dockable form
@@ -15,7 +34,6 @@ type
     constructor Create;
     procedure FuncHelloWorld;
     procedure FuncHolaMundo;
-    procedure FuncHolaMundoEx;
     procedure FuncHelloWorldDocking;
     procedure FuncAbout;
     procedure DoNppnToolbarModification; override;
@@ -31,6 +49,9 @@ var
   Npp: THelloWorldPlugin;
 
 implementation
+
+uses
+  ModulePath, VersionInfo {$IFDEF FPC}, Forms{$ENDIF};
 
 { THelloWorldPlugin }
 
@@ -65,23 +86,20 @@ begin
 {$IFNDEF NPP_NO_HUGE_FILES}
   if not Npp.SupportsBigFiles then
   begin
-    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.3 or newer'])),
-      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(WideFormat(Msg,['Notepad++ 8.3 or newer'])),
+      PWChar('Unsupported N++ Version'), MB_ICONWARNING);
     Exit;
   end;
 {$ELSE}
   if Npp.SupportsBigFiles then
   begin
-    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.2.1 or older'])),
-      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(WideFormat(Msg,['Notepad++ 8.2.1 or older'])),
+      PWChar('Unsupported N++ Version'), MB_ICONWARNING);
     Exit;
   end;
 {$ENDIF}
 {$ENDIF}
-  if Npp.HasFullRangeApis then
-    Npp.FuncHolaMundoEx
-  else
-    Npp.FuncHolaMundo;
+  Npp.FuncHolaMundo;
 end;
 
 procedure _FuncAbout; cdecl;
@@ -96,13 +114,11 @@ end;
 
 procedure THelloWorldPlugin.FuncHelloWorld;
 begin
-  SendMessage(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0,
-    LPARAM(PAnsiChar('Hello, World!'#13#10)));
+  SendMessageW(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('Hello, World!'#13#10)));
 
-  if SendMessage(self.NppData.ScintillaMainHandle, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
+  if SendMessageW(self.NppData.ScintillaMainHandle, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
   then
-    SendMessage(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0,
-      LPARAM(UTF8Encode('こにちは、皆さん‼'#13#10)));
+    SendMessageW(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
 end;
 
 procedure THelloWorldPlugin.FuncHolaMundo;
@@ -115,73 +131,65 @@ var
 begin
   HelloTxt := Default (TSciTextToFind);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(NppData.ScintillaMainHandle,
-    SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessageW(NppData.ScintillaMainHandle, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(NppData.ScintillaMainHandle, SCI_FINDTEXT, 0,
-    LPARAM(@HelloTxt));
+  StartPos := SendMessageW(NppData.ScintillaMainHandle, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
+    SendMessageW(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessageW(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
-      Length(OldTxt) - 1, LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
-      StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,
-      Length(NewTxt), 0);
-  end;
-end;
-
-procedure THelloWorldPlugin.FuncHolaMundoEx;
-const
-  OldTxt = 'Hello, World!';
-  NewTxt = 'Hola, mundo!';
-var
-  HelloTxt: TSciTextToFindFull;
-  StartPos: Sci_Position;
-begin
-  HelloTxt := Default (TSciTextToFindFull);
-  HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(NppData.ScintillaMainHandle,
-    SCI_GETLENGTH, 0, 0);
-  HelloTxt.chrgText := HelloTxt.chrg;
-  HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(NppData.ScintillaMainHandle, SCI_FINDTEXTFULL, 0,
-    LPARAM(@HelloTxt));
-  if StartPos <> INVALID_POSITION then
-  begin
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
-      StartPos + Length(OldTxt), 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
-      Length(OldTxt) - 1, LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
-      StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,
-      Length(NewTxt), 0);
+    SendMessageW(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
+      Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
+    SendMessageW(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessageW(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 
 procedure THelloWorldPlugin.FuncAbout;
+const
+  Msg = '%s'#13#10#13#10'%s'#13#10'%s'#13#10'License: %s';
 var
-  a: TAboutForm;
+  Info: TFileVersionInfo;
 begin
-  a := TAboutForm.Create(self);
   try
-    a.ShowModal;
-  finally
-    FreeAndNil(a);
+    try
+      Info := TFileVersionInfo.Create(TModulePath.DLLFullName);
+      MessageBoxW(Npp.NppData.NppHandle,
+                  PWChar(WideFormat(Msg,
+                    [Info.FileDescription,
+                     Info.LegalCopyright,
+                     Info.Comments,
+                     Info.LegalTrademarks])),
+                  PWChar(Info.ProductName),
+                  MB_ICONINFORMATION);
+    finally
+      FreeAndNil(Info);
+    end;
+  except
+  on E: Exception do
+  {$IFDEF FPC}
+    MessageBox(Npp.NppData.NppHandle, PChar(E.Message), PChar(E.Message), MB_ICONERROR);
+  {$ELSE}
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(E.Message), PWChar(E.Message), MB_ICONERROR);
+  {$ENDIF}
   end;
 end;
 
 procedure THelloWorldPlugin.FuncHelloWorldDocking;
 begin
   if (not Assigned(HelloWorldDockingForm)) then
+{$IFDEF FPC}
+    Application.CreateForm(THelloWorldDockingForm, HelloWorldDockingForm);
+    if (not Assigned(HelloWorldDockingForm.Npp)) then
+      HelloWorldDockingForm.Show(self, DlgMenuId)
+    else
+      HelloWorldDockingForm.Show;
+{$ELSE}
     HelloWorldDockingForm := THelloWorldDockingForm.Create(self, DlgMenuId);
-  HelloWorldDockingForm.Show;
+    HelloWorldDockingForm.Show;
+{$ENDIF}
 end;
 
 procedure THelloWorldPlugin.DoNppnToolbarModification;

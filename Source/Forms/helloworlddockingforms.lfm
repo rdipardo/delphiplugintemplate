@@ -6,7 +6,6 @@ inherited HelloWorldDockingForm: THelloWorldDockingForm
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
-  Scaled = False
   TextHeight = 13
   object Button1: TButton
     Left = 8
