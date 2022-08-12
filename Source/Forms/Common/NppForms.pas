@@ -19,11 +19,17 @@
 
 unit NppForms;
 
+{$IFDEF FPC}{$mode delphi}{$ENDIF}
+
 interface
 
 uses
-  Windows, Messages, Classes, NppPlugin, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
-  Vcl.Dialogs;
+  Windows, Messages, Classes, NppPlugin,
+{$IFNDEF FPC}
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs
+{$ELSE}
+  Graphics, Controls, Forms, Dialogs, LCLIntf, LCLType, LMessages
+{$ENDIF};
 
 type
   TWinApiMsgProc = function(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
@@ -42,8 +48,8 @@ type
     { Public declarations }
     Npp: TNppPlugin;
     DefaultCloseAction: TCloseAction;
-    constructor Create(NppParent: TNppPlugin); reintroduce; overload;
-    constructor Create(AOwner: TNppForm); reintroduce; overload;
+    constructor Create(AOwner: TComponent); overload; override;
+    constructor Create(const Plugin: TNppPlugin); reintroduce; overload;
     destructor Destroy; override;
     function WantChildKey(Child: TControl; var Message: TMessage): Boolean; override;
   end;
@@ -53,26 +59,27 @@ var
 
 implementation
 
+{$IFDEF FPC}
+{$R *.lfm}
+{$ELSE}
 {$R *.dfm}
+{$ENDIF}
 
-constructor TNppForm.Create(NppParent: TNppPlugin);
+constructor TNppForm.Create(AOwner: TComponent);
 begin
-  self.Npp := NppParent;
-  self.DefaultCloseAction := caNone;
-  inherited Create(nil);
-  self.RegisterForm();
-end;
-
-constructor TNppForm.Create(AOwner: TNppForm);
-begin
-  self.Npp := AOwner.Npp;
   self.DefaultCloseAction := caNone;
   inherited Create(AOwner);
 end;
 
+constructor TNppForm.Create(const Plugin: TNppPlugin);
+begin
+  self.Npp := Plugin;
+  Create(TComponent(nil));
+end;
+
 destructor TNppForm.Destroy;
 begin
-  if (self.HandleAllocated) then
+  if (Assigned(self.Npp)) then
   begin
     self.UnregisterForm();
   end;
@@ -85,15 +92,17 @@ var
   _MsgProc: TWinApiMsgProc;
 begin
 {$IFDEF CPUx64}
-  _MsgProc := SendMessageW;
+  _MsgProc := Windows.SendMessageW;
 {$ELSE}
-  _MsgProc := SendMessage;
+  _MsgProc := Windows.SendMessage;
 {$ENDIF}
   Result := _MsgProc(Hndl, Msg, _WParam, _LParam);
 end;
 
 procedure TNppForm.RegisterForm();
 begin
+  if (not Assigned(self.Npp)) then
+    exit;
   // "For each created dialog in your plugin, you should register it (and
   // unregister while destroy it) to Notepad++ by using this message. If
   // this message is ignored, then your dialog won't react with the key

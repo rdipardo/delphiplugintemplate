@@ -19,10 +19,19 @@
 
 unit nppplugin;
 
+{$IFDEF FPC}
+{$mode delphiunicode}
+{$ENDIF}
+
 interface
 
 uses
-  Classes, SysUtils, Windows, Messages, Vcl.Dialogs, Vcl.Forms;
+  Classes, SysUtils, Windows, Messages,
+{$IFNDEF FPC}
+  Vcl.Forms
+{$ELSE}
+  LCLIntf, LCLType, LMessages, Forms
+{$ENDIF};
 
 {$I '..\..\Include\Scintilla.inc'}
 {$I '..\..\Include\Npp.inc'}
@@ -110,7 +119,7 @@ var
 begin
   i := Length(self.FuncArray);
   SetLength(self.FuncArray, i + 1);
-  StringToWideChar(Name, self.FuncArray[i].ItemName, 1000);
+  StrPLCopy(self.FuncArray[i].ItemName, Name, 1000);
   self.FuncArray[i].Func := Func;
   self.FuncArray[i].ShortcutKey := nil;
   Result := i;
@@ -142,15 +151,12 @@ end;
 
 procedure TNppPlugin.GetFileLine(var filename: String; var Line: Integer);
 var
-  s: String;
-  r: Integer;
+  s: array [0..1001] of char;
+  r: Sci_Position;
 begin
-  s := '';
-  SetLength(s, 300);
   SendMessage(self.NppData.NppHandle, NPPM_GETFULLCURRENTPATH, 0,
-    LPARAM(PChar(s)));
-  SetLength(s, StrLen(PChar(s)));
-  filename := s;
+    LPARAM(@s[0]));
+  filename := string(s);
 
   r := SendMessage(self.NppData.ScintillaMainHandle, SCI_GETCURRENTPOS, 0, 0);
   Line := SendMessage(self.NppData.ScintillaMainHandle,
@@ -170,13 +176,11 @@ end;
 
 function TNppPlugin.GetPluginsConfigDir: string;
 var
-  s: string;
+  s: array [0..1001] of char;
 begin
-  SetLength(s, 1001);
   SendMessage(self.NppData.NppHandle, NPPM_GETPLUGINSCONFIGDIR, 1000,
-    LPARAM(PChar(s)));
-  SetString(s, PChar(s), StrLen(PChar(s)));
-  Result := s;
+    LPARAM(@s[0]));
+  Result := string(s);
 end;
 
 procedure TNppPlugin.BeNotified(sn: PSciNotification);
@@ -235,6 +239,7 @@ function TNppPlugin.GetWord: string;
 var
   s: string;
 begin
+  s := '';
   SetLength(s, 800);
   SendMessage(self.NppData.NppHandle, NPPM_GETCURRENTWORD, 0, LPARAM(PChar(s)));
   Result := s;
@@ -243,15 +248,13 @@ end;
 function TNppPlugin.DoOpen(filename: String): Boolean;
 var
   r: Integer;
-  s: string;
+  s: array [0..1001] of char;
 begin
   // ask if we are not already opened
-  SetLength(s, 500);
-  r := SendMessage(self.NppData.NppHandle, NPPM_GETFULLCURRENTPATH, 0,
-    LPARAM(PChar(s)));
-  SetString(s, PChar(s), StrLen(PChar(s)));
+  SendMessage(self.NppData.NppHandle, NPPM_GETFULLCURRENTPATH, 0,
+    LPARAM(@s[0]));
   Result := true;
-  if (s = filename) then
+  if {$ifdef FPC}WideSameText{$else}SameText{$endif}(string(s), filename) then
     exit;
   r := SendMessage(self.NppData.NppHandle, WM_DOOPEN, 0,
     LPARAM(PChar(filename)));

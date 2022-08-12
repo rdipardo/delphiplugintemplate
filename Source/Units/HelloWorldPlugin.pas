@@ -1,9 +1,28 @@
-﻿unit HelloWorldPlugin;
+{
+  Original unit (c) 2008 Damjan Zobo Cvetko
+  Revisions (c) 2022 Robert Di Pardo <dipardo.r@gmail.com>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+}
+
+unit HelloWorldPlugin;
 
 interface
 
 uses
-  SysUtils, Windows, NppPlugin, AboutForms, HelloWorldDockingForms;
+  SysUtils, Windows, NppPlugin, HelloWorldDockingForms;
 
 const
   /// menu index of the dockable form
@@ -31,6 +50,9 @@ var
   Npp: THelloWorldPlugin;
 
 implementation
+
+uses
+  ModulePath, VersionInfo {$IFDEF FPC}, Forms{$ENDIF};
 
 { THelloWorldPlugin }
 
@@ -65,15 +87,15 @@ begin
 {$IFNDEF NPP_NO_HUGE_FILES}
   if not Npp.SupportsBigFiles then
   begin
-    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.3 or newer'])),
-      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(WideFormat(Msg,['Notepad++ 8.3 or newer'])),
+      PWChar('Unsupported N++ Version'), MB_ICONWARNING);
     Exit;
   end;
 {$ELSE}
   if Npp.SupportsBigFiles then
   begin
-    MessageBox(Npp.NppData.NppHandle, PChar(Format(Msg,['Notepad++ 8.2.1 or older'])),
-      PChar('Unsupported N++ Version'), MB_ICONWARNING);
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(WideFormat(Msg,['Notepad++ 8.2.1 or older'])),
+      PWChar('Unsupported N++ Version'), MB_ICONWARNING);
     Exit;
   end;
 {$ENDIF}
@@ -166,22 +188,44 @@ begin
 end;
 
 procedure THelloWorldPlugin.FuncAbout;
+const
+  Msg = '%s'#13#10#13#10'%s'#13#10'%s'#13#10'License: %s';
 var
-  a: TAboutForm;
+  Info: TFileVersionInfo;
 begin
-  a := TAboutForm.Create(self);
   try
-    a.ShowModal;
-  finally
-    FreeAndNil(a);
+    try
+      Info := TFileVersionInfo.Create(TModulePath.DLLFullName);
+      MessageBoxW(Npp.NppData.NppHandle,
+                  PWChar(WideFormat(Msg,
+                    [Info.FileDescription,
+                     Info.LegalCopyright,
+                     Info.Comments,
+                     Info.LegalTrademarks])),
+                  PWChar(Info.ProductName),
+                  MB_ICONINFORMATION);
+    finally
+      FreeAndNil(Info);
+    end;
+  except
+  on E: Exception do
+    MessageBoxW(Npp.NppData.NppHandle, PWChar(E.Message), PWChar(E.Message), MB_ICONERROR);
   end;
 end;
 
 procedure THelloWorldPlugin.FuncHelloWorldDocking;
 begin
   if (not Assigned(HelloWorldDockingForm)) then
+{$IFDEF FPC}
+    Application.CreateForm(THelloWorldDockingForm, HelloWorldDockingForm);
+    if (not Assigned(HelloWorldDockingForm.Npp)) then
+      HelloWorldDockingForm.Show(self, DlgMenuId)
+    else
+      HelloWorldDockingForm.Show;
+{$ELSE}
     HelloWorldDockingForm := THelloWorldDockingForm.Create(self, DlgMenuId);
-  HelloWorldDockingForm.Show;
+    HelloWorldDockingForm.Show;
+{$ENDIF}
 end;
 
 procedure THelloWorldPlugin.DoNppnToolbarModification;
