@@ -39,11 +39,11 @@ uses
   TNppPlugin = class(TObject)
   private
     FuncArray: array of _TFuncItem;
+    FClosingBufferID: THandle;
   protected
     PluginName: nppString;
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
     function SupportsBigFiles: Boolean; // needs N++ 8.3 or later
-    function HasFullRangeApis: Boolean; // needs N++ 8.4.3 or later
     function GetNppVersion: Cardinal;
     function GetPluginsConfigDir: string;
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer; overload;
@@ -68,11 +68,15 @@ uses
     // hooks
     procedure DoNppnToolbarModification; virtual;
     procedure DoNppnShutdown; virtual;
+    procedure DoNppnBufferActivated(const BufferID: THandle); virtual;
+    procedure DoNppnFileClosed(const BufferID: THandle); virtual;
+    procedure DoUpdateUI(const hwnd: HWND; const updated: Integer); virtual;
+    procedure DoModified(const hwnd: HWND; const modificationType: Integer); virtual;
 
     // df
     function DoOpen(filename: String): Boolean; overload;
-    function DoOpen(filename: String; Line: Integer): Boolean; overload;
-    procedure GetFileLine(var filename: String; var Line: Integer);
+    function DoOpen(filename: String; Line: Sci_Position): Boolean; overload;
+    procedure GetFileLine(var filename: String; var Line: Sci_Position);
     function GetWord: string;
   end;
 
@@ -131,7 +135,6 @@ var
   i: Integer;
 begin
   i := self.AddFuncItem(Name, Func);
-  New(self.FuncArray[i].ShortcutKey);
   self.FuncArray[i].ShortcutKey := ShortcutKey;
   Result := i;
 end;
@@ -149,7 +152,7 @@ begin
   end;
 end;
 
-procedure TNppPlugin.GetFileLine(var filename: String; var Line: Integer);
+procedure TNppPlugin.GetFileLine(var filename: String; var Line: Sci_Position);
 var
   s: array [0..1001] of char;
   r: Sci_Position;
@@ -185,17 +188,40 @@ end;
 
 procedure TNppPlugin.BeNotified(sn: PSciNotification);
 begin
-  if (HWND(sn^.nmhdr.hwndFrom) = self.NppData.NppHandle) and
-    (sn^.nmhdr.code = NPPN_TBMODIFICATION) then
-  begin
-    self.DoNppnToolbarModification;
-  end
-  else if (HWND(sn^.nmhdr.hwndFrom) = self.NppData.NppHandle) and
-    (sn^.nmhdr.code = NPPN_SHUTDOWN) then
-  begin
-    self.DoNppnShutdown;
-  end;
-  // @todo
+  try
+    if HWND(sn^.nmhdr.hwndFrom) = self.NppData.NppHandle then begin
+      case sn.nmhdr.code of
+        NPPN_TBMODIFICATION: begin
+          self.DoNppnToolbarModification;
+        end;
+        NPPN_SHUTDOWN: begin
+          self.DoNppnShutdown;
+        end;
+        NPPN_BUFFERACTIVATED: begin
+          self.DoNppnBufferActivated(sn.nmhdr.idFrom);
+        end;
+        NPPN_FILEBEFORECLOSE: begin
+          FClosingBufferID := SendMessage(HWND(sn.nmhdr.hwndFrom), NPPM_GETCURRENTBUFFERID, 0, 0);
+        end;
+        NPPN_FILECLOSED: begin
+          self.DoNppnFileClosed(FClosingBufferID);
+        end;
+      end;
+    end else begin
+      case sn.nmhdr.code of
+        SCN_MODIFIED: begin
+          Self.DoModified(HWND(sn.nmhdr.hwndFrom), sn.modificationType);
+        end;
+        SCN_UPDATEUI: begin
+          self.DoUpdateUI(HWND(sn.nmhdr.hwndFrom), sn.updated);
+        end;
+      end;
+    end;
+   except
+     on E: Exception do begin
+       OutputDebugString({$ifdef FPC}PAnsiChar{$else}PChar{$endif}(Format('%s> %s: "%s"', [{$ifdef FPC}UTF8Encode{$endif}(PluginName), E.ClassName, E.Message])));
+     end;
+   end;
 end;
 
 {$REGION 'Virtual procedures'}
@@ -232,6 +258,26 @@ procedure TNppPlugin.DoNppnToolbarModification;
 begin
   // override
 end;
+
+procedure TNppPlugin.DoNppnBufferActivated(const BufferID: THandle);
+begin
+  // override
+end;
+
+procedure TNppPlugin.DoNppnFileClosed(const BufferID: THandle);
+begin
+  // override
+end;
+
+procedure TNppPlugin.DoModified(const hwnd: HWND; const modificationType: Integer);
+begin
+  // override
+end;
+
+procedure TNppPlugin.DoUpdateUI(const hwnd: HWND; const updated: Integer);
+begin
+  // override
+end;
 {$ENDREGION}
 
 // utils
@@ -261,7 +307,7 @@ begin
   Result := (r = 0);
 end;
 
-function TNppPlugin.DoOpen(filename: String; Line: Integer): Boolean;
+function TNppPlugin.DoOpen(filename: String; Line: Sci_Position): Boolean;
 var
   r: Boolean;
 begin
@@ -319,19 +365,5 @@ begin
        ((LOWORD(NppVersion) > 21) and (not (LOWORD(NppVersion) in [191, 192, 193])))));
 end;
 
-/// since 8.4.3
-/// A return value of `true` means the 64-bit APIs added in Scintilla 5.2.3 are available
-/// https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ed4bb1a93e763001aac842698fcde0856ba8b0bc
-function TNppPlugin.HasFullRangeApis: Boolean;
-var
-  NppVersion: Cardinal;
-begin
-  NppVersion := GetNppVersion;
-  Result :=
-    (HIWORD(NppVersion) > 8) or
-    ((HIWORD(NppVersion) = 8) and
-       ((LOWORD(NppVersion) >= 43) and (not (LOWORD(NppVersion) in [191, 192, 193]))));
-end;
 
 end.

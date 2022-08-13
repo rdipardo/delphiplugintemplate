@@ -34,7 +34,6 @@ type
     constructor Create;
     procedure FuncHelloWorld;
     procedure FuncHolaMundo;
-    procedure FuncHolaMundoEx;
     procedure FuncHelloWorldDocking;
     procedure FuncAbout;
     procedure DoNppnToolbarModification; override;
@@ -100,10 +99,7 @@ begin
   end;
 {$ENDIF}
 {$ENDIF}
-  if Npp.HasFullRangeApis then
-    Npp.FuncHolaMundoEx
-  else
-    Npp.FuncHolaMundo;
+  Npp.FuncHolaMundo;
 end;
 
 procedure _FuncAbout; cdecl;
@@ -124,7 +120,7 @@ begin
   if SendMessage(self.NppData.ScintillaMainHandle, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
   then
     SendMessage(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0,
-      LPARAM(UTF8Encode('こにちは、皆さん‼'#13#10)));
+      LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
 end;
 
 procedure THelloWorldPlugin.FuncHolaMundo;
@@ -142,36 +138,6 @@ begin
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
   StartPos := SendMessage(NppData.ScintillaMainHandle, SCI_FINDTEXT, 0,
-    LPARAM(@HelloTxt));
-  if StartPos <> INVALID_POSITION then
-  begin
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
-      StartPos + Length(OldTxt), 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
-      Length(OldTxt) - 1, LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
-      StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,
-      Length(NewTxt), 0);
-  end;
-end;
-
-procedure THelloWorldPlugin.FuncHolaMundoEx;
-const
-  OldTxt = 'Hello, World!';
-  NewTxt = 'Hola, mundo!';
-var
-  HelloTxt: TSciTextToFindFull;
-  StartPos: Sci_Position;
-begin
-  HelloTxt := Default (TSciTextToFindFull);
-  HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(NppData.ScintillaMainHandle,
-    SCI_GETLENGTH, 0, 0);
-  HelloTxt.chrgText := HelloTxt.chrg;
-  HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(NppData.ScintillaMainHandle, SCI_FINDTEXTFULL, 0,
     LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin

@@ -54,6 +54,7 @@ type
     CmdId, DlgId: Integer;
     constructor Create(const NppParent: TNppPlugin; const DlgId: Integer); reintroduce; overload; virtual;
     constructor Create(AOwner: TNppForm; const DlgId: Integer); reintroduce; overload; virtual;
+    destructor Destroy; override;
     procedure Show; overload;
     procedure Show(const Plugin: TNppPlugin; const DlgMenuId: integer); overload;
     procedure Hide;
@@ -94,6 +95,20 @@ begin
   self.DlgId := DlgId;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
   self.RemoveControlParent(self);
+end;
+
+destructor TNppDockingForm.Destroy;
+begin
+  with (self.ToolbarData) do
+  begin
+    if Assigned(Title) then
+      Dispose(Title);
+    if Assigned(ModuleName) then
+      Dispose(ModuleName);
+    if Assigned(AdditionalInfo) then
+      Dispose(AdditionalInfo);
+  end;
+  inherited;
 end;
 
 procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
