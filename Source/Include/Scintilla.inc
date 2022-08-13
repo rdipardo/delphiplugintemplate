@@ -23,8 +23,6 @@ type
   uptr_t = NativeUInt;
   sptr_t = NativeInt;
   TScintillaMessageFnc = function(ptr : sptr_t; Msg: UINT; wParam: uptr_t; lParam : sptr_t) : sptr_t; cdecl;
-  SciFnDirectStatus = function(ptr: sptr_t; Msg: UINT; wParam: uptr_t; lParam: sptr_t; pStatus: PInteger) : sptr_t; cdecl;
-  SciFnDirect = TScintillaMessageFnc;
 
   TNotifyHeader = record
     hwndFrom : HWND;
