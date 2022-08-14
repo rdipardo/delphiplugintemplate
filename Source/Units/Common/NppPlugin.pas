@@ -44,6 +44,7 @@ uses
     PluginName: nppString;
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
     function SupportsBigFiles: Boolean; // needs N++ 8.3 or later
+    function HasV5Apis: Boolean; // needs N++ 8.4 or later
     function GetNppVersion: Cardinal;
     function GetPluginsConfigDir: string;
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer; overload;
@@ -369,5 +370,27 @@ begin
        ((LOWORD(NppVersion) > 21) and (not (LOWORD(NppVersion) in [191, 192, 193])))));
 end;
 
+/// since 8.4
+/// A return value of `true` means the Scintilla API level is at least 5.2.1
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80
+///
+/// See https://www.scintilla.org/ScintillaHistory.html § 5.1.5
+/// > When calling SCI_GETTEXT, SCI_GETSELTEXT, and SCI_GETCURLINE with a NULL
+/// > buffer argument to discover the length that should be allocated, do not
+/// > include the terminating NUL in the returned value. The value returned is 1
+/// > less than previous versions of Scintilla. Applications should allocate a
+/// > buffer 1 more than this to accommodate the NUL. The wParam (length)
+/// > argument to SCI_GETTEXT and SCI_GETCURLINE also omits the NUL
+function TNppPlugin.HasV5Apis: Boolean;
+var
+  NppVersion: Cardinal;
+begin
+  NppVersion := GetNppVersion;
+  Result :=
+    (HIWORD(NppVersion) > 8) or
+    ((HIWORD(NppVersion) = 8) and
+        ((LOWORD(NppVersion) >= 4) and
+           (not (LOWORD(NppVersion) in [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 31, 32, 33, 191, 192, 193]))));
+end;
 
 end.
