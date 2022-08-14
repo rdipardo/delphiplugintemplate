@@ -31,10 +31,10 @@ bc. git checkout -f api-v5.2.3
 
 Run the install script with the name of a project directory, e.g.:
 
-bc. install MyPlugin
+bc. install %USERPROFILE%\projects\MyPlugin
 
 *Note*
-Remember to edit the DLL attach hook in 'Units/DLLExports.pas' with the actual name of your plugin class instance and type:
+Remember to edit the DLL attach hook in 'Source/Units/DLLExports.pas' with the actual name of your plugin class instance and type:
 
 bc[pascal]. case dwReason of
 DLL_PROCESS_ATTACH:
@@ -53,7 +53,7 @@ h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
 !{border: 0}https://i.ibb.co/GdYYz8c/npp-8-3-3-x64-dark-detail.png(npp_8.3.3_x64_dark_detail)!
 
-Plugin API messages provided by 'Include/Npp.inc':
+Plugin API messages provided by 'Source/Include/Npp.inc':
 
 * @NPPM_ADDTOOLBARICON_FORDARKMODE@[1]
 * @NPPM_ADDTOOLBARICON_DEPRECATED@[2]
@@ -61,11 +61,11 @@ Plugin API messages provided by 'Include/Npp.inc':
 *Note*
 @NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
-Types provided by 'Include/Npp.inc':
+Types provided by 'Source/Include/Npp.inc':
 
 * @TTbIconsDarkMode@[3]
 
-Methods provided by 'Units/Common/NppPlugin.pas'
+Methods provided by 'Source/Units/Common/NppPlugin.pas'
 
 * @TNppPlugin.SupportsDarkMode@ - returns @true@ if the running editor is at least version 8.0
 
@@ -75,7 +75,7 @@ h3. Huge File Support (64-bit Notepad++ 8.3 and later)
 Since "version 8.3":8.3, x64 builds of Notepad++ can open files of >2GiB.
 To support these Notepad++ versions, 64-bit plugins that call any Scintilla APIs _*must*_ be able to handle 64-bit character positions.
 
-The definitions provided in 'Include/Scintilla.inc' will support huge files without any configuration.
+The definitions provided in 'Source/Include/Scintilla.inc' will support huge files without any configuration.
 
 h4. 64-bit DLLs compiled with the default Scintilla definitions are compatible with Notepad++ >= 8.3 _*ONLY!*_
 
@@ -114,28 +114,28 @@ Notepad++ added these APIs in 8.4.3:
 * @SCI_FORMATRANGEFULL@
 * @SCI_GETTEXTRANGEFULL@
 
-Note that, "since Notepad++ 8.3":8.3, all of the _former_ APIs return 64-bit values also; these are:
+Note that, "since Notepad++ 8.3":8.3, all of the _former_ APIs return 64-bit values also; these include:
 
 * @SCI_FINDTEXT@
 * @SCI_FORMATRANGE@
 * @SCI_GETTEXTRANGE@
 
-Calling any of the above APIs is functionally equivalent in Notepad++ 8.4.3 or later.
+Calling any of the six APIs above is functionally equivalent in Notepad++ 8.4.3 or later.
 However, a future version of Scintilla will "deprecate the former APIs":sciNext (the ones without the @*FULL@ suffix).
-For forward compatibility, the following types are provided by 'Include/Scintilla.inc':
+For forward compatibility, the following types are provided by 'Source/Include/Scintilla.inc':
 
 * @TSciTextRangeFull@
 * @TSciTextToFindFull@
 * @TSciRangeToFormatFull@
 
-Methods provided by 'Units/Common/NppPlugin.pas':
+Methods provided by 'Source/Units/Common/NppPlugin.pas':
 
 * @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
 
 
 h3. Breaking Changes in Notepad++ 8.4.3 and later
 
-'Include/Scintilla.inc' no longer provides the @TSearchResultMarking@ type.
+'Source/Include/Scintilla.inc' no longer provides the @TSearchResultMarking@ type.
 
 Notepad++ replaced the underlying Scintilla structure with "a custom type":oneMatch that can't be implemented in Object Pascal.
 
@@ -155,6 +155,10 @@ h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
 
 Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
 Code paths depending on the old implementation should add 1 to the return value.
+
+Methods provided by 'Source/Units/Common/NppPlugin.pas':
+
+* `TNppPlugin.HasV5Apis` - returns `true` if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
 h3. Optional Scintilla Features (as of v5.2.3)[4]
@@ -215,5 +219,6 @@ fn4. "Scintilla 5.2.3 definitions":https://github.com/notepad-plus-plus/notepad-
 [sci523]https://sourceforge.net/p/scintilla/code/ci/241398a1d33bb7644596826f61639bdff477b32c/tree/doc/ScintillaHistory.html?diff=1c48196154f5d39fcd70f02d71344c6707543b8f
 [sciNext]https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE#:~:text=SCI_GETTEXTRANGE%20will%20be%20deprecated%20at%20some%20point
 [8.3]https://community.notepad-plus-plus.org/topic/22471/prevent-plugin-from-crash-on-v8-3-and-later-version-recompile-x64-plugins-with-new-header
+[8.4]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80
 [oneMatch]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/08128ee36a31fdb0b3d72d1d7342f50e8103ea47#diff-41f42d8960fb90330ea7a19c8e7f35d0575fe12eb976cb95f4971106c48329b4
 [docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
