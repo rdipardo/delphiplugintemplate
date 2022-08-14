@@ -45,6 +45,7 @@ uses
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
     function SupportsBigFiles: Boolean; // needs N++ 8.3 or later
     function HasV5Apis: Boolean; // needs N++ 8.4 or later
+    function HasFullRangeApis: Boolean; // needs N++ 8.4.3 or later
     function GetNppVersion: Cardinal;
     function GetPluginsConfigDir: string;
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer; overload;
@@ -387,6 +388,21 @@ begin
     ((HIWORD(NppVersion) = 8) and
         ((LOWORD(NppVersion) >= 4) and
            (not (LOWORD(NppVersion) in [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 31, 32, 33, 191, 192, 193]))));
+end;
+
+/// since 8.4.3
+/// A return value of `true` means the 64-bit APIs added in Scintilla 5.2.3 are available
+/// https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ed4bb1a93e763001aac842698fcde0856ba8b0bc
+function TNppPlugin.HasFullRangeApis: Boolean;
+var
+  NppVersion: Cardinal;
+begin
+  NppVersion := GetNppVersion;
+  Result :=
+    (HIWORD(NppVersion) > 8) or
+    ((HIWORD(NppVersion) = 8) and
+       ((LOWORD(NppVersion) >= 43) and (not (LOWORD(NppVersion) in [191, 192, 193]))));
 end;
 
 end.
