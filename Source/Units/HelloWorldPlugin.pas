@@ -130,7 +130,7 @@ end;
 procedure THelloWorldPlugin.FuncHolaMundo;
 const
   OldTxt = 'Hello, World!';
-  NewTxt = 'Hola, mundo!';
+  NewTxt = '¡Hola, mundo!';
 var
   HelloTxt: TSciTextToFind;
   StartPos: Sci_Position;
@@ -149,7 +149,7 @@ begin
     SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
     SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
-      Length(OldTxt) - 1, LPARAM(PAnsiChar(NewTxt)));
+      Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
     SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
       StartPos, 0);
     SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,
@@ -160,7 +160,7 @@ end;
 procedure THelloWorldPlugin.FuncHolaMundoEx;
 const
   OldTxt = 'Hello, World!';
-  NewTxt = 'Hola, mundo!';
+  NewTxt = '¡Hola, mundo!';
 var
   HelloTxt: TSciTextToFindFull;
   StartPos: Sci_Position;
@@ -179,7 +179,7 @@ begin
     SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
     SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
-      Length(OldTxt) - 1, LPARAM(PAnsiChar(NewTxt)));
+      Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
     SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
       StartPos, 0);
     SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,

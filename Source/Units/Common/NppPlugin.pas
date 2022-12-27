@@ -35,6 +35,7 @@ uses
 
 {$I '..\..\Include\Scintilla.inc'}
 {$I '..\..\Include\Npp.inc'}
+{$I '..\..\Include\DarkMode.inc'}
 
   TNppPlugin = class(TObject)
   private
@@ -80,6 +81,10 @@ uses
     function DoOpen(filename: String; Line: Sci_Position): Boolean; overload;
     procedure GetFileLine(var filename: String; var Line: Sci_Position);
     function GetWord: string;
+
+    // needs N++ 8.4.1 or later
+    function IsDarkModeEnabled: Boolean;
+    procedure GetDarkModeColors(PColors: PDarkModeColors);
   end;
 
 implementation
@@ -346,6 +351,31 @@ end;
 function TNppPlugin.SupportsDarkMode: Boolean;
 begin
   Result := HIWORD(GetNppVersion) >= 8;
+end;
+
+/// since 8.4.1
+/// Returns `true` if the dark mode setting can be detected by sending the NPPM_ISDARKMODEENABLED message
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53
+function TNppPlugin.IsDarkModeEnabled: Boolean;
+var
+  NppVersion: Cardinal;
+  HasQueryApi: Boolean;
+begin
+  NppVersion := GetNppVersion;
+  HasQueryApi :=
+    ((HIWORD(NppVersion) > 8) or
+     ((HIWORD(NppVersion) = 8) and
+        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191, 192, 193]))))));
+  Result := (HasQueryApi and Boolean(SendMessage(self.NppData.NppHandle, NPPM_ISDARKMODEENABLED, 0, 0)));
+end;
+
+/// since 8.4.1
+/// Initializes a TDarkModeColors instance with the editor's active dark mode styles
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53
+procedure TNppPlugin.GetDarkModeColors(PColors: PDarkModeColors);
+begin
+  if IsDarkModeEnabled then
+    SendMessage(self.NppData.NppHandle, NPPM_GETDARKMODECOLORS, WPARAM(SizeOf(TDarkModeColors)), LPARAM(PColors));
 end;
 
 /// since 8.3
