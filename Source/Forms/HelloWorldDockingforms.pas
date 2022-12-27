@@ -46,7 +46,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure ToggleDarkMode;
   end;
 
 var
@@ -113,8 +113,27 @@ end;
 
 procedure THelloWorldDockingForm.FormShow(Sender: TObject);
 begin
+  ToggleDarkMode;
   inherited;
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
 end;
 
+procedure THelloWorldDockingForm.ToggleDarkMode;
+var
+  DarkModeColors: NppPlugin.TDarkModeColors;
+begin
+  self.ParentBackground := (not self.Npp.IsDarkModeEnabled);
+  Memo1.ParentColor := self.ParentBackground;
+  if (not self.ParentBackground) then begin
+    DarkModeColors := Default(NppPlugin.TDarkModeColors);
+    self.Npp.GetDarkModeColors(@DarkModeColors);
+    self.Color := TColor(DarkModeColors.Background);
+    Memo1.Color := TColor(DarkModeColors.SofterBackground);
+    Memo1.Font.Color := TColor(DarkModeColors.Text);
+  end else begin
+    self.Color := clBtnFace;
+    Memo1.Color := clWhite;
+    Memo1.Font.Color := clWindowText;
+  end;
+end;
 end.

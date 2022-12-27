@@ -419,6 +419,12 @@ const
   // since 8.4.3
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/f1ed4de78dbe8f5d85f4d199bae2970148cca8ed
 
+  NPPM_GETBOOKMARKID = (NPPMSG + 111);
+  // void* NPPM_GETBOOKMARKID(0, 0)
+  // Returns the bookmark ID
+  // since 8.4.7
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/4d5069280900ee249d358bc2b311bdb4b03f30a9
+
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
   CURRENT_DIRECTORY = 2;
@@ -626,7 +632,7 @@ type
   /// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/3dfe526019a66be4cac540affbf17dc833bf51b6
   TPlatform = ( PF_UNKNOWN, PF_X86, PF_X64, PF_IA64, PF_ARM64 );
 
-  TWinVer = ( WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV_S2003, WV_XPX64, WV_VISTA, WV_WIN7, WV_WIN8, WV_WIN81, WV_WIN10 );
+  TWinVer = ( WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV_S2003, WV_XPX64, WV_VISTA, WV_WIN7, WV_WIN8, WV_WIN81, WV_WIN10, WV_WIN11 );
 
   TSessionInfo = record
     SessionFilePathName: nppPChar;
