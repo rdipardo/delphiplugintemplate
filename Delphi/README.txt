@@ -7,7 +7,7 @@ Quick Start
     
     "%ProgramFiles(x86)%\Embarcadero\Studio\20.0\bin\rsvars.bat"
 
-* Enter the 'Source' directory
+* Enter the 'Delphi' directory
 
 * To build a 64-bit DLL, run
 

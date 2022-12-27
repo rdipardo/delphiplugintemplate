@@ -1,8 +1,8 @@
 # Notepad++ Plugin Template for Delphi & Lazarus
 
-<img src="https://i.ibb.co/BGGB7Tb/npp-8-3-3-x64-docked.png" alt="npp-8-3-3-x64-docked" border="0">
+<img src="https://i.ibb.co/WkQ1PJk/npp-8-4-7-x64-win10-docked.png" alt="npp-8-4-7-x64-win10-docked" border="0">
 
-An updated version of the [Delphi plugin template][upstream] by [Damjan Zobo Cvetko](https://github.com/zobo), developer of the popular [DBGP] plugin for the Xdebug server.
+An updated version of the [Delphi plugin template][upstream] by [Damjan Zobo Cvetko](https://github.com/zobo), developer of the popular [DBGp] plugin for the Xdebug server.
 
 Since Delphi 2009 added [Unicode support][D2009], and ANSI plugins can't be loaded in current versions of Notepad++, compiling for Unicode is now the only option.
 
@@ -15,26 +15,28 @@ Download one of these tagged revisions to target an appropriate API level:
 
 | Tag                      | Scintilla API version   | Supported Notepad++ versions   |
 | :--                      | :--                     | :--                            |
+| **[api-v5.3.2]**         |  5.3.2                  | 8.4.8+        (all builds)     |
 | **[api-v5.2.3]**         |  5.2.3                  | 8.4.3+        (all builds)     |
 | **[api-v5.2.2]**         |  5.2.2                  | 8.4 - 8.4.2   (all builds)     |
 | **[api-v4]**             |  4.4.6                  | 7.9.4 - 8.3.3 (32-bit) <br/> 8.3 - 8.3.3 (64-bit) |
 | &#x2013;                 |  &#x2013;               | *or, with the `NPP_NO_HUGE_FILES` compiler definition* |
 | &#x2013;                 |  &#x2013;               | 7.9.4 - 8.2.1 (64-bit)         |
 
+[api-v5.3.2]: https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.2.zip
 [api-v5.2.3]: https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.3.zip
 [api-v5.2.2]: https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
 [api-v4]: https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v4.zip
 
 Or, clone the repository and check out a tag, for example:
 
-    git checkout -f api-v5.2.3
+    git checkout -f api-v5.3.2
 
 Run the install script with the name of a project directory, e.g.:
 
     install %USERPROFILE%\projects\MyPlugin
 
 **Note**
-Remember to edit the DLL attach hook in 'Source/Units/DLLExports.pas' with the actual name of your plugin class instance and type:
+Remember to edit the DLL attach hook in [Source/Units/DLLExports.pas](Source/Units/DLLExports.pas#lines-42) with the actual name of your plugin class instance and type:
 
 ~~~pascal
 case dwReason of
@@ -54,7 +56,7 @@ end;
 
 <img src="https://i.ibb.co/GdYYz8c/npp-8-3-3-x64-dark-detail.png" alt="npp_8.3.3_x64_dark_detail" border="0"/>
 
-Plugin API messages provided by 'Source/Include/Npp.inc':
+Plugin API messages provided by [Source/Include/Npp.inc](Source/Include/Npp.inc#lines-94):
 
 - `NPPM_ADDTOOLBARICON_FORDARKMODE` [^1]
 - `NPPM_ADDTOOLBARICON_DEPRECATED` [^2]
@@ -62,11 +64,11 @@ Plugin API messages provided by 'Source/Include/Npp.inc':
 **Note**
 `NPPM_ADDTOOLBARICON_DEPRECATED` is defined as an alias for the older `NPPM_ADDTOOLBARICON` message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
-Types provided by 'Source/Include/Npp.inc':
+Types provided by [Source/Include/Npp.inc](Source/Include/Npp.inc#lines-652):
 
 - `TTbIconsDarkMode`[^3]
 
-Methods provided by 'Source/Units/Common/NppPlugin.pas'
+Methods provided by [Source/Units/Common/NppPlugin.pas](Source/Units/Common/NppPlugin.pas#lines-357)
 
 - `TNppPlugin.SupportsDarkMode` - returns `true` if the running editor is at least version 8.0
 
@@ -74,9 +76,9 @@ Methods provided by 'Source/Units/Common/NppPlugin.pas'
 ### Huge File Support (64-bit Notepad++ 8.3 and later)
 
 Since [version 8.3][8.3], x64 builds of Notepad++ can open files of >2GiB in size.
-To support these Notepad++ versions, 64-bit plugins that call any Scintilla APIs _*must*_ be able to handle 64-bit character positions.
+To support these Notepad++ versions, 64-bit plugins that call any Scintilla APIs __*must*__ be able to handle 64-bit character positions.
 
-The definitions provided in 'Source/Include/Scintilla.inc' will support huge files without any configuration.
+The definitions provided in [Source/Include/Scintilla.inc] will support huge files without any configuration.
 
 #### 64-bit DLLs compiled with the default Scintilla definitions are compatible with Notepad++ >= 8.3 _*ONLY!*_
 
@@ -108,6 +110,27 @@ Note that it _does not_ check CPU architecture; you still need to use conditiona
 {$ENDIF}
 ~~~
 
+### Dark Mode API (Notepad++ 8.4.1 and later)
+
+API messages provided by [Source/Include/Npp.inc](Source/Include/Npp.inc#lines-373):
+
+- `NPPM_ISDARKMODEENABLED` [^4]
+- `NPPM_GETDARKMODECOLORS` [^5]
+- `NPPN_DARKMODECHANGED` [^6]
+
+Constants defined in [Source/Include/Docking.inc](Source/Include/Docking.inc#lines-35):
+
+- `DWS_USEOWNDARKMODE` [^7]
+
+Types provided by [Source/Include/DarkMode.inc](Source/Include/DarkMode.inc#lines-19):
+
+- `TDarkModeColors` [^8]
+
+Methods provided by [Source/Units/Common/NppPlugin.pas](Source/Units/Common/NppPlugin.pas#lines-365)
+
+- `IsDarkModeEnabled` - returns `true` if the dark mode setting can be detected by sending the `NPPM_ISDARKMODEENABLED` message
+- `GetDarkModeColors` - initializes an instance of `TDarkModeColors` with the editor's active dark mode styles; use them to dynamically style form components at runtime
+
 ### 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
 
 Scintilla began supporting 64-bit character positions on the Windows platform in [version 5.2.3][sci523].
@@ -125,20 +148,20 @@ Note that, [since Notepad++ 8.3][8.3], all of the _former_ APIs return 64-bit va
 
 Calling any of the six APIs above is functionally equivalent in Notepad++ 8.4.3 or later.
 However, a future version of Scintilla will [deprecate the former APIs][sciNext] (the ones without the `*FULL` suffix).
-For forward compatibility, the following types are provided by 'Source/Include/Scintilla.inc':
+For forward compatibility, the following types are provided by [Source/Include/Scintilla.inc]:
 
 - `TSciTextRangeFull`
 - `TSciTextToFindFull`
 - `TSciRangeToFormatFull`
 
-Methods provided by 'Source/Units/Common/NppPlugin.pas':
+Methods provided by [Source/Units/Common/NppPlugin.pas](Source/Units/Common/NppPlugin.pas#lines-433):
 
 - `TNppPlugin.HasFullRangeApis` - returns `true` if the `SCI_FINDTEXTFULL`, `SCI_FORMATRANGEFULL` and `SCI_GETTEXTRANGEFULL` APIs are available
 
 
 ### Breaking Changes in Notepad++ 8.4.3 and later
 
-'Source/Include/Scintilla.inc' no longer provides the `TSearchResultMarking` type.
+[Source/Include/Scintilla.inc] no longer provides the `TSearchResultMarking` type.
 
 Notepad++ replaced the underlying Scintilla structure with [a custom type][oneMatch] that can't be implemented in Object Pascal.
 
@@ -159,11 +182,11 @@ Note that the following messages are no longer provided:
 Since Scintilla version [5.1.5][sci515], calling any of these three APIs with an empty buffer returns a string length that _does not count the final `NULL` character_.
 Code paths depending on the old implementation should add 1 to the return value.
 
-Methods provided by 'Source/Units/Common/NppPlugin.pas':
+Methods provided by [Source/Units/Common/NppPlugin.pas](Source/Units/Common/NppPlugin.pas#lines-417):
 
 - `TNppPlugin.HasV5Apis` - returns `true` if the running editor is at least version 8.4, [the first release][8.4] with a Scintilla v5 API
 
-### Optional Scintilla Features (as of v5.2.3)[^4]
+### Optional Scintilla Features (as of v5.3.2)[^9]
 
 Use these compiler definitions to enable or disable features.
 
@@ -208,17 +231,19 @@ _Hides_ the following API messages:
 ## Plugin API Reference
 
 [^1]: [`NPPM_ADDTOOLBARICON_FORDARKMODE`](https://community.notepad-plus-plus.org/topic/21652/add-new-api-nppm_addtoolbaricon_fordarkmode-for-dark-mode)
-
 [^2]: [`NPPM_ADDTOOLBARICON_DEPRECATED`](https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_addtoolbaricon-nppm_addtoolbaricon_deprecated-in-v80)
-
 [^3]: [`TTbIconsDarkMode`](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/8a898bae3f84c03c44aaed25001e9fa1ddfa09aa)
-
-[^4]: [Scintilla 5.2.3 definitions](https://github.com/notepad-plus-plus/notepad-plus-plus/blob/ed4bb1a93e763001aac842698fcde0856ba8b0bc/scintilla/include/Scintilla.h)
+[^4]: [`NPPM_ISDARKMODEENABLED`][dmAPI]
+[^5]: [`NPPM_GETDARKMODECOLORS`][dmAPI]
+[^6]: [`NPPN_DARKMODECHANGED`][dmNotif]
+[^7]: [`DWS_USEOWNDARKMODE`](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/d3b026bfeb96eb39e0402673d68dd04e640e2e1e#diff-13f08cb1430beb8369d6b0712fa5005d6fdd8c9d8d0c67d9a967a1cd76fc0f7b)
+[^8]: [`TDarkModeColors`][dmAPI]
+[^9]: [Scintilla 5.3.2 definitions](https://github.com/notepad-plus-plus/notepad-plus-plus/blob/fc61868cf2e317bfb7384502f80b6476fda6ddc8/scintilla/include/Scintilla.h)
 
 
 
 [upstream]: https://sourceforge.net/projects/npp-plugins/files/DelphiPluginTemplate
-[DBGP]: https://github.com/zobo/dbgpPlugin
+[DBGp]: https://github.com/zobo/dbgpPlugin
 [D2009]: https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
 [DXE2]: https://community.embarcadero.com/blogs/entry/delphi-64bit-code
 [sci]: https://www.scintilla.org/ScintillaDoc.html#TextRetrievalAndModification
@@ -229,3 +254,6 @@ _Hides_ the following API messages:
 [8.4]: https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80
 [oneMatch]: https://github.com/notepad-plus-plus/notepad-plus-plus/commit/08128ee36a31fdb0b3d72d1d7342f50e8103ea47#diff-41f42d8960fb90330ea7a19c8e7f35d0575fe12eb976cb95f4971106c48329b4
 [docs]: https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
+[dmAPI]: https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ff
+[dmNotif]: https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR696
+[Source/Include/Scintilla.inc]: https://bitbucket.org/rdipardo/delphiplugintemplate/src/HEAD/Source/Include/Scintilla.inc
