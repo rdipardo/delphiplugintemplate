@@ -14,6 +14,7 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
+| *"default":default*      |  5.3.2/3                |  8.5+   (all builds)           |
 | *"api-v5.3.2":v5.3.2*    |  5.3.2                  |  8.4.8+ (all builds)           |
 | *"api-v5.2.3":v5.2.3*    |  5.2.3                  |  8.4.3+ (all builds)           |
 | *"api-v5.2.2":v5.2.2*    |  5.2.2                  |  8.4 - 8.4.2 (all builds)      |
@@ -26,6 +27,7 @@ Download one of these tagged revisions to target an appropriate API level:
 [v5.2.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.3.zip
 [v5.2.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
 [v4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v4.zip
+[default]https://bitbucket.org/rdipardo/delphiplugintemplate/get/default.zip
 
 Or, clone the repository and check out a tag, for example:
 
@@ -111,22 +113,22 @@ h3. Dark Mode API (Notepad++ 8.4.1 and later)
 
 API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-373/:
 
-- @NPPM_ISDARKMODEENABLED@[4]
-- @NPPM_GETDARKMODECOLORS@[5]
-- @NPPN_DARKMODECHANGED@[6]
+* @NPPM_ISDARKMODEENABLED@[4]
+* @NPPM_GETDARKMODECOLORS@[5]
+* @NPPN_DARKMODECHANGED@[6]
 
 Constants defined in "Source/Include/Docking.inc":Source/Include/Docking.inc#lines-35/:
 
-- @DWS_USEOWNDARKMODE@[7]
+* @DWS_USEOWNDARKMODE@[7]
 
 Types provided by "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-19/:
 
-- @TDarkModeColors@[8]
+* @TDarkModeColors@[8]
 
 Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-365/:
 
-- @IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
-- @GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
+* @IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
+* @GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
 
 
 h3. 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
