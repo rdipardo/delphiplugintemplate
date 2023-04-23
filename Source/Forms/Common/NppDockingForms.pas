@@ -115,6 +115,7 @@ procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
 begin
   if (self.Npp.NppData.NppHandle <> msg.NMHdr.hwndFrom) then
   begin
+    self.RemoveControlParent(self);
     inherited;
     exit;
   end;
@@ -136,7 +137,6 @@ begin
     if Assigned(FOnDock) then
       FOnDock(self);
   end;
-  inherited;
 end;
 
 procedure TNppDockingForm.RegisterDockingForm
@@ -151,14 +151,12 @@ begin
   if (not self.Icon.Empty) then
   begin
     self.ToolbarData.IconTab := self.Icon.Handle;
-    self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ICONTAB;
+    self.ToolbarData.Mask := MaskStyle or DWS_ICONTAB;
   end;
 
   self.ToolbarData.ClientHandle := self.Handle;
 
   self.ToolbarData.DlgId := self.DlgId;
-  self.ToolbarData.Mask := MaskStyle;
-
   self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ADDINFO;
 
   GetMem(self.ToolbarData.Title, MAX_PATH * sizeof(nppPChar));
@@ -216,20 +214,25 @@ end;
 // looking for the previous component, while in a floating state.
 // I still don't know why the pointer climbs up to the docking dialog that holds this one
 // but this works for now.
+// ==========================================================================================
+// Changed logic to *set* (not clear) the WS_EX_CONTROLPARENT flag:
+// https://github.com/kbilsted/NotepadPlusPlusPluginPack.Net/issues/17#issuecomment-683455467
+// ==========================================================================================
 procedure TNppDockingForm.RemoveControlParent(control: TControl);
 var
   wincontrol: TWinControl;
-  i, r: Integer;
+  i: Integer;
+  r: NativeInt;
 begin
   if (control is TWinControl) then
   begin
     wincontrol := control as TWinControl;
     wincontrol.HandleNeeded;
-    r := Windows.GetWindowLong(wincontrol.Handle, GWL_EXSTYLE);
-    if (r and WS_EX_CONTROLPARENT = WS_EX_CONTROLPARENT) then
+    r := Windows.GetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE);
+    if (r and WS_EX_CONTROLPARENT <> WS_EX_CONTROLPARENT) then
     begin
-      Windows.SetWindowLong(wincontrol.Handle, GWL_EXSTYLE,
-        r and not WS_EX_CONTROLPARENT);
+      Windows.SetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE,
+        r or WS_EX_CONTROLPARENT);
     end;
   end;
   for i := control.ComponentCount - 1 downto 0 do
