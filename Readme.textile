@@ -184,7 +184,7 @@ Code paths depending on the old implementation should add 1 to the return value.
 
 Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-417/:
 
-* `TNppPlugin.HasV5Apis` - returns `true` if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
+* @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
 h3. Optional Scintilla Features (as of v5.3.2)[9]
