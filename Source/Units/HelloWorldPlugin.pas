@@ -38,6 +38,7 @@ type
     procedure FuncHelloWorldDocking;
     procedure FuncAbout;
     procedure DoNppnToolbarModification; override;
+    procedure BeNotified(sn: PSciNotification); override;
   end;
 
 procedure _FuncHelloWorld; cdecl;
@@ -256,6 +257,20 @@ begin
   else
     SendMessage(NppData.NppHandle, NPPM_ADDTOOLBARICON_DEPRECATED,
       WPARAM(CmdIdFromDlgId(DlgMenuId)), LPARAM(@tb));
+end;
+
+procedure THelloWorldPlugin.BeNotified(sn: PSciNotification);
+begin
+  inherited BeNotified(sn);
+  if HWND(sn^.nmhdr.hwndFrom) = self.NppData.NppHandle then begin
+    case sn.nmhdr.code of
+      NPPN_DARKMODECHANGED: begin
+        if Assigned(HelloWorldDockingForm) then begin
+          HelloWorldDockingForm.ToggleDarkMode;
+        end;
+      end;
+    end;
+  end;
 end;
 
 end.

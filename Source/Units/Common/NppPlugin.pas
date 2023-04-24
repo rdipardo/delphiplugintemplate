@@ -64,7 +64,7 @@ uses
     // needed for DLL export.. wrappers are in the main dll file.
     function GetName: nppPChar;
     function GetFuncsArray(var FuncsCount: Integer): Pointer;
-    procedure BeNotified(sn: PSciNotification);
+    procedure BeNotified(sn: PSciNotification); virtual;
     procedure MessageProc(var Msg: TMessage); virtual;
     procedure SetInfo(NppData: TNppData); virtual;
 
