@@ -15,6 +15,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+const
+  /// Standard flag for main parent after its children are initialized.
+  dmfInit: Cardinal = $0000000B;
+  /// Standard flag for main parent usually used in NPPN_DARKMODECHANGED.
+  dmfHandleChange: Cardinal = $0000000C;
+
 type
   TDarkModeColors = packed record
     Background: Cardinal;

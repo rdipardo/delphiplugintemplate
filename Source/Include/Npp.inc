@@ -427,6 +427,37 @@ const
   // since 8.4.7
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/4d5069280900ee249d358bc2b311bdb4b03f30a9
 
+  NPPM_DARKMODESUBCLASSANDTHEME = (NPPMSG + 112);
+  // ULONG NPPM_DARKMODESUBCLASSANDTHEME(ULONG dmFlags, HWND hwnd)
+  // Add support for generic dark mode.
+  //
+  // Docking panels don't need to call NPPM_DARKMODESUBCLASSANDTHEME for main hwnd.
+  // Subclassing is applied automatically unless DWS_USEOWNDARKMODE flag is used.
+  //
+  // Returns succesful combinations of flags.
+  // Examples:
+  //
+  // - after controls initializations in WM_INITDIALOG, in WM_CREATE or after CreateWindow:
+  //
+  // auto success = static_cast<ULONG>(::SendMessage(nppData._nppHandle, NPPM_DARKMODESUBCLASSANDTHEME, static_cast<WPARAM>(NppDarkMode::dmfInit), reinterpret_cast<LPARAM>(mainHwnd)));
+  //
+  // - handling dark mode change:
+  //
+  // extern "C" __declspec(dllexport) void beNotified(SCNotification * notifyCode)
+  // {
+  // 	switch (notifyCode->nmhdr.code)
+  // 	{
+  // 		case NPPN_DARKMODECHANGED:
+  // 		{
+  // 			::SendMessage(nppData._nppHandle, NPPM_DARKMODESUBCLASSANDTHEME, static_cast<WPARAM>(dmfHandleChange), reinterpret_cast<LPARAM>(mainHwnd));
+  // 			::SetWindowPos(mainHwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED); // to redraw titlebar and window
+  // 			break;
+  // 		}
+  // 	}
+  // }
+  // since 8.5.4
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f
+
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
   CURRENT_DIRECTORY = 2;

@@ -14,7 +14,8 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.3.2/3                |  8.5+   (all builds)           |
+| *"default":default*      |  5.3.5                  |  8.5.4+ (all builds)           |
+| *"api-v5.3.3-4":v5.3.3*  |  5.3.3/4                |  8.5 - 8.5.3 (all builds)      |
 | *"api-v5.3.2":v5.3.2*    |  5.3.2                  |  8.4.8+ (all builds)           |
 | *"api-v5.2.3":v5.2.3*    |  5.2.3                  |  8.4.3+ (all builds)           |
 | *"api-v5.2.2":v5.2.2*    |  5.2.2                  |  8.4 - 8.4.2 (all builds)      |
@@ -23,6 +24,7 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
+[v5.3.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.3-4.zip
 [v5.3.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.2.zip
 [v5.2.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.3.zip
 [v5.2.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
@@ -109,7 +111,7 @@ bc[pascal]. {$IFDEF CPUx64}
 {$ENDIF}
 
 
-h3. Dark Mode API (Notepad++ 8.4.1 and later)
+h3. Dark Mode Notification API (Notepad++ 8.4.1 and later)
 
 API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-373/:
 
@@ -130,6 +132,16 @@ Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppP
 * @IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
 * @GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
 
+h3. Dark Mode Theme API (Notepad++ 8.5.4 and later)
+
+API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-430/:
+
+* @NPPM_DARKMODESUBCLASSANDTHEME@[9]
+
+Bit masks defined in "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-20/:
+
+* @dmfInit@[10]
+* @dmfHandleChange@[11]
 
 h3. 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
 
@@ -187,7 +199,7 @@ Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppP
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.3.2)[9]
+h3. Optional Scintilla Features (as of v5.3.2)[12]
 
 Use these compiler definitions to enable or disable features.
 
@@ -242,7 +254,13 @@ fn7. "DWS_USEOWNDARKMODE":https://github.com/notepad-plus-plus/notepad-plus-plus
 
 fn8. "TDarkModeColors":dmAPI
 
-fn9. "Scintilla 5.2.3 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/fc61868cf2e317bfb7384502f80b6476fda6ddc8/scintilla/include/Scintilla.h
+fn9. "NPPM_DARKMODESUBCLASSANDTHEME":dmfAPI
+
+fn10. "NppDarkMode::dmfInit":dmfAPI
+
+fn11. "NppDarkMode::dmfHandleChange":dmfAPI
+
+fn12. "Scintilla 5.3.2 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/fc61868cf2e317bfb7384502f80b6476fda6ddc8/scintilla/include/Scintilla.h
 
 
 
@@ -260,3 +278,4 @@ fn9. "Scintilla 5.2.3 definitions":https://github.com/notepad-plus-plus/notepad-
 [docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
 [dmAPI]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ff
 [dmNotif]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR696
+[dmfAPI]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ff
