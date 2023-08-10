@@ -14,7 +14,7 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.3.5                  |  8.5.4+ (all builds)           |
+| *"default":default*      |  5.3.5/6                |  8.5.4+ (all builds)           |
 | *"api-v5.3.3-4":v5.3.3*  |  5.3.3/4                |  8.5 - 8.5.3 (all builds)      |
 | *"api-v5.3.2":v5.3.2*    |  5.3.2                  |  8.4.8 - 8.4.9 (all builds)    |
 | *"api-v5.2.3":v5.2.3*    |  5.2.3                  |  8.4.3 - 8.4.7 (all builds)    |
