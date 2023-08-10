@@ -118,12 +118,15 @@ begin
 end;
 
 procedure THelloWorldPlugin.FuncHelloWorld;
+var
+  Editor: HWND;
 begin
-  SendMessageW(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('Hello, World!'#13#10)));
+  Editor := Self.CurrentScintilla;
+  SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('Hello, World!'#13#10)));
 
-  if SendMessageW(self.NppData.ScintillaMainHandle, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
+  if SendMessageW(Editor, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
   then
-    SendMessageW(self.NppData.ScintillaMainHandle, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
+    SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
 end;
 
 procedure THelloWorldPlugin.FuncHolaMundo;
@@ -131,24 +134,26 @@ const
   OldTxt = 'Hello, World!';
   NewTxt = '¡Hola, mundo!';
 var
+  Editor: HWND;
   HelloTxt: TSciTextToFind;
   StartPos: Sci_Position;
 begin
+  Editor := Self.CurrentScintilla;
   HelloTxt := Default (TSciTextToFind);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessageW(NppData.ScintillaMainHandle, SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessageW(NppData.ScintillaMainHandle, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
+  StartPos := SendMessageW(Editor, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessageW(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessageW(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
+    SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessageW(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
+    SendMessageW(Editor, SCI_REPLACETARGET,
       Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessageW(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessageW(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+    SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 
@@ -157,28 +162,26 @@ const
   OldTxt = 'Hello, World!';
   NewTxt = '¡Hola, mundo!';
 var
+  Editor: HWND;
   HelloTxt: TSciTextToFindFull;
   StartPos: Sci_Position;
 begin
+  Editor := Self.CurrentScintilla;
   HelloTxt := Default (TSciTextToFindFull);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(NppData.ScintillaMainHandle,
-    SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessage(Editor, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(NppData.ScintillaMainHandle, SCI_FINDTEXTFULL, 0,
-    LPARAM(@HelloTxt));
+  StartPos := SendMessage(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETTARGETEND,
+    SendMessage(Editor, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessage(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_REPLACETARGET,
+    SendMessage(Editor, SCI_REPLACETARGET,
       Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONSTART,
-      StartPos, 0);
-    SendMessage(NppData.ScintillaMainHandle, SCI_SETSELECTIONEND,
-      Length(NewTxt), 0);
+    SendMessage(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessage(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 
@@ -249,12 +252,10 @@ begin
   begin
     tbDark.ToolbarIconDarkMode := LoadImage(Hinstance, 'TB_DM_ICON', IMAGE_ICON,
       0, 0, (LR_DEFAULTSIZE or LR_LOADMAP3DCOLORS));
-    SendMessage(NppData.NppHandle, NPPM_ADDTOOLBARICON_FORDARKMODE,
-      WPARAM(CmdIdFromDlgId(DlgMenuId)), LPARAM(@tbDark));
+    SendNppMessage(NPPM_ADDTOOLBARICON_FORDARKMODE, CmdIdFromDlgId(DlgMenuId), @tbDark);
   end
   else
-    SendMessage(NppData.NppHandle, NPPM_ADDTOOLBARICON_DEPRECATED,
-      WPARAM(CmdIdFromDlgId(DlgMenuId)), LPARAM(@tb));
+    SendNppMessage(NPPM_ADDTOOLBARICON_DEPRECATED, CmdIdFromDlgId(DlgMenuId), @tb);
 end;
 
 procedure THelloWorldPlugin.BeNotified(sn: PSciNotification);
