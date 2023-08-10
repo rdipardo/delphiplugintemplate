@@ -41,6 +41,7 @@ uses
   private
     FuncArray: array of _TFuncItem;
     FClosingBufferID: THandle;
+    function GetCurrentScintilla: HWND;
   protected
     PluginName: nppString;
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
@@ -54,6 +55,9 @@ uses
       ShortcutKey: PShortcutKey): Integer; overload;
     function MakeShortcutKey(const Ctrl, Alt, Shift: Boolean; const AKey: UCHAR)
       : PShortcutKey;
+    // wrappers for common API calls
+    function SendNppMessage(Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: NativeInt = 0): LRESULT; overload;
+    function SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; APParam: Pointer = nil): LRESULT; overload;
   public
     NppData: TNppData;
     constructor Create;
@@ -85,6 +89,8 @@ uses
     // needs N++ 8.4.1 or later
     function IsDarkModeEnabled: Boolean;
     procedure GetDarkModeColors(PColors: PDarkModeColors);
+
+    property CurrentScintilla: HWND read GetCurrentScintilla;
   end;
 
 implementation
@@ -163,14 +169,14 @@ procedure TNppPlugin.GetFileLine(var filename: String; var Line: Sci_Position);
 var
   s: array [0..1001] of char;
   r: Sci_Position;
+  editor: HWND;
 begin
-  SendMessage(self.NppData.NppHandle, NPPM_GETFULLCURRENTPATH, 0,
-    LPARAM(@s[0]));
+  editor := CurrentScintilla;
+  SendNppMessage(NPPM_GETFULLCURRENTPATH, 0, @s[0]);
   filename := string(s);
 
-  r := SendMessage(self.NppData.ScintillaMainHandle, SCI_GETCURRENTPOS, 0, 0);
-  Line := SendMessage(self.NppData.ScintillaMainHandle,
-    SCI_LINEFROMPOSITION, r, 0);
+  r := SendMessage(editor, SCI_GETCURRENTPOS, 0, 0);
+  Line := SendMessage(editor, SCI_LINEFROMPOSITION, r, 0);
 end;
 
 function TNppPlugin.GetFuncsArray(var FuncsCount: Integer): Pointer;
@@ -188,8 +194,7 @@ function TNppPlugin.GetPluginsConfigDir: string;
 var
   s: array [0..1001] of char;
 begin
-  SendMessage(self.NppData.NppHandle, NPPM_GETPLUGINSCONFIGDIR, 1000,
-    LPARAM(@s[0]));
+  SendNppMessage(NPPM_GETPLUGINSCONFIGDIR, 1000, @s[0]);
   Result := string(s);
 end;
 
@@ -294,7 +299,7 @@ var
 begin
   s := '';
   SetLength(s, 800);
-  SendMessage(self.NppData.NppHandle, NPPM_GETCURRENTWORD, 0, LPARAM(PChar(s)));
+  SendNppMessage(NPPM_GETCURRENTWORD, 0, PChar(s));
   Result := s;
 end;
 
@@ -304,13 +309,11 @@ var
   s: array [0..1001] of char;
 begin
   // ask if we are not already opened
-  SendMessage(self.NppData.NppHandle, NPPM_GETFULLCURRENTPATH, 0,
-    LPARAM(@s[0]));
+  SendNppMessage(NPPM_GETFULLCURRENTPATH, 0, @s[0]);
   Result := true;
   if {$ifdef FPC}WideSameText{$else}SameText{$endif}(string(s), filename) then
     exit;
-  r := SendMessage(self.NppData.NppHandle, WM_DOOPEN, 0,
-    LPARAM(PChar(filename)));
+  r := SendNppMessage(WM_DOOPEN, 0, PChar(filename));
   Result := (r = 0);
 end;
 
@@ -320,7 +323,7 @@ var
 begin
   r := self.DoOpen(filename);
   if (r) then
-    SendMessage(self.NppData.ScintillaMainHandle, SCI_GOTOLINE, Line, 0);
+    SendMessage(CurrentScintilla, SCI_GOTOLINE, Line, 0);
   Result := r;
 end;
 
@@ -333,16 +336,36 @@ function TNppPlugin.GetNppVersion: Cardinal;
 var
   NppVersion: Cardinal;
 begin
-  NppVersion := SendMessage(self.NppData.NppHandle, NPPM_GETNPPVERSION, 0, 0);
+  NppVersion := SendNppMessage(NPPM_GETNPPVERSION);
   // retrieve the zero-padded version, if available
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ef609c896f209ecffd8130c3e3327ca8a8157e72
   if ((HIWORD(NppVersion) > 8) or
       ((HIWORD(NppVersion) = 8) and
         (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191, 192, 193]))) or
           (LOWORD(NppVersion) in [5, 6, 7, 8, 9])))) then
-    NppVersion := SendMessage(self.NppData.NppHandle, NPPM_GETNPPVERSION, 1, 0);
+    NppVersion := SendNppMessage(NPPM_GETNPPVERSION, 1, 0);
 
   Result := NppVersion;
+end;
+
+function TNppPlugin.SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; _LParam: NativeInt): LRESULT;
+begin
+  Result := SendMessage(self.NppData.NppHandle, Msg, WPARAM(_WParam), LPARAM(_LParam));
+end;
+
+function TNppPlugin.SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; APParam: Pointer): LRESULT;
+begin
+  Result := SendNppMessage(Msg, _WParam, NativeInt(APParam));
+end;
+
+function TNppPlugin.GetCurrentScintilla: HWND;
+var
+  Idx: Integer;
+begin
+  Result := Self.NppData.ScintillaMainHandle;
+  SendNppMessage(NPPM_GETCURRENTSCINTILLA, 0, @Idx);
+  if Idx <> 0 then
+    Result := Self.NppData.ScintillaSecondHandle;
 end;
 
 /// since 8.0
@@ -366,7 +389,7 @@ begin
     ((HIWORD(NppVersion) > 8) or
      ((HIWORD(NppVersion) = 8) and
         (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191, 192, 193]))))));
-  Result := (HasQueryApi and Boolean(SendMessage(self.NppData.NppHandle, NPPM_ISDARKMODEENABLED, 0, 0)));
+  Result := (HasQueryApi and Boolean(SendNppMessage(NPPM_ISDARKMODEENABLED)));
 end;
 
 /// since 8.4.1
@@ -375,7 +398,7 @@ end;
 procedure TNppPlugin.GetDarkModeColors(PColors: PDarkModeColors);
 begin
   if IsDarkModeEnabled then
-    SendMessage(self.NppData.NppHandle, NPPM_GETDARKMODECOLORS, WPARAM(SizeOf(TDarkModeColors)), LPARAM(PColors));
+    SendNppMessage(NPPM_GETDARKMODECOLORS, SizeOf(TDarkModeColors), PColors);
 end;
 
 /// since 8.3
