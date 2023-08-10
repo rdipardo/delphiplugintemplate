@@ -18,7 +18,7 @@
 
 library HelloWorld;
 
-{$R '..\Source\HelloWorldResource.rc'}
+{$R '..\Source\HelloWorldResource.res'}
 {$WARN SYMBOL_PLATFORM OFF} // Notepad++ only supports Windows
 
 uses
