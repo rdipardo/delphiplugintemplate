@@ -458,6 +458,15 @@ const
   // since 8.5.4
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f
 
+  NPPM_ALLOCATEINDICATOR = (NPPMSG + 113);
+  // BOOL NPPM_ALLOCATEINDICATOR(int numberRequested, int* startNumber)
+  // sets startNumber to the initial indicator ID if successful
+  // Allocates an indicator number to a plugin: if a plugin needs to add an indicator,
+  // it has to use this message to get the indicator number, in order to prevent a conflict with the other plugins.
+  // Returns: TRUE if successful, FALSE otherwise.
+  // since 8.5.6
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/de25873cb3352ee59d883e95e80c91806944e348
+
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
   CURRENT_DIRECTORY = 2;
