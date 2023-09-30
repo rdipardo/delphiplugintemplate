@@ -18,6 +18,10 @@
 
 library HelloWorld;
 
+{$IFDEF RELEASE}
+  {$SetPEOptFlags $40}
+{$ENDIF}
+
 {$R '..\Source\HelloWorldResource.res'}
 {$WARN SYMBOL_PLATFORM OFF} // Notepad++ only supports Windows
 

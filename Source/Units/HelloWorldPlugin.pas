@@ -169,19 +169,19 @@ begin
   Editor := Self.CurrentScintilla;
   HelloTxt := Default (TSciTextToFindFull);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(Editor, SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
+  StartPos := SendMessageW(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessage(Editor, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETTARGETEND,
+    SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessage(Editor, SCI_REPLACETARGET,
+    SendMessageW(Editor, SCI_REPLACETARGET,
       Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+    SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 

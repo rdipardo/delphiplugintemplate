@@ -177,8 +177,8 @@ begin
   SendNppMessage(NPPM_GETFULLCURRENTPATH, 0, @s[0]);
   filename := string(s);
 
-  r := SendMessage(editor, SCI_GETCURRENTPOS, 0, 0);
-  Line := SendMessage(editor, SCI_LINEFROMPOSITION, r, 0);
+  r := SendMessageW(editor, SCI_GETCURRENTPOS, 0, 0);
+  Line := SendMessageW(editor, SCI_LINEFROMPOSITION, r, 0);
 end;
 
 function TNppPlugin.GetFuncsArray(var FuncsCount: Integer): Pointer;
@@ -327,7 +327,7 @@ var
 begin
   r := self.DoOpen(filename);
   if (r) then
-    SendMessage(CurrentScintilla, SCI_GOTOLINE, Line, 0);
+    SendMessageW(CurrentScintilla, SCI_GOTOLINE, Line, 0);
   Result := r;
 end;
 
@@ -354,7 +354,7 @@ end;
 
 function TNppPlugin.SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; _LParam: NativeInt): LRESULT;
 begin
-  Result := SendMessage(self.NppData.NppHandle, Msg, WPARAM(_WParam), LPARAM(_LParam));
+  Result := SendMessageW(self.NppData.NppHandle, Msg, WPARAM(_WParam), LPARAM(_LParam));
 end;
 
 function TNppPlugin.SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; APParam: Pointer): LRESULT;
