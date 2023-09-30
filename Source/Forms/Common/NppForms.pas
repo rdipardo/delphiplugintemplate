@@ -91,7 +91,7 @@ end;
 function TNppForm.SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: NativeUInt; _LParam: NativeInt): LRESULT;
 begin
   try
-    if SendMessageTimeout(Hndl, Msg, _WParam, _LParam, SMTO_NORMAL, 5000, @Result) = 0 then
+    if SendMessageTimeoutW(Hndl, Msg, _WParam, _LParam, SMTO_NORMAL, 5000, @Result) = 0 then
       RaiseLastOSError;
   except
     on E: EOSError do begin

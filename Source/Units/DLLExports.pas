@@ -25,13 +25,12 @@ uses
 
 /// *NOTE*
 /// exported function names must be EXACTLY these: Pascal is case insensitive, not C++
-function isUnicode: BOOL; cdecl; export;
-function getName: NppPChar; cdecl; export;
-function getFuncsArray(var nFuncs: integer): Pointer; cdecl; export;
-function messageProc(Msg: integer; _wParam: WPARAM; _lParam: LPARAM): LRESULT;
-  cdecl; export;
-procedure setInfo(NppData: TNppData); cdecl; export;
-procedure beNotified(Msg: PSciNotification); cdecl; export;
+function isUnicode: BOOL; cdecl;
+function getName: NppPChar; cdecl;
+function getFuncsArray(var nFuncs: integer): Pointer; cdecl;
+function messageProc(Msg: integer; _wParam: WPARAM; _lParam: LPARAM): LRESULT; cdecl;
+procedure setInfo(NppData: TNppData); cdecl;
+procedure beNotified(Msg: PSciNotification); cdecl;
 procedure DLLEntryPoint(dwReason: DWord);
 
 implementation
@@ -55,28 +54,27 @@ begin
   end;
 end;
 
-procedure setInfo(NppData: TNppData); cdecl; export;
+procedure setInfo(NppData: TNppData); cdecl;
 begin
   Npp.setInfo(NppData);
 end;
 
-function getName: NppPChar; cdecl; export;
+function getName: NppPChar; cdecl;
 begin
   Result := Npp.getName;
 end;
 
-function getFuncsArray(var nFuncs: integer): Pointer; cdecl; export;
+function getFuncsArray(var nFuncs: integer): Pointer; cdecl;
 begin
   Result := Npp.getFuncsArray(nFuncs);
 end;
 
-procedure beNotified(Msg: PSciNotification); cdecl; export;
+procedure beNotified(Msg: PSciNotification); cdecl;
 begin
   Npp.beNotified(Msg);
 end;
 
-function messageProc(Msg: integer; _wParam: WPARAM; _lParam: LPARAM): LRESULT;
-  cdecl; export;
+function messageProc(Msg: integer; _wParam: WPARAM; _lParam: LPARAM): LRESULT; cdecl;
 var
   xmsg: TMessage;
 begin
@@ -88,7 +86,7 @@ begin
   Result := xmsg.Result;
 end;
 
-function isUnicode: BOOL; cdecl; export;
+function isUnicode: BOOL; cdecl;
 begin
   Result := true;
 end;

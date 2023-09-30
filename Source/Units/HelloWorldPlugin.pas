@@ -122,11 +122,11 @@ var
   Editor: HWND;
 begin
   Editor := Self.CurrentScintilla;
-  SendMessage(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('Hello, World!'#13#10)));
+  SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('Hello, World!'#13#10)));
 
-  if SendMessage(Editor, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
+  if SendMessageW(Editor, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
   then
-    SendMessage(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
+    SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
 end;
 
 procedure THelloWorldPlugin.FuncHolaMundo;
@@ -141,19 +141,19 @@ begin
   Editor := Self.CurrentScintilla;
   HelloTxt := Default (TSciTextToFind);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(Editor, SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(Editor, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
+  StartPos := SendMessageW(Editor, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessage(Editor, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETTARGETEND,
+    SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessage(Editor, SCI_REPLACETARGET,
+    SendMessageW(Editor, SCI_REPLACETARGET,
       Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+    SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 
@@ -169,19 +169,19 @@ begin
   Editor := Self.CurrentScintilla;
   HelloTxt := Default (TSciTextToFindFull);
   HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessage(Editor, SCI_GETLENGTH, 0, 0);
+  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
   HelloTxt.chrgText := HelloTxt.chrg;
   HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessage(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
+  StartPos := SendMessageW(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
-    SendMessage(Editor, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETTARGETEND,
+    SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessage(Editor, SCI_REPLACETARGET,
+    SendMessageW(Editor, SCI_REPLACETARGET,
       Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessage(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessage(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+    SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
+    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
   end;
 end;
 
@@ -207,7 +207,11 @@ begin
     end;
   except
   on E: Exception do
+  {$IFDEF FPC}
+    MessageBox(Npp.NppData.NppHandle, PChar(E.Message), PChar(E.Message), MB_ICONERROR);
+  {$ELSE}
     MessageBoxW(Npp.NppData.NppHandle, PWChar(E.Message), PWChar(E.Message), MB_ICONERROR);
+  {$ENDIF}
   end;
 end;
 
