@@ -22,7 +22,7 @@ unit HelloWorldPlugin;
 interface
 
 uses
-  SysUtils, Windows, NppPlugin, HelloWorldDockingForms;
+  SysUtils, Windows, NppPlugin, HelloWorldDockingForms, AboutForms;
 
 const
   /// menu index of the dockable form
@@ -52,8 +52,10 @@ var
 
 implementation
 
+{$IFDEF FPC}
 uses
-  ModulePath, VersionInfo {$IFDEF FPC}, Forms{$ENDIF};
+  Forms;
+{$ENDIF}
 
 { THelloWorldPlugin }
 
@@ -186,24 +188,20 @@ begin
 end;
 
 procedure THelloWorldPlugin.FuncAbout;
-const
-  Msg = '%s'#13#10#13#10'%s'#13#10'%s'#13#10'License: %s';
-var
-  Info: TFileVersionInfo;
 begin
   try
     try
-      Info := TFileVersionInfo.Create(TModulePath.DLLFullName);
-      MessageBoxW(Npp.NppData.NppHandle,
-                  PWChar(WideFormat(Msg,
-                    [Info.FileDescription,
-                     Info.LegalCopyright,
-                     Info.Comments,
-                     Info.LegalTrademarks])),
-                  PWChar(Info.ProductName),
-                  MB_ICONINFORMATION);
+      if (not Assigned(AboutForm)) then begin
+      {$IFDEF FPC}
+          Application.CreateForm(TAboutForm, AboutForm);
+          AboutForm.Npp := Self;
+      {$ELSE}
+          AboutForm := TAboutForm.Create(Self);
+      {$ENDIF}
+      end;
+      AboutForm.ShowModal;
     finally
-      FreeAndNil(Info);
+      FreeAndNil(AboutForm);
     end;
   except
   on E: Exception do

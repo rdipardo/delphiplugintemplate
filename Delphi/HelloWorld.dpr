@@ -39,6 +39,7 @@ uses
   NppPlugin in '..\Source\Units\Common\nppplugin.pas',
   NppForms in '..\Source\Forms\Common\NppForms.pas' {NppForm} ,
   NppDockingForms in '..\Source\Forms\Common\NppDockingForms.pas' {NppDockingForm} ,
+  AboutForms in '..\Source\Forms\AboutForms.pas' {AboutForm} ,
   HelloworldDockingforms in '..\Source\Forms\helloworlddockingforms.pas' {HelloWorldDockingForm} ,
   HelloWorldPlugin in '..\Source\Units\HelloWorldPlugin.pas';
 

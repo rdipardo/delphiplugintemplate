@@ -18,8 +18,8 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "LegalCopyright", "Copyright \251 2008 Damjan Zobo Cvetko\0"
-      VALUE "Comments", "Updated for x64 Notepad++ by Robert Di Pardo, Copyright \251 2022\0"
-      VALUE "LegalTrademarks", "GPLv2 (main units); GPLv3 (N++ interface); LGPLv3 (Scintilla interface); MPL 2.0 (library)\0"
+      VALUE "Comments", "Updated for x64 Notepad++ by Robert Di Pardo\r\nCopyright \251 2022, 2023\0"
+      VALUE "LegalTrademarks", "GPLv2 (main units)\r\nGPLv3 (N++ interface)\r\nLGPLv3 (Scintilla interface)\r\nMPL 2.0 (library)\0"
       VALUE "FileDescription", "Notepad++ Plugin Template for Delphi & Lazarus\0"
       VALUE "OriginalFilename", "HelloWorld.dll\0"
       VALUE "InternalName", "HelloWorld\0"

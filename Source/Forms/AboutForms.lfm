@@ -1,0 +1,60 @@
+object AboutForm: TAboutForm
+  Left = 623
+  Height = 330
+  Top = 196
+  Width = 440
+  BorderStyle = bsToolWindow
+  Caption = 'About Hello World'
+  ClientHeight = 330
+  ClientWidth = 440
+  DesignTimePPI = 144
+  Font.Height = -16
+  Font.Name = 'Tahoma'
+  Position = poScreenCenter
+  LCLVersion = '2.2.6.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 330
+    Top = 0
+    Width = 440
+    Align = alClient
+    ClientHeight = 330
+    ClientWidth = 440
+    object Label1: TLabel
+      Left = 0
+      Height = 24
+      Top = 36
+      Width = 440
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Example plugin'
+    end
+    object Label2: TLabel
+      Left = 0
+      Height = 80
+      Top = 72
+      Width = 440
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Damjan Zobo Cvetko, zobo@users.sf.net'
+      WordWrap = True
+    end
+    object Label3: TLabel
+      Left = 0
+      Height = 80
+      Top = 152
+      Width = 440
+      Alignment = taCenter
+      AutoSize = False
+    end
+    object Button1: TButton
+      Left = 166
+      Height = 40
+      Top = 256
+      Width = 110
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 0
+    end
+  end
+end
