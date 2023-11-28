@@ -345,8 +345,8 @@ begin
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ef609c896f209ecffd8130c3e3327ca8a8157e72
   if ((HIWORD(NppVersion) > 8) or
       ((HIWORD(NppVersion) = 8) and
-        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191, 192, 193]))) or
-          (LOWORD(NppVersion) in [5, 6, 7, 8, 9])))) then
+        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191..193]))) or
+          (LOWORD(NppVersion) in [5..9])))) then
     NppVersion := SendNppMessage(NPPM_GETNPPVERSION, 1, 0);
 
   Result := NppVersion;
@@ -392,7 +392,7 @@ begin
   HasQueryApi :=
     ((HIWORD(NppVersion) > 8) or
      ((HIWORD(NppVersion) = 8) and
-        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191, 192, 193]))))));
+        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191..193]))))));
   Result := (HasQueryApi and Boolean(SendNppMessage(NPPM_ISDARKMODEENABLED)));
 end;
 
@@ -419,9 +419,9 @@ begin
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and
       // 8.3 => 8,3 *not* 8,30
-      ((LOWORD(NppVersion) in [3, 4]) or
+      ((LOWORD(NppVersion) in [3..9]) or
        // Also check for N++ versions 8.1.9.1, 8.1.9.2 and 8.1.9.3
-       ((LOWORD(NppVersion) > 21) and (not (LOWORD(NppVersion) in [191, 192, 193])))));
+       ((LOWORD(NppVersion) > 21) and (not (LOWORD(NppVersion) in [191..193])))));
 end;
 
 /// since 8.4
@@ -444,7 +444,7 @@ begin
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and
         ((LOWORD(NppVersion) >= 4) and
-           (not (LOWORD(NppVersion) in [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 31, 32, 33, 191, 192, 193]))));
+           (not (LOWORD(NppVersion) in [11..19, 21, 31..33, 191..193]))));
 end;
 
 /// since 8.4.3
@@ -459,7 +459,7 @@ begin
   Result :=
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and
-       ((LOWORD(NppVersion) >= 43) and (not (LOWORD(NppVersion) in [191, 192, 193]))));
+       ((LOWORD(NppVersion) >= 43) and (not (LOWORD(NppVersion) in [191..193]))));
 end;
 
 end.
