@@ -31,6 +31,12 @@ const
   MODELESSDIALOGADD = 0;
   MODELESSDIALOGREMOVE = 1;
   NPPM_GETNBSESSIONFILES = (NPPMSG + 13);
+  // LRESULT NPPM_GETNBSESSIONFILES (BOOL* isValidXML, const TCHAR* sessionFileName);
+  // Retrieves the number of files to load in the session sessionFileName. sessionFileName should be a full path name of an xml file.
+  // Returns 0 if sessionFileName is an empty string/NULL, or XML session file is corrupted/invalid, else the number of files.
+  // If isValidXML is null, then this parameter will be ignored. TRUE if XML is valid, otherwise FALSE.
+  // since 8.6
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/72c5175b33cb3a06d0ece2a7700295b0c9647140
   NPPM_GETSESSIONFILES = (NPPMSG + 14);
   NPPM_SAVESESSION = (NPPMSG + 15);
   NPPM_SAVECURRENTSESSION = (NPPMSG + 16);
