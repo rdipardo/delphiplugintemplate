@@ -61,7 +61,7 @@
             </Options>
           </Linking>
           <Other>
-            <CustomOptions Value="-vm4055"/>
+            <CustomOptions Value="-vm4055 -dRELEASE"/>
           </Other>
         </CompilerOptions>
       </Item2>
