@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.3.6
+  Object Pascal definitions for Scintilla 5.4.1
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2023 Robert Di Pardo <dipardo.r@gmail.com>
@@ -992,7 +992,9 @@ const
   SC_SEL_LINES = 2;
   SC_SEL_THIN = 3;
   SCI_SETSELECTIONMODE = 2422;
+  SCI_CHANGESELECTIONMODE = 2659;
   SCI_GETSELECTIONMODE = 2423;
+  SCI_SETMOVEEXTENDSSELECTION = 2719;
   SCI_GETMOVEEXTENDSSELECTION = 2706;
   SCI_GETLINESELSTARTPOSITION = 2424;
   SCI_GETLINESELENDPOSITION = 2425;
@@ -1138,6 +1140,7 @@ const
   SCI_CLEARSELECTIONS = 2571;
   SCI_SETSELECTION = 2572;
   SCI_ADDSELECTION = 2573;
+  SCI_SELECTIONFROMPOINT = 2474;
   SCI_DROPSELECTIONN = 2671;
   SCI_SETMAINSELECTION = 2574;
   SCI_GETMAINSELECTION = 2575;
