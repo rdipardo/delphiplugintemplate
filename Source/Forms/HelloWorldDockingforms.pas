@@ -46,7 +46,7 @@ type
   private
     { Private declarations }
   public
-    procedure ToggleDarkMode;
+    procedure ToggleDarkMode; override;
   end;
 
 var
@@ -113,7 +113,6 @@ end;
 
 procedure THelloWorldDockingForm.FormShow(Sender: TObject);
 begin
-  ToggleDarkMode;
   inherited;
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_SETMENUITEMCHECK, self.CmdID, 1);
 end;

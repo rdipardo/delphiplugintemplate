@@ -34,7 +34,6 @@ type
     constructor Create;
     procedure FuncHelloWorld;
     procedure FuncHolaMundo;
-    procedure FuncHolaMundoEx;
     procedure FuncHelloWorldDocking;
     procedure FuncAbout;
     procedure DoNppnToolbarModification; override;
@@ -103,9 +102,6 @@ begin
   end;
 {$ENDIF}
 {$ENDIF}
-  if Npp.HasFullRangeApis then
-    Npp.FuncHolaMundoEx
-  else
     Npp.FuncHolaMundo;
 end;
 
@@ -135,55 +131,51 @@ procedure THelloWorldPlugin.FuncHolaMundo;
 const
   OldTxt = 'Hello, World!';
   NewTxt = '¡Hola, mundo!';
+  NewTxtA: ShortString = #161'Hola, mundo!';
 var
   Editor: HWND;
   HelloTxt: TSciTextToFind;
+  HelloTxtFull: TSciTextToFindFull;
   StartPos: Sci_Position;
+  SciMsg, LenNewTxt: Cardinal;
 begin
   Editor := Self.CurrentScintilla;
+  SciMsg := SCI_FINDTEXT;
   HelloTxt := Default (TSciTextToFind);
-  HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
-  HelloTxt.chrgText := HelloTxt.chrg;
-  HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessageW(Editor, SCI_FINDTEXT, 0, LPARAM(@HelloTxt));
-  if StartPos <> INVALID_POSITION then
-  begin
-    SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
-    SendMessageW(Editor, SCI_SETTARGETEND,
-      StartPos + Length(OldTxt), 0);
-    SendMessageW(Editor, SCI_REPLACETARGET,
-      Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
-    SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+  with HelloTxt do begin
+    chrg.cpMin := 0;
+    chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
+    chrgText := chrg;
+    lpstrText := PAnsiChar(OldTxt);
   end;
-end;
-
-procedure THelloWorldPlugin.FuncHolaMundoEx;
-const
-  OldTxt = 'Hello, World!';
-  NewTxt = '¡Hola, mundo!';
-var
-  Editor: HWND;
-  HelloTxt: TSciTextToFindFull;
-  StartPos: Sci_Position;
-begin
-  Editor := Self.CurrentScintilla;
-  HelloTxt := Default (TSciTextToFindFull);
-  HelloTxt.chrg.cpMin := 0;
-  HelloTxt.chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
-  HelloTxt.chrgText := HelloTxt.chrg;
-  HelloTxt.lpstrText := PAnsiChar(OldTxt);
-  StartPos := SendMessageW(Editor, SCI_FINDTEXTFULL, 0, LPARAM(@HelloTxt));
+  if Npp.HasFullRangeApis then begin
+    SciMsg := SCI_FINDTEXTFULL;
+    HelloTxtFull := Default (TSciTextToFindFull);
+    with HelloTxtFull do begin
+      chrg.cpMin := 0;
+      chrg.cpMax := SendMessageW(Editor, SCI_GETLENGTH, 0, 0);
+      chrgText := chrg;
+      lpstrText := PAnsiChar(OldTxt);
+    end;
+  end;
+  StartPos := SendMessageW(Editor, SciMsg, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
     SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);
     SendMessageW(Editor, SCI_SETTARGETEND,
       StartPos + Length(OldTxt), 0);
-    SendMessageW(Editor, SCI_REPLACETARGET,
-      Length(NewTxt), LPARAM(PAnsiChar(NewTxt)));
+    if SendMessageW(Editor, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8 then
+    begin
+      LenNewTxt := Length(NewTxt);
+      SendMessageW(Editor, SCI_REPLACETARGET, LenNewTxt, LPARAM(PAnsiChar(NewTxt)));
+    end
+    else
+    begin
+      LenNewTxt := Length(NewTxtA);
+      SendMessageW(Editor, SCI_REPLACETARGET, LenNewTxt, LPARAM(@(NewTxtA)[1]));
+    end;
     SendMessageW(Editor, SCI_SETSELECTIONSTART, StartPos, 0);
-    SendMessageW(Editor, SCI_SETSELECTIONEND, Length(NewTxt), 0);
+    SendMessageW(Editor, SCI_SETSELECTIONEND, LenNewTxt, 0);
   end;
 end;
 
@@ -234,12 +226,23 @@ var
   tbDark: TTbIconsDarkMode;
   HTbBmp: HBITMAP;
   HTIcon: HICON;
+  hHDC: HDC;
+  bmpX, bmpY, icoX, icoY: Integer;
 begin
   tb := Default (TToolbarIcons);
   tbDark := Default (TTbIconsDarkMode);
-  HTbBmp := LoadImage(Hinstance, 'TB_BMP', IMAGE_BITMAP, 0, 0,
-    (LR_DEFAULTSIZE or LR_LOADMAP3DCOLORS));
-  HTIcon := LoadImage(Hinstance, 'TB_ICON', IMAGE_ICON, 0, 0,
+  hHDC := 0;
+  try
+    hHDC := GetDC(THandle(Nil));
+    bmpX := MulDiv(16, GetDeviceCaps(hHDC, LOGPIXELSX), 96);
+    bmpY := MulDiv(16, GetDeviceCaps(hHDC, LOGPIXELSY), 96);
+    icoX := MulDiv(32, GetDeviceCaps(hHDC, LOGPIXELSX), 96);
+    icoY := MulDiv(32, GetDeviceCaps(hHDC, LOGPIXELSY), 96);
+  finally
+    ReleaseDC(THandle(Nil), hHDC);
+  end;
+  HTbBmp := LoadImage(Hinstance, 'TB_BMP', IMAGE_BITMAP, bmpX, bmpY, 0);
+  HTIcon := LoadImage(Hinstance, 'TB_ICON', IMAGE_ICON, icoX, icoY,
     (LR_DEFAULTSIZE or LR_LOADMAP3DCOLORS));
   tb.ToolbarBmp := HTbBmp;
   tb.ToolbarIcon := HTIcon;
@@ -249,7 +252,7 @@ begin
   if self.SupportsDarkMode then
   begin
     tbDark.ToolbarIconDarkMode := LoadImage(Hinstance, 'TB_DM_ICON', IMAGE_ICON,
-      0, 0, (LR_DEFAULTSIZE or LR_LOADMAP3DCOLORS));
+      icoX, icoY, (LR_DEFAULTSIZE or LR_LOADMAP3DCOLORS));
     SendNppMessage(NPPM_ADDTOOLBARICON_FORDARKMODE, CmdIdFromDlgId(DlgMenuId), @tbDark);
   end
   else

@@ -52,5 +52,4 @@ begin
   Dll_Process_Detach_Hook:= @DLLEntryPoint;
   DLLEntryPoint(DLL_PROCESS_ATTACH);
   Application.Initialize;
-  Application.CreateForm(THelloWorldDockingForm, HelloWorldDockingForm);
 end.

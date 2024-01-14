@@ -52,6 +52,7 @@ type
     constructor Create(const Plugin: TNppPlugin); reintroduce; overload;
     destructor Destroy; override;
     function WantChildKey(Child: TControl; var Message: TMessage): Boolean; override;
+    procedure ToggleDarkMode; virtual;
   end;
 
 var
@@ -71,6 +72,8 @@ constructor TNppForm.Create(AOwner: TComponent);
 begin
   self.DefaultCloseAction := caNone;
   inherited Create(AOwner);
+  if Assigned(Self.Npp) then
+    ToggleDarkMode;
 end;
 
 constructor TNppForm.Create(const Plugin: TNppPlugin);
@@ -142,6 +145,10 @@ function TNppForm.WantChildKey(Child: TControl; var Message: TMessage): Boolean;
 begin
   Result := Child.Perform(CN_BASE + Message.Msg, Message.WParam,
     Message.LParam) <> 0;
+end;
+
+procedure TNppForm.ToggleDarkMode;
+begin
 end;
 
 end.
