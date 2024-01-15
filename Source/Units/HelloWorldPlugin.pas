@@ -22,7 +22,7 @@ unit HelloWorldPlugin;
 interface
 
 uses
-  SysUtils, Windows, NppPlugin, HelloWorldDockingForms, AboutForms;
+  SysUtils, Windows, NppPlugin, HelloWorldDockingForms, HelloWorldModeless, AboutForms;
 
 const
   /// menu index of the dockable form
@@ -35,6 +35,7 @@ type
     procedure FuncHelloWorld;
     procedure FuncHolaMundo;
     procedure FuncHelloWorldDocking;
+    procedure FuncHelloWorldModeless;
     procedure FuncAbout;
     procedure DoNppnToolbarModification; override;
     procedure BeNotified(sn: PSciNotification); override;
@@ -43,6 +44,7 @@ type
 procedure _FuncHelloWorld; cdecl;
 procedure _FuncHolaMundo; cdecl;
 procedure _FuncHelloWorldDocking; cdecl;
+procedure _FuncHelloWorldModeless; cdecl;
 procedure _FuncAbout; cdecl;
 
 /// a global instance of the main plugin object
@@ -72,6 +74,7 @@ begin
   self.AddFuncItem('&Replace "Hello, World!"', _FuncHolaMundo, PSk);
 
   self.AddFuncItem('Load Docking &Form', _FuncHelloWorldDocking);
+  self.AddFuncItem('Show a &Modeless Form', _FuncHelloWorldModeless);
   self.AddFuncItem('-', nil); // create a separator
   self.AddFuncItem('&About', _FuncAbout);
 end;
@@ -113,6 +116,11 @@ end;
 procedure _FuncHelloWorldDocking; cdecl;
 begin
   Npp.FuncHelloWorldDocking;
+end;
+
+procedure _FuncHelloWorldModeless; cdecl;
+begin
+  Npp.FuncHelloWorldModeless;
 end;
 
 procedure THelloWorldPlugin.FuncHelloWorld;
@@ -220,6 +228,14 @@ begin
 {$ENDIF}
 end;
 
+procedure THelloWorldPlugin.FuncHelloWorldModeless;
+begin
+  if (not Assigned(HelloWorldModelessForm)) then
+    HelloWorldModelessForm := TModelessForm.Create(self);
+
+  HelloWorldModelessForm.Show;
+end;
+
 procedure THelloWorldPlugin.DoNppnToolbarModification;
 var
   tb: TToolbarIcons;
@@ -267,6 +283,9 @@ begin
       NPPN_DARKMODECHANGED: begin
         if Assigned(HelloWorldDockingForm) then begin
           HelloWorldDockingForm.ToggleDarkMode;
+        end;
+        if Assigned(HelloWorldModelessForm) then begin
+          HelloWorldModelessForm.ToggleDarkMode;
         end;
       end;
     end;

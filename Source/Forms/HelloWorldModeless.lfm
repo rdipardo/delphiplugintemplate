@@ -1,0 +1,38 @@
+object HelloWorldModelessForm: TModelessForm
+  BorderStyle = bsDialog
+  Caption = 'Modeless Dialog'
+  Left = 649
+  Height = 282
+  Top = 155
+  Width = 306
+  OnCreate = FormCreate
+  ClientHeight = 282
+  ClientWidth = 306
+  DesignTimePPI = 144
+  Font.Height = -16
+  Font.Name = 'Tahoma'
+  Position = poScreenCenter
+  object Button1: TButton
+    Left = 96
+    Height = 38
+    Top = 180
+    Width = 112
+    Caption = 'Learn More'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Memo1: TMemo
+    Left = 12
+    Height = 134
+    Top = 12
+    Width = 278
+    Lines.Strings = (
+      '1. CTRL+A'
+      '2. CTRL+X'
+      '3. CTRL+V'
+      ''
+      'All working?'
+    )
+    TabOrder = 0
+  end
+end

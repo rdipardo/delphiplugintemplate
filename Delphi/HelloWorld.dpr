@@ -41,6 +41,7 @@ uses
   NppDockingForms in '..\Source\Forms\Common\NppDockingForms.pas' {NppDockingForm} ,
   AboutForms in '..\Source\Forms\AboutForms.pas' {AboutForm} ,
   HelloworldDockingforms in '..\Source\Forms\helloworlddockingforms.pas' {HelloWorldDockingForm} ,
+  HelloWorldModeless in '..\Source\Forms\helloworldmodeless.pas' {HelloWorldModelessForm} ,
   HelloWorldPlugin in '..\Source\Units\HelloWorldPlugin.pas';
 
 exports
