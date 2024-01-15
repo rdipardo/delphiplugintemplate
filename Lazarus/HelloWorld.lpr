@@ -51,5 +51,8 @@ exports
 begin
   Dll_Process_Detach_Hook:= @DLLEntryPoint;
   DLLEntryPoint(DLL_PROCESS_ATTACH);
+{$IFDEF VER3_2}
+  Application.Scaled := True;
+{$ENDIF}
   Application.Initialize;
 end.

@@ -165,8 +165,9 @@ begin
       chrgText := chrg;
       lpstrText := PAnsiChar(OldTxt);
     end;
-  end;
-  StartPos := SendMessageW(Editor, SciMsg, 0, LPARAM(@HelloTxt));
+    StartPos := SendMessageW(Editor, SciMsg, 0, LPARAM(@HelloTxtFull));
+  end else
+    StartPos := SendMessageW(Editor, SciMsg, 0, LPARAM(@HelloTxt));
   if StartPos <> INVALID_POSITION then
   begin
     SendMessageW(Editor, SCI_SETTARGETSTART, StartPos, 0);

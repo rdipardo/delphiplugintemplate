@@ -1,6 +1,6 @@
 h1. Notepad++ Plugin Template for Delphi & Lazarus
 
-!{border: 0}https://i.ibb.co/WkQ1PJk/npp-8-4-7-x64-win10-docked.png(npp-8-4-7-x64-win10-docked)!
+!{border: 0}https://i.ibb.co/1KN8LfC/npp-8-6-2-x64-win10-docked.png(npp-8-6-2-x64-win10-docked)!
 
 An updated version of the "Delphi plugin template":upstream by "Damjan Zobo Cvetko":https://github.com/zobo, developer of the popular "DBGp":DBGp plugin for the Xdebug server.
 
