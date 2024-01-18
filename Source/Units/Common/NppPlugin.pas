@@ -36,22 +36,25 @@ uses
 {$ENDIF};
 
 {$I '..\..\Include\Scintilla.inc'}
+{$I '..\..\Include\SciApi.inc'}
 {$I '..\..\Include\Npp.inc'}
 {$I '..\..\Include\DarkMode.inc'}
 
   TNppPlugin = class(TObject)
   private
-    FuncArray: array of _TFuncItem;
     FClosingBufferID: THandle;
     function GetCurrentScintilla: HWND;
   protected
     PluginName: nppString;
+    FuncArray: array of _TFuncItem;
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
     function SupportsBigFiles: Boolean; // needs N++ 8.3 or later
     function HasV5Apis: Boolean; // needs N++ 8.4 or later
     function HasFullRangeApis: Boolean; // needs N++ 8.4.3 or later
+    function HasMinimalReplacementApi: Boolean; // needs N++ 8.4.8 or later
     function GetNppVersion: Cardinal;
-    function GetPluginsConfigDir: string;
+    function GetApiLevel: TSciApiLevel;
+    function GetPluginsConfigDir: nppString;
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer; overload;
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD;
       ShortcutKey: PShortcutKey): Integer; overload;
@@ -194,12 +197,12 @@ begin
   Result := nppPChar(self.PluginName);
 end;
 
-function TNppPlugin.GetPluginsConfigDir: string;
+function TNppPlugin.GetPluginsConfigDir: nppString;
 var
-  s: array [0..1001] of char;
+  s: array [0..1001] of nppChar;
 begin
   SendNppMessage(NPPM_GETPLUGINSCONFIGDIR, 1000, @s[0]);
-  Result := string(s);
+  Result := nppString(s);
 end;
 
 procedure TNppPlugin.BeNotified(sn: PSciNotification);
@@ -354,6 +357,18 @@ begin
   Result := NppVersion;
 end;
 
+function TNppPlugin.GetApiLevel: TSciApiLevel;
+begin
+  if (not self.HasV5Apis) then
+    Result := sciApi_LT_5
+  else if (not self.HasFullRangeApis) then
+    Result := sciApi_GTE_515
+  else if (not self.HasMinimalReplacementApi) then
+    Result := sciApi_GTE_523
+  else
+    Result := sciApi_GTE_532;
+end;
+
 function TNppPlugin.SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; _LParam: NativeInt): LRESULT;
 begin
   Result := SendMessageW(self.NppData.NppHandle, Msg, WPARAM(_WParam), LPARAM(_LParam));
@@ -461,6 +476,20 @@ begin
   Result :=
     (HIWORD(NppVersion) > 8) or
     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 430));
+end;
+
+/// since 8.4.8
+/// A return value of `true` means the SCI_REPLACETARGETMINIMAL and SCI_GETSTYLEDTEXTFULL APIs added in Scintilla 5.3.2 are available
+/// https://groups.google.com/g/scintilla-interest/c/9OG2VdnWJ5I
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/fc61868cf2e317bfb7384502f80b6476fda6ddc8
+function TNppPlugin.HasMinimalReplacementApi: Boolean;
+var
+  NppVersion: Cardinal;
+begin
+  NppVersion := GetNppVersion;
+  Result :=
+    ((HIWORD(NppVersion) > 8) or
+     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 480)));
 end;
 
 end.

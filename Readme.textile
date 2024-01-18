@@ -133,8 +133,23 @@ Types provided by "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#line
 
 Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-365 :
 
-* @IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
-* @GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
+* @TNppPlugin.IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
+* @TNppPlugin.GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
+
+
+h3. @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ (Notepad++ 8.4.8 and later)
+
+Added to Scintilla 5.3.2 to minimize the visual impact of text replacement when "change history":https://scintilla.org/ChangeHistory.html is enabled.
+@SCI_GETSTYLEDTEXTFULL@ was a late addition to the 64-bit APIs introduced in 5.2.3.
+
+Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-32 :
+
+* @TSciApiLevel.sciApi_GTE_532@ - the running editor's version of Scintilla is at least 5.3.2
+
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-485 :
+
+* @TNppPlugin.HasMinimalReplacementApi@ - returns @true@ if the @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ APIs are available
+
 
 h3. Dark Mode Theme API (Notepad++ 8.5.4 and later)
 
@@ -170,6 +185,10 @@ For forward compatibility, the following types are provided by '"$":Source/Inclu
 * @TSciTextToFindFull@
 * @TSciRangeToFormatFull@
 
+Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-27 :
+
+* @TSciApiLevel.sciApi_GTE_523@ - the running editor's version of Scintilla is at least 5.2.3
+
 Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-433 :
 
 * @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
@@ -197,6 +216,11 @@ h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
 
 Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
 Code paths depending on the old implementation should add 1 to the return value.
+
+Types provided by "$":Source/Include/SciApi.inc :
+
+* @TSciApiLevel.sciApi_LT_5@ - the running editor's version of Scintilla is <= 4.4.6
+* @TSciApiLevel.sciApi_GTE_515@ - the Scintilla version is at least 5.1.5
 
 Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-417 :
 
