@@ -26,11 +26,13 @@ unit nppplugin;
 interface
 
 uses
-  Classes, SysUtils, Windows, Messages,
+  Classes, SysUtils, Windows, Messages
 {$IFNDEF FPC}
-  Vcl.Forms
+  , Vcl.Forms
 {$ELSE}
-  LCLIntf, LCLType, LMessages, Forms
+{$IFDEF LCL}
+  , LCLIntf, LCLType, LMessages, Forms
+{$ENDIF}
 {$ENDIF};
 
 {$I '..\..\Include\Scintilla.inc'}
