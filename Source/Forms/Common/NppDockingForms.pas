@@ -40,7 +40,7 @@ type
     { Private declarations }
     FOnDock: TNotifyEvent;
     FOnFloat: TNotifyEvent;
-    procedure RemoveControlParent(control: TControl);
+    procedure SetControlParent(control: TControl);
   protected
     { Protected declarations }
     ToolbarData: TToolbarData;
@@ -86,7 +86,6 @@ begin
   self.DlgId := DlgId;
   self.CmdId := self.Npp.CmdIdFromDlgId(DlgId);
   self.RegisterDockingForm(self.NppDefaultDockingMask);
-  self.RemoveControlParent(self);
 end;
 
 constructor TNppDockingForm.Create(AOwner: TNppForm; const DlgId: Integer);
@@ -94,7 +93,6 @@ begin
   inherited Create(AOwner);
   self.DlgId := DlgId;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
-  self.RemoveControlParent(self);
 end;
 
 destructor TNppDockingForm.Destroy;
@@ -115,7 +113,7 @@ procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
 begin
   if (self.Npp.NppData.NppHandle <> msg.NMHdr.hwndFrom) then
   begin
-    self.RemoveControlParent(self);
+    self.SetControlParent(self);
     inherited;
     exit;
   end;
@@ -195,7 +193,6 @@ begin
     CmdId := Plugin.CmdIdFromDlgId(DlgMenuId);
   end;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
-  self.RemoveControlParent(self);
   self.Show;
 end;
 
@@ -217,7 +214,7 @@ end;
 // Changed logic to *set* (not clear) the WS_EX_CONTROLPARENT flag:
 // https://github.com/kbilsted/NotepadPlusPlusPluginPack.Net/issues/17#issuecomment-683455467
 // ==========================================================================================
-procedure TNppDockingForm.RemoveControlParent(control: TControl);
+procedure TNppDockingForm.SetControlParent(control: TControl);
 var
   wincontrol: TWinControl;
   i: Integer;
@@ -234,10 +231,13 @@ begin
         r or WS_EX_CONTROLPARENT);
     end;
   end;
-  for i := control.ComponentCount - 1 downto 0 do
+  if (control.ComponentCount > 0) then
   begin
-    if (control.Components[i] is TControl) then
-      self.RemoveControlParent(control.Components[i] as TControl);
+    for i := control.ComponentCount - 1 downto 0 do
+    begin
+      if (control.Components[i] is TControl) then
+        self.SetControlParent(control.Components[i] as TControl);
+    end;
   end;
 end;
 
