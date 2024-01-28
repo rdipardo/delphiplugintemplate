@@ -44,6 +44,10 @@ type
     procedure RegisterForm();
     procedure UnregisterForm();
     procedure DoClose(var Action: TCloseAction); override;
+{$ifdef FPC}
+    { sent by clicking the 'X' on the title bar }
+    procedure HandleCloseQuery({%H-}Sender: TObject; {%H-}var CanClose: Boolean); virtual;
+{$endif}
   public
     { Public declarations }
     Npp: TNppPlugin;
@@ -53,6 +57,9 @@ type
     destructor Destroy; override;
     function WantChildKey(Child: TControl; var Message: TMessage): Boolean; override;
     procedure ToggleDarkMode; virtual;
+{$ifdef FPC}
+    function ShowModal: Integer; override;
+{$endif}
   end;
 
 var
@@ -71,6 +78,9 @@ uses SysUtils;
 constructor TNppForm.Create(AOwner: TComponent);
 begin
   self.DefaultCloseAction := caNone;
+{$ifdef FPC}
+  self.OnCloseQuery := HandleCloseQuery;
+{$endif}
   inherited Create(AOwner);
   if Assigned(Self.Npp) then
     ToggleDarkMode;
@@ -151,4 +161,29 @@ procedure TNppForm.ToggleDarkMode;
 begin
 end;
 
+{$ifdef FPC}
+function TNppForm.ShowModal: Integer;
+begin
+  Exclude(FFormState, fsModal);
+  try
+    try
+      Show;
+      while (ModalResult = mrNone) do
+      begin
+        { https://gitlab.com/freepascal.org/lazarus/lazarus/-/blob/main/lcl/include/customform.inc?ref_type=heads#L3022 }
+        Application.HandleMessage;
+      end;
+    finally
+      Result := ModalResult;
+    end;
+  except
+    Raise;
+  end;
+end;
+
+procedure TNppForm.HandleCloseQuery({%H-}Sender: TObject; {%H-}var CanClose: Boolean);
+begin
+  ModalResult := mrCancel;
+end;
+{$endif}
 end.
