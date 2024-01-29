@@ -293,4 +293,10 @@ begin
   end;
 end;
 
+initialization
+  { . . . }
+finalization
+  { NOTE: do not attempt to free docking forms; the application manages them }
+  if Assigned(HelloWorldModelessForm) then
+    FreeAndNil(HelloWorldModelessForm);
 end.

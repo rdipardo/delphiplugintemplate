@@ -52,6 +52,7 @@ uses
     function HasV5Apis: Boolean; // needs N++ 8.4 or later
     function HasFullRangeApis: Boolean; // needs N++ 8.4.3 or later
     function HasMinimalReplacementApi: Boolean; // needs N++ 8.4.8 or later
+    function SupportsDarkModeSubclassing: Boolean; // needs N++ 8.5.4 or later
     function GetNppVersion: Cardinal;
     function GetApiLevel: TSciApiLevel;
     function GetPluginsConfigDir: nppString;
@@ -95,6 +96,7 @@ uses
     function IsDarkModeEnabled: Boolean;
     procedure GetDarkModeColors(PColors: PDarkModeColors);
 
+    property CanSubclass: Boolean read SupportsDarkModeSubclassing;
     property CurrentScintilla: HWND read GetCurrentScintilla;
   end;
 
@@ -490,6 +492,19 @@ begin
   Result :=
     ((HIWORD(NppVersion) > 8) or
      ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 480)));
+end;
+
+/// since 8.5.4
+/// A return value of `true` means the NPPM_DARKMODESUBCLASSANDTHEME API is available
+/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f
+function TNppPlugin.SupportsDarkModeSubclassing: Boolean;
+var
+  NppVersion: Cardinal;
+begin
+  NppVersion := GetNppVersion;
+  Result :=
+    ((HIWORD(NppVersion) > 8) or
+     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 540)));
 end;
 
 end.

@@ -38,6 +38,9 @@ type
   TNppForm = class(TForm)
   private
     { Private declarations }
+    FThemeInitialized: Boolean;
+    FRegistered: Boolean;
+    function CanRegister: Boolean;
   protected
     function SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: NativeInt = 0): LRESULT; overload;
     function SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: Pointer = nil): LRESULT; overload;
@@ -57,6 +60,7 @@ type
     destructor Destroy; override;
     function WantChildKey(Child: TControl; var Message: TMessage): Boolean; override;
     procedure ToggleDarkMode; virtual;
+    procedure SubclassAndTheme(DmFlag: Cardinal); virtual;
 {$ifdef FPC}
     function ShowModal: Integer; override;
 {$endif}
@@ -77,6 +81,8 @@ uses SysUtils;
 
 constructor TNppForm.Create(AOwner: TComponent);
 begin
+  FThemeInitialized := False;
+  FRegistered := False;
   self.DefaultCloseAction := caNone;
 {$ifdef FPC}
   self.OnCloseQuery := HandleCloseQuery;
@@ -123,7 +129,7 @@ end;
 
 procedure TNppForm.RegisterForm();
 begin
-  if (not Assigned(self.Npp)) then
+  if not CanRegister then
     exit;
   // "For each created dialog in your plugin, you should register it (and
   // unregister while destroy it) to Notepad++ by using this message. If
@@ -131,13 +137,14 @@ begin
   // stroke messages such as TAB key. For the good functioning of your
   // plugin dialog, you're recommended to not ignore this message"
   // https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_modelessdialogage
-  SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
-    MODELESSDIALOGADD, LPARAM(self.Handle));
+  FRegistered :=
+    HWND(0) <> SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
+      MODELESSDIALOGADD, LPARAM(self.Handle));
 end;
 
 procedure TNppForm.UnregisterForm();
 begin
-  if (not self.HandleAllocated) then
+  if not (FRegistered and CanRegister) then
     exit;
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
     MODELESSDIALOGREMOVE, LPARAM(self.Handle));
@@ -158,7 +165,27 @@ begin
 end;
 
 procedure TNppForm.ToggleDarkMode;
+var
+  DmFlag: Cardinal;
 begin
+  if FThemeInitialized then
+    DmFlag := dmfHandleChange
+  else begin
+    DmFlag := dmfInit;
+    FThemeInitialized := True;
+  end;
+  if Assigned(self.Npp) and (self.Npp.CanSubclass) then
+    SubclassAndTheme(DmFlag);
+end;
+
+procedure TNppForm.SubclassAndTheme(DmFlag: Cardinal);
+begin
+  SafeSendMessage(Npp.NppData.NppHandle, NPPM_DARKMODESUBCLASSANDTHEME, DmFlag, self.Handle);
+end;
+
+function TNppForm.CanRegister: Boolean;
+begin
+  Result := (Assigned(self.Npp) and IsWindow(self.Npp.NppData.NppHandle) and self.HandleAllocated);
 end;
 
 {$ifdef FPC}

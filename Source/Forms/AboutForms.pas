@@ -41,6 +41,7 @@ type
     Label3: TLabel;
     Panel1: TPanel;
     constructor Create(AOwner: TComponent); override;
+    procedure FormShow({%H-}Sender: TObject);
   end;
 
 var
@@ -55,7 +56,7 @@ implementation
 {$ENDIF}
 
 uses
-  ModulePath, VersionInfo;
+  ModulePath, VersionInfo, NppPlugin;
 
 function ToTTranslateString(const Msg: UnicodeString): String;
 begin
@@ -67,6 +68,7 @@ var
   Info: TFileVersionInfo;
 begin
   inherited Create(AOwner);
+  OnShow := FormShow;
   try
     Info := TFileVersionInfo.Create(TModulePath.DLLFullName);
     self.Caption := ToTTranslateString(Info.ProductName);
@@ -78,4 +80,19 @@ begin
   end;
 end;
 
+procedure TAboutForm.FormShow({%H-}Sender: TObject);
+var
+  DarkModeColors: NppPlugin.TDarkModeColors;
+begin
+  inherited ToggleDarkMode;
+  if (self.Npp.IsDarkModeEnabled) then begin
+    DarkModeColors := Default(NppPlugin.TDarkModeColors);
+    self.Npp.GetDarkModeColors(@DarkModeColors);
+    self.Color := TColor(DarkModeColors.Background);
+    self.Font.Color := TColor(DarkModeColors.Text);
+  end else begin
+    self.Color := clBtnFace;
+    self.Font.Color := clWindowText;
+  end;
+end;
 end.

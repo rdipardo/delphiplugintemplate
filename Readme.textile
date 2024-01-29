@@ -162,6 +162,11 @@ Bit masks defined in "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#l
 * @dmfInit@[10]
 * @dmfHandleChange@[11]
 
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-500 :
+
+* @TNppPlugin.SupportsDarkModeSubclassing@ - returns @true@ if the @NPPM_DARKMODESUBCLASSANDTHEME@ API is available; accessed through the @CanSubclass@ property
+
+
 h3. 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
 
 Scintilla began supporting 64-bit character positions on the Windows platform in "version 5.2.3":sci523.

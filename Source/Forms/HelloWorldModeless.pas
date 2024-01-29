@@ -68,6 +68,10 @@ procedure TModelessForm.ToggleDarkMode;
 var
   DarkModeColors: NppPlugin.TDarkModeColors;
 begin
+  if (self.Npp.CanSubclass) then begin
+    inherited;
+    Exit;
+  end;
   if (self.Npp.IsDarkModeEnabled) then begin
     DarkModeColors := Default(NppPlugin.TDarkModeColors);
     self.Npp.GetDarkModeColors(@DarkModeColors);
