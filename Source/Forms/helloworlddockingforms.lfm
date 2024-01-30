@@ -1,4 +1,4 @@
-inherited HelloWorldDockingForm: THelloWorldDockingForm
+object HelloWorldDockingForm: THelloWorldDockingForm
   BorderStyle = bsSizeToolWin
   Caption = 'HelloWorldDockingForm'
   OnCreate = FormCreate

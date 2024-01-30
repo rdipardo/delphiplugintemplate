@@ -1,8 +1,11 @@
-inherited HelloWorldModelessForm: TModelessForm
+object HelloWorldModelessForm: TModelessForm
   BorderStyle = bsDialog
   Caption = 'Modeless Dialog'
   ClientHeight = 188
   ClientWidth = 204
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
   OnCreate = FormCreate
   ExplicitWidth = 226
   ExplicitHeight = 244

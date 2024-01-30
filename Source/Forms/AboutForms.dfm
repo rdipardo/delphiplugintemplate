@@ -3,6 +3,8 @@ object AboutForm: TAboutForm
   Width = 440
   BorderStyle = bsToolWindow
   Caption = 'About Hello World'
+  ClientHeight = 255
+  ClientWidth = 335
   Font.Height = -12
   Font.Name = 'Tahoma'
   Position = poScreenCenter

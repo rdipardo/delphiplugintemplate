@@ -41,7 +41,7 @@ object AboutForm: TAboutForm
     end
     object Label3: TLabel
       Left = 0
-      Height = 80
+      Height = 88
       Top = 152
       Width = 440
       Alignment = taCenter
@@ -50,7 +50,7 @@ object AboutForm: TAboutForm
     object Button1: TButton
       Left = 166
       Height = 40
-      Top = 256
+      Top = 264
       Width = 110
       Caption = 'OK'
       ModalResult = 1

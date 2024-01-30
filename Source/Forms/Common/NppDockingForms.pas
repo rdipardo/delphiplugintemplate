@@ -69,16 +69,7 @@ type
     { Published declarations }
   end;
 
-var
-  NppDockingForm: TNppDockingForm;
-
 implementation
-
-{$IFDEF FPC}
-{$R *.lfm}
-{$ELSE}
-{$R *.dfm}
-{$ENDIF}
 
 constructor TNppDockingForm.Create(const NppParent: TNppPlugin; const DlgId: Integer);
 begin

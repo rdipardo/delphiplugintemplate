@@ -66,18 +66,9 @@ type
 {$endif}
   end;
 
-var
-  NppForm: TNppForm;
-
 implementation
 
 uses SysUtils;
-
-{$IFDEF FPC}
-{$R *.lfm}
-{$ELSE}
-{$R *.dfm}
-{$ENDIF}
 
 constructor TNppForm.Create(AOwner: TComponent);
 begin

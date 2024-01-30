@@ -1,6 +1,9 @@
-inherited HelloWorldDockingForm: THelloWorldDockingForm
+object HelloWorldDockingForm: THelloWorldDockingForm
   BorderStyle = bsSizeToolWin
   Caption = 'HelloWorldDockingForm'
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyPress = FormKeyPress
