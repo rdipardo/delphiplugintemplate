@@ -44,7 +44,7 @@ Run the install script with the name of a project directory, e.g.:
 bc. install %USERPROFILE%\projects\MyPlugin
 
 *Note*
-Remember to edit the DLL attach hook in "Source/Units/DLLExports.pas":Source/Units/DLLExports.pas#lines-42 with the actual name of your plugin class instance and type:
+Remember to edit the DLL attach hook in "Source/Units/DLLExports.pas":Source/Units/DLLExports.pas#lines-38 with the actual name of your plugin class instance and type:
 
 bc[pascal]. case dwReason of
 DLL_PROCESS_ATTACH:
@@ -63,7 +63,7 @@ h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
 !{border: 0}https://i.ibb.co/GdYYz8c/npp-8-3-3-x64-dark-detail.png(npp_8.3.3_x64_dark_detail)!
 
-Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-94 :
+Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-680 :
 
 * @NPPM_ADDTOOLBARICON_FORDARKMODE@[1]
 * @NPPM_ADDTOOLBARICON_DEPRECATED@[2]
@@ -71,11 +71,11 @@ Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#
 *Note*
 @NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
-Types provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-652 :
+Types provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-1061 :
 
 * @TTbIconsDarkMode@[3]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-357 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-398 :
 
 * @TNppPlugin.SupportsDarkMode@ - returns @true@ if the running editor is at least version 8.0
 
@@ -117,7 +117,7 @@ bc[pascal]. {$IFDEF CPUx64}
 
 h3. Dark Mode Notification API (Notepad++ 8.4.1 and later)
 
-API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-373 :
+API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-722 :
 
 * @NPPM_ISDARKMODEENABLED@[4]
 * @NPPM_GETDARKMODECOLORS@[5]
@@ -127,11 +127,11 @@ Constants defined in "Source/Include/Docking.inc":Source/Include/Docking.inc#lin
 
 * @DWS_USEOWNDARKMODE@[7]
 
-Types provided by "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-19 :
+Types provided by "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-25 :
 
 * @TDarkModeColors@[8]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-365 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-406 :
 
 * @TNppPlugin.IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
 * @TNppPlugin.GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
@@ -139,21 +139,21 @@ Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppP
 
 h3. @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ (Notepad++ 8.4.8 and later)
 
-Added to Scintilla 5.3.2 to minimize the visual impact of text replacement when "change history":https://scintilla.org/ChangeHistory.html is enabled.
+Added to Scintilla 5.3.2 to minimize the visual impact of text replacement when "change history":https://scintilla.org/ScintillaDoc.html#ChangeHistory is enabled.
 @SCI_GETSTYLEDTEXTFULL@ was a late addition to the 64-bit APIs introduced in 5.2.3.
 
 Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-32 :
 
 * @TSciApiLevel.sciApi_GTE_532@ - the running editor's version of Scintilla is at least 5.3.2
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-485 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-488 :
 
 * @TNppPlugin.HasMinimalReplacementApi@ - returns @true@ if the @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ APIs are available
 
 
 h3. Dark Mode Theme API (Notepad++ 8.5.4 and later)
 
-API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-430 :
+API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-808 :
 
 * @NPPM_DARKMODESUBCLASSANDTHEME@[9]
 
@@ -162,7 +162,7 @@ Bit masks defined in "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#l
 * @dmfInit@[10]
 * @dmfHandleChange@[11]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-500 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-501 :
 
 * @TNppPlugin.SupportsDarkModeSubclassing@ - returns @true@ if the @NPPM_DARKMODESUBCLASSANDTHEME@ API is available; accessed through the @CanSubclass@ property
 
@@ -194,7 +194,7 @@ Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-27
 
 * @TSciApiLevel.sciApi_GTE_523@ - the running editor's version of Scintilla is at least 5.2.3
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-433 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-474 :
 
 * @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
 
@@ -222,12 +222,12 @@ h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
 Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
 Code paths depending on the old implementation should add 1 to the return value.
 
-Types provided by "$":Source/Include/SciApi.inc :
+Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-17 :
 
 * @TSciApiLevel.sciApi_LT_5@ - the running editor's version of Scintilla is <= 4.4.6
 * @TSciApiLevel.sciApi_GTE_515@ - the Scintilla version is at least 5.1.5
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-417 :
+Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-458 :
 
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 

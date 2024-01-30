@@ -21,6 +21,7 @@ unit nppplugin;
 
 {$IFDEF FPC}
 {$mode delphiunicode}
+{$modeSwitch hintdirective+}
 {$ENDIF}
 
 interface
