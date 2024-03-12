@@ -1,10 +1,10 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.4.1
+  Object Pascal definitions for Scintilla 5.4.3
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
-  Copyright (c) 2023 Robert Di Pardo <dipardo.r@gmail.com>
+  Copyright (c) 2024 Robert Di Pardo <dipardo.r@gmail.com>
   Distributed under the terms of the GNU Lesser General Public License Version 3.0 or later
 }
 type
@@ -549,6 +549,7 @@ const
   SCI_AUTOCGETAUTOHIDE = 2119;
   SC_AUTOCOMPLETE_NORMAL = 0;
   SC_AUTOCOMPLETE_FIXED_SIZE = 1;
+  SC_AUTOCOMPLETE_SELECT_FIRST_ITEM = 2;
   SCI_AUTOCSETOPTIONS = 2638;
   SCI_AUTOCGETOPTIONS = 2639;
   SCI_AUTOCSETDROPRESTOFWORD = 2270;

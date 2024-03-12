@@ -15,8 +15,8 @@ SET "TEMPLATE_PATH=.\Source"
 
 IF "%1"=="" (
   SET /p "PROJECT_DIR=Enter the root path of your plugin project: "
-  SET "PROJECT_PATH=%~dp0!PROJECT_DIR!"
-) ELSE SET "PROJECT_PATH=%~dp0%1"
+  SET "PROJECT_PATH=!PROJECT_DIR!"
+) ELSE SET "PROJECT_PATH=%1"
 
 IF NOT EXIST "%PROJECT_PATH%" md "%PROJECT_PATH%"
 

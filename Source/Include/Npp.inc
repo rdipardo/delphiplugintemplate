@@ -220,10 +220,10 @@ const
   // Return TRUE
   NPPM_DMMVIEWOTHERTAB = (NPPMSG + 35);
   // BOOL NPPM_RELOADFILE(BOOL withAlert, TCHAR *filePathName2Reload)
-  // Reload the document which matches with the given filePathName2switch.
+  // Reload the document which matches with the given filePathName2Reload.
   // wParam: 0 (not used)
   // lParam[in]: filePathName2Reload is the full file path of document to reload
-  // Return TRUE
+  // Return TRUE if reloading file succeeds, otherwise FALSE
   NPPM_RELOADFILE = (NPPMSG + 36);
   // BOOL NPPM_SWITCHTOFILE(0, TCHAR* filePathName2switch)
   // Switch to the document which matches with the given filePathName2switch.
@@ -864,55 +864,67 @@ const
 
 // Notification code
   NPPN_FIRST = 1000;
-  NPPN_READY = (NPPN_FIRST + 1); // To notify plugins that all the procedures of launchment of notepad++ are done.
+  // To notify plugins that all the procedures of launchment of notepad++ are done.
   //scnNotification->nmhdr.code = NPPN_READY;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_TBMODIFICATION = (NPPN_FIRST + 2); // To notify plugins that toolbar icons can be registered
+  NPPN_READY = (NPPN_FIRST + 1);
+  // To notify plugins that toolbar icons can be registered
   //scnNotification->nmhdr.code = NPPN_TBMODIFICATION;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_FILEBEFORECLOSE = (NPPN_FIRST + 3); // To notify plugins that the current file is about to be closed
+  NPPN_TBMODIFICATION = (NPPN_FIRST + 2);
+  // To notify plugins that the current file is about to be closed
   //scnNotification->nmhdr.code = NPPN_FILEBEFORECLOSE;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEOPENED = (NPPN_FIRST + 4); // To notify plugins that the current file is just opened
+  NPPN_FILEBEFORECLOSE = (NPPN_FIRST + 3);
+  // To notify plugins that the current file is just opened
   //scnNotification->nmhdr.code = NPPN_FILEOPENED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILECLOSED = (NPPN_FIRST + 5); // To notify plugins that the current file is just closed
+  NPPN_FILEOPENED = (NPPN_FIRST + 4);
+  // To notify plugins that the current file is just closed
   //scnNotification->nmhdr.code = NPPN_FILECLOSED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEBEFOREOPEN = (NPPN_FIRST + 6); // To notify plugins that the current file is about to be opened
+  NPPN_FILECLOSED = (NPPN_FIRST + 5);
+  // To notify plugins that the current file is about to be opened
   //scnNotification->nmhdr.code = NPPN_FILEBEFOREOPEN;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEBEFORESAVE = (NPPN_FIRST + 7); // To notify plugins that the current file is about to be saved
-  //scnNotification->nmhdr.code = NPPN_FILEBEFOREOPEN;
+  NPPN_FILEBEFOREOPEN = (NPPN_FIRST + 6);
+  // To notify plugins that the current file is about to be saved
+  //scnNotification->nmhdr.code = NPPN_FILEBEFORESAVE;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILESAVED = (NPPN_FIRST + 8); // To notify plugins that the current file is just saved
+  NPPN_FILEBEFORESAVE = (NPPN_FIRST + 7);
+  // To notify plugins that the current file is just saved
   //scnNotification->nmhdr.code = NPPN_FILESAVED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_SHUTDOWN = (NPPN_FIRST + 9); // To notify plugins that Notepad++ is about to be shutdowned.
+  NPPN_FILESAVED = (NPPN_FIRST + 8);
+  // To notify plugins that Notepad++ is about to be shutdowned.
   //scnNotification->nmhdr.code = NPPN_SHUTDOWN;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_BUFFERACTIVATED = (NPPN_FIRST + 10); // To notify plugins that a buffer was activated = (put to foreground);.
+  NPPN_SHUTDOWN = (NPPN_FIRST + 9);
+  // To notify plugins that a buffer was activated = (put to foreground);.
   //scnNotification->nmhdr.code = NPPN_BUFFERACTIVATED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = activatedBufferID;
-  NPPN_LANGCHANGED = (NPPN_FIRST + 11); // To notify plugins that the language in the current doc is just changed.
+  NPPN_BUFFERACTIVATED = (NPPN_FIRST + 10);
+  // To notify plugins that the language in the current doc is just changed.
   //scnNotification->nmhdr.code = NPPN_LANGCHANGED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = currentBufferID;
-  NPPN_WORDSTYLESUPDATED = (NPPN_FIRST + 12); // To notify plugins that user initiated a WordStyleDlg change.
+  NPPN_LANGCHANGED = (NPPN_FIRST + 11);
+  // To notify plugins that user initiated a WordStyleDlg change.
   //scnNotification->nmhdr.code = NPPN_WORDSTYLESUPDATED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = currentBufferID;
-  NPPN_SHORTCUTREMAPPED = (NPPN_FIRST + 13); // To notify plugins that plugin command shortcut is remapped.
+  NPPN_WORDSTYLESUPDATED = (NPPN_FIRST + 12);
+  // To notify plugins that plugin command shortcut is remapped.
   //scnNotification->nmhdr.code = NPPN_SHORTCUTSREMAPPED;
   //scnNotification->nmhdr.hwndFrom = ShortcutKeyStructurePointer;
   //scnNotification->nmhdr.idFrom = cmdID;
@@ -923,76 +935,107 @@ const
     //  bool _isShift;
     //  UCHAR _key;
     //};
-  NPPN_FILEBEFORELOAD = (NPPN_FIRST + 14); // To notify plugins that the current file is about to be loaded
-  //scnNotification->nmhdr.code = NPPN_FILEBEFOREOPEN;
+  NPPN_SHORTCUTSREMAPPED = (NPPN_FIRST + 13);
+  // To notify plugins that the current file is about to be loaded
+  //scnNotification->nmhdr.code = NPPN_FILEBEFORELOAD;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = NULL;
-  NPPN_FILELOADFAILED = (NPPN_FIRST + 15);  // To notify plugins that file open operation failed
-  //scnNotification->nmhdr.code = NPPN_FILEOPENFAILED;
+  NPPN_FILEBEFORELOAD = (NPPN_FIRST + 14);
+  // To notify plugins that file open operation failed
+  //scnNotification->nmhdr.code = NPPN_FILELOADFAILED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_READONLYCHANGED = (NPPN_FIRST + 16);  // To notify plugins that current document change the readonly status,
+  NPPN_FILELOADFAILED = (NPPN_FIRST + 15);
+  // To notify plugins that current document change the readonly status,
   //scnNotification->nmhdr.code = NPPN_READONLYCHANGED;
   //scnNotification->nmhdr.hwndFrom = bufferID;
   //scnNotification->nmhdr.idFrom = docStatus;
     // where bufferID is BufferID
     //       docStatus can be combined by DOCSTATUS_READONLY and DOCSTATUS_BUFFERDIRTY
+  NPPN_READONLYCHANGED = (NPPN_FIRST + 16);
   DOCSTATUS_READONLY = 1;
   DOCSTATUS_BUFFERDIRTY = 2;
-  NPPN_DOCORDERCHANGED = (NPPN_FIRST + 17);  // To notify plugins that document order is changed
+  // To notify plugins that document order is changed
   //scnNotification->nmhdr.code = NPPN_DOCORDERCHANGED;
   //scnNotification->nmhdr.hwndFrom = newIndex;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_SNAPSHOTDIRTYFILELOADED = (NPPN_FIRST + 18);  // To notify plugins that a snapshot dirty file is loaded on startup
+  NPPN_DOCORDERCHANGED = (NPPN_FIRST + 17);
+  // To notify plugins that a snapshot dirty file is loaded on startup
   //scnNotification->nmhdr.code = NPPN_SNAPSHOTDIRTYFILELOADED;
   //scnNotification->nmhdr.hwndFrom = NULL;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_BEFORESHUTDOWN = (NPPN_FIRST + 19);  // To notify plugins that Npp shutdown has been triggered, files have not been closed yet
+  NPPN_SNAPSHOTDIRTYFILELOADED = (NPPN_FIRST + 18);
+  // To notify plugins that Npp shutdown has been triggered, files have not been closed yet
   //scnNotification->nmhdr.code = NPPN_BEFORESHUTDOWN;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_CANCELSHUTDOWN = (NPPN_FIRST + 20);  // To notify plugins that Npp shutdown has been cancelled
+  NPPN_BEFORESHUTDOWN = (NPPN_FIRST + 19);
+  // To notify plugins that Npp shutdown has been cancelled
   //scnNotification->nmhdr.code = NPPN_CANCELSHUTDOWN;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_FILEBEFORERENAME = (NPPN_FIRST + 21);  // To notify plugins that file is to be renamed
+  NPPN_CANCELSHUTDOWN = (NPPN_FIRST + 20);
+  // To notify plugins that file is to be renamed
   //scnNotification->nmhdr.code = NPPN_FILEBEFORERENAME;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILERENAMECANCEL = (NPPN_FIRST + 22);  // To notify plugins that file rename has been cancelled
+  NPPN_FILEBEFORERENAME = (NPPN_FIRST + 21);
+  // To notify plugins that file rename has been cancelled
   //scnNotification->nmhdr.code = NPPN_FILERENAMECANCEL;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILERENAMED = (NPPN_FIRST + 23);  // To notify plugins that file has been renamed
+  NPPN_FILERENAMECANCEL = (NPPN_FIRST + 22);
+  // To notify plugins that file has been renamed
   //scnNotification->nmhdr.code = NPPN_FILERENAMED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEBEFOREDELETE = (NPPN_FIRST + 24);  // To notify plugins that file is to be deleted
+  NPPN_FILERENAMED = (NPPN_FIRST + 23);
+  // To notify plugins that file is to be deleted
   //scnNotification->nmhdr.code = NPPN_FILEBEFOREDELETE;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEDELETEFAILED = (NPPN_FIRST + 25);  // To notify plugins that file deletion has failed
+  NPPN_FILEBEFOREDELETE = (NPPN_FIRST + 24);
+  // To notify plugins that file deletion has failed
   //scnNotification->nmhdr.code = NPPN_FILEDELETEFAILED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_FILEDELETED = (NPPN_FIRST + 26);  // To notify plugins that file has been deleted
+  NPPN_FILEDELETEFAILED = (NPPN_FIRST + 25);
+  // To notify plugins that file has been deleted
   //scnNotification->nmhdr.code = NPPN_FILEDELETED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = BufferID;
-  NPPN_DARKMODECHANGED = (NPPN_FIRST + 27); // To notify plugins that Dark Mode was enabled/disabled
+  NPPN_FILEDELETED = (NPPN_FIRST + 26);
+  // To notify plugins that Dark Mode was enabled/disabled
   //scnNotification->nmhdr.code = NPPN_DARKMODECHANGED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
-  NPPN_CMDLINEPLUGINMSG = (NPPN_FIRST + 28);  // To notify plugins that the new argument for plugins (via '-pluginMessage="YOUR_PLUGIN_ARGUMENT"' in command line) is available
+  // since 8.4.1
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53
+  NPPN_DARKMODECHANGED = (NPPN_FIRST + 27);
+  // To notify plugins that the new argument for plugins (via '-pluginMessage="YOUR_PLUGIN_ARGUMENT"' in command line) is available
   //scnNotification->nmhdr.code = NPPN_CMDLINEPLUGINMSG;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = pluginMessage; //where pluginMessage is pointer of type wchar_t
-  NPPN_EXTERNALLEXERBUFFER = (NPPN_FIRST + 29);  // To notify lexer plugins that the buffer (in idFrom) is just applied to a external lexer
+  // since 8.4.2
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/0f8d5724afb0a540e8b4024252945ab60bc88c71
+  NPPN_CMDLINEPLUGINMSG = (NPPN_FIRST + 28);
+  // To notify lexer plugins that the buffer (in idFrom) is just applied to a external lexer
 	//scnNotification->nmhdr.code = NPPN_EXTERNALLEXERBUFFER;
 	//scnNotification->nmhdr.hwndFrom = hwndNpp;
 	//scnNotification->nmhdr.idFrom = BufferID; //where pluginMessage is pointer of type wchar_t
   // since 8.5
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/03a5c4795b764fa5e719092da0c37fc66ec82889
+  NPPN_EXTERNALLEXERBUFFER = (NPPN_FIRST + 29);
+  // To notify plugins that the current document is just modified by Replace All action.
+  // For solving the performance issue (from v8.6.4), Notepad++ doesn't trigger SCN_MODIFIED during Replace All action anymore.
+  // As a result, the plugins which monitor SCN_MODIFIED should also monitor NPPN_GLOBALMODIFIED.
+  // This notification is implemented in Notepad++ v8.6.5.
+  //scnNotification->nmhdr.code = NPPN_GLOBALMODIFIED;
+  //scnNotification->nmhdr.hwndFrom = BufferID;
+  //scnNotification->nmhdr.idFrom = 0; // preserved for the future use, must be zero
+  // since 8.6.5
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/49e6957d486c360e05ba85ceb1c179a891831779
+  NPPN_GLOBALMODIFIED = (NPPN_FIRST + 30);
 
   MACRO_USER                = (WM_USER + 4000);
   WM_ISCURRENTMACRORECORDED = (MACRO_USER + 01);
