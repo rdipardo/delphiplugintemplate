@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.4.3
+  Object Pascal definitions for Scintilla 5.5.0
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2024 Robert Di Pardo <dipardo.r@gmail.com>
@@ -412,6 +412,8 @@ const
   SC_ELEMENT_SELECTION_SECONDARY_BACK = 15;
   SC_ELEMENT_SELECTION_INACTIVE_TEXT = 16;
   SC_ELEMENT_SELECTION_INACTIVE_BACK = 17;
+  SC_ELEMENT_SELECTION_INACTIVE_ADDITIONAL_TEXT = 18;
+  SC_ELEMENT_SELECTION_INACTIVE_ADDITIONAL_BACK = 19;
   SC_ELEMENT_CARET = 40;
   SC_ELEMENT_CARET_ADDITIONAL = 41;
   SC_ELEMENT_CARET_LINE_BACK = 50;
