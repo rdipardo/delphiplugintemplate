@@ -217,16 +217,11 @@ end;
 procedure THelloWorldPlugin.FuncHelloWorldDocking;
 begin
   if (not Assigned(HelloWorldDockingForm)) then
-{$IFDEF FPC}
-    Application.CreateForm(THelloWorldDockingForm, HelloWorldDockingForm);
-    if (not Assigned(HelloWorldDockingForm.Npp)) then
-      HelloWorldDockingForm.Show(self, DlgMenuId)
-    else
-      HelloWorldDockingForm.Show;
-{$ELSE}
-    HelloWorldDockingForm := THelloWorldDockingForm.Create(self, DlgMenuId);
+  begin
+    HelloWorldDockingForm := THelloWorldDockingForm.Create(self);
+    HelloWorldDockingForm.Show(self, DlgMenuId);
+  end else
     HelloWorldDockingForm.Show;
-{$ENDIF}
 end;
 
 procedure THelloWorldPlugin.FuncHelloWorldModeless;

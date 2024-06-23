@@ -136,11 +136,12 @@ begin
 
   self.HandleNeeded;
   FillChar(self.ToolbarData, sizeof(TToolbarData), 0);
+  self.ToolbarData.Mask := MaskStyle;
 
   if (not self.Icon.Empty) then
   begin
     self.ToolbarData.IconTab := self.Icon.Handle;
-    self.ToolbarData.Mask := MaskStyle or DWS_ICONTAB;
+    self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ICONTAB;
   end;
 
   self.ToolbarData.ClientHandle := self.Handle;

@@ -64,6 +64,7 @@ procedure THelloWorldDockingForm.FormCreate(Sender: TObject);
 begin
   // e.g. for a console input window:
   // self.NppDefaultDockingMask := DWS_DF_CONT_BOTTOM;
+  self.NppDefaultDockingMask := DWS_DF_CONT_RIGHT;
   self.KeyPreview := true; // special hack for input forms
   self.OnFloat := self.FormFloat;
   self.OnDock := self.FormDock;
