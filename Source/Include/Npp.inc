@@ -823,6 +823,41 @@ const
   // since 8.5.6
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/de25873cb3352ee59d883e95e80c91806944e348
   NPPM_ALLOCATEINDICATOR = (NPPMSG + 113);
+  // int NPPM_GETTABCOLORID (int view, int tabIndex)
+  // Gets the tab color id for the given view and tab index.
+  // wParam [in]: 0 for MAIN_VIEW, 1 for SUB_VIEW, -1 for currently active view
+  // lParam [in]: zero-based tab index, i.e., use 0 for first tab, 1 for second tab, etc.; use -1 for active tab
+  // Returns the tab color id value
+  //
+  // The return value is one of:
+  //     -1 (no color)
+  //      0 (yellow)
+  //      1 (green)
+  //      2 (blue)
+  //      3 (orange)
+  //      4 (pink)
+  //
+  // There is no symmetric plugin command for setting the tab color.
+  // Plugins can use <see cref="NPPM_MENUCOMMAND"/> to set active tab's color
+  // with the desired tab color using these menu-command ids:
+  //     44110 (no color)
+  //     44111 (yellow)
+  //     44112 (green)
+  //     44113 (blue)
+  //     44114 (orange)
+  //     44115 (pink)
+  //
+  // since 8.6.8
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/9244cd09430c82ecff805ea862c9133d5cb56ded
+  NPPM_GETTABCOLORID = (NPPMSG + 114);
+  // int NPPM_SETUNTITLEDNAME(BufferID id, const TCHAR* newName)
+  // Rename the tab name for an untitled tab.
+  // wParam[in]: id - BufferID of the tab. -1 for currently active tab
+  // lParam[in]: newName - the desired new name of the tab
+  // Return TRUE upon success; FALSE upon failure
+  // since 8.6.9
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/b3daf0a98220ffc6e206133aa645d5a2d1d63a4f
+  NPPM_SETUNTITLEDNAME = (NPPMSG + 115);
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
