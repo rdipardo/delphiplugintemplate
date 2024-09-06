@@ -545,7 +545,7 @@ const
   // int NPPM_GETLANGUAGENAME(LangType langType, TCHAR* langName)
   // Get programming language name from the given language type (enum LangType).
   // wParam[in]: langType is the number of LangType
-  // lParam[out]: langName is the buffer to recieve the language name string
+  // lParam[out]: langName is the buffer to receive the language name string
   // Return value is the number of copied character / number of character to copy (\0 is not included)
   //
   // You should call this function 2 times - the first time you pass langName as NULL to get the number of characters to copy.
@@ -555,7 +555,7 @@ const
   // INT NPPM_GETLANGUAGEDESC(int langType, TCHAR *langDesc)
   // Get programming language short description from the given language type (enum LangType)
   // wParam[in]: langType is the number of LangType
-  // lParam[out]: langDesc is the buffer to recieve the language description string
+  // lParam[out]: langDesc is the buffer to receive the language description string
   // Return value is the number of copied character / number of character to copy (\0 is not included)
   //
   // You should call this function 2 times - the first time you pass langDesc as NULL to get the number of characters to copy.
@@ -681,7 +681,7 @@ const
   // BOOL NPPM_GETEXTERNALLEXERAUTOINDENTMODE(const TCHAR* languageName, ExternalLexerAutoIndentMode* autoIndentMode)
   // Get ExternalLexerAutoIndentMode for an installed external programming language.
   // wParam[in]: languageName is external language name to search
-  // lParam[out]: autoIndentMode could recieve one of three following values
+  // lParam[out]: autoIndentMode could receive one of three following values
   //              - Standard (0) means Notepad++ will keep the same TAB indentation between lines;
   //              - C_Like (1) means Notepad++ will perform a C-Language style indentation for the selected external language;
   //              - Custom (2) means a Plugin will be controlling auto-indentation for the current language.
@@ -690,7 +690,7 @@ const
   // BOOL NPPM_SETEXTERNALLEXERAUTOINDENTMODE(const TCHAR* languageName, ExternalLexerAutoIndentMode autoIndentMode)
   // Set ExternalLexerAutoIndentMode for an installed external programming language.
   // wParam[in]: languageName is external language name to set
-  // lParam[in]: autoIndentMode could recieve one of three following values
+  // lParam[in]: autoIndentMode could receive one of three following values
   //             - Standard (0) means Notepad++ will keep the same TAB indentation between lines;
   //             - C_Like (1) means Notepad++ will perform a C-Language style indentation for the selected external language;
   //             - Custom (2) means a Plugin will be controlling auto-indentation for the current language.
@@ -756,7 +756,7 @@ const
   // Users should call it with commandLineStr as NULL to get the required number of TCHAR (not including the terminating nul character),
   // allocate commandLineStr buffer with the return value + 1, then call it again to get the current command line string.
   // wParam[in]: strLen is "commandLineStr" buffer length
-  // lParam[out]: commandLineStr recieves all copied command line string
+  // lParam[out]: commandLineStr receives all copied command line string
   // Return the number of TCHAR copied/to copy
   // since 8.4.2
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/0f8d5724afb0a540e8b4024252945ab60bc88c71
@@ -858,6 +858,14 @@ const
   // since 8.6.9
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/b3daf0a98220ffc6e206133aa645d5a2d1d63a4f
   NPPM_SETUNTITLEDNAME = (NPPMSG + 115);
+  // int NPPM_GETNATIVELANGFILENAME(size_t strLen, char* nativeLangFileName)
+  // Get the Current native language file name string. Use it after getting NPPN_READY notification to find out which native language is used.
+  // Users should call it with nativeLangFileName as NULL to get the required number of char (not including the terminating nul character),
+  // allocate language file name string buffer with the return value + 1, then call it again to get the current native language file name string.
+  // wParam[in]: strLen is "language file name string" buffer length
+  // lParam[out]: language file name string receives all copied native language file name string
+  // Return the number of char copied/to copy
+  NPPM_GETNATIVELANGFILENAME = (NPPMSG + 116);
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
@@ -899,7 +907,7 @@ const
 
 // Notification code
   NPPN_FIRST = 1000;
-  // To notify plugins that all the procedures of launchment of notepad++ are done.
+  // To notify plugins that all the initialization for launching Notepad++ is complete.
   //scnNotification->nmhdr.code = NPPN_READY;
   //scnNotification->nmhdr.hwndFrom = hwndNpp;
   //scnNotification->nmhdr.idFrom = 0;
@@ -1071,6 +1079,13 @@ const
   // since 8.6.5
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/49e6957d486c360e05ba85ceb1c179a891831779
   NPPN_GLOBALMODIFIED = (NPPN_FIRST + 30);
+  // To notify plugins that the current native language is just changed to another one.
+  // Use NPPM_GETNATIVELANGFILENAME to get current native language file name.
+  // Use NPPM_GETMENUHANDLE(NPPPLUGINMENU, 0) to get submenu "Plugins" handle (HMENU)
+  //scnNotification->nmhdr.code = NPPN_NATIVELANGCHANGED;
+  //scnNotification->nmhdr.hwndFrom = hwndNpp
+  //scnNotification->nmhdr.idFrom = 0; // preserved for the future use, must be zero
+  NPPN_NATIVELANGCHANGED = (NPPN_FIRST + 31);
 
   MACRO_USER                = (WM_USER + 4000);
   WM_ISCURRENTMACRORECORDED = (MACRO_USER + 01);
@@ -1091,7 +1106,7 @@ type
               L_MMIXAL, L_NIM, L_NNCRONTAB, L_OSCRIPT, L_REBOL,
               L_REGISTRY, L_RUST, L_SPICE, L_TXT2TAGS, L_VISUALPROLOG,
               L_TYPESCRIPT, L_JSON5, L_MSSQL, L_GDSCRIPT, L_HOLLYWOOD,
-              L_GOLANG, L_RAKU,
+              L_GOLANG, L_RAKU, L_TOML,
               // Don't use L_JS, use L_JAVASCRIPT instead
               // The end of enumerated language type, so it should be always at the end
               L_EXTERNAL);
