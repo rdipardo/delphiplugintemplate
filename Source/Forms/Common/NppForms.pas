@@ -129,7 +129,7 @@ begin
   // plugin dialog, you're recommended to not ignore this message"
   // https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_modelessdialogage
   FRegistered :=
-    HWND(0) <> SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
+    LRESULT(0) <> SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_MODELESSDIALOG,
       MODELESSDIALOGADD, LPARAM(self.Handle));
 end;
 

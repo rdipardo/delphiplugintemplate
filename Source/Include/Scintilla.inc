@@ -9,12 +9,12 @@
 }
 type
   { scintilla/include/Sci_Position.h }
-{$IF DEFINED(NPP_NO_HUGE_FILES) AND DEFINED(CPUx64)}
+{$IF DEFINED(NPP_NO_HUGE_FILES) AND DEFINED(WIN64)}
 {$MESSAGE 'Plugin will be compatible with Npp <= 8.2.1 *only*'}
   Sci_Position = LongInt;
   Sci_PositionU = Cardinal;
 {$ELSE}
-{$IFDEF CPUx64}{$MESSAGE 'Plugin will be compatible with Npp 8.3+ *only*'}{$ENDIF}
+{$IFDEF WIN64}{$MESSAGE 'Plugin will be compatible with Npp 8.3+ *only*'}{$ENDIF}
   Sci_Position = NativeInt;
   Sci_PositionU = NativeUInt;
 {$ENDIF}

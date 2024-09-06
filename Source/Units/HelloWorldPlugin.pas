@@ -132,7 +132,7 @@ begin
 
   if SendMessageW(Editor, SCI_GETCODEPAGE, 0, 0) = SC_CP_UTF8
   then
-    SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こにちは、皆さん‼'#13#10)));
+    SendMessageW(Editor, SCI_REPLACESEL, 0, LPARAM(PAnsiChar('こんにちは、皆さん‼'#13#10)));
 end;
 
 procedure THelloWorldPlugin.FuncHolaMundo;
