@@ -103,6 +103,8 @@ uses
 
 implementation
 
+uses Math;
+
 { TNppPlugin }
 
 { This is hacking for trouble...
@@ -346,18 +348,22 @@ end;
 
 function TNppPlugin.GetNppVersion: Cardinal;
 var
-  NppVersion: Cardinal;
+  NppVersion, VersionWord, BuildN: Cardinal;
+  Quot, Rem, Hi, Lo: Word;
 begin
   NppVersion := SendNppMessage(NPPM_GETNPPVERSION);
-  // retrieve the zero-padded version, if available
-  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ef609c896f209ecffd8130c3e3327ca8a8157e72
-  if ((HIWORD(NppVersion) > 8) or
-      ((HIWORD(NppVersion) = 8) and
-        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191..193]))) or
-          (LOWORD(NppVersion) in [5..9])))) then
-    NppVersion := SendNppMessage(NPPM_GETNPPVERSION, 1, 0);
-
-  Result := NppVersion;
+  VersionWord := LOWORD(NppVersion) * 10;
+  Quot := 0; Rem := 0; BuildN := 0;
+  DivMod(VersionWord, 10, Quot, Rem);
+  while Quot > 9 do
+  begin
+    BuildN := Rem;
+    VersionWord := Quot;
+    Divmod(VersionWord, 10, Quot, Rem);
+  end;
+  Hi := HIWORD(NppVersion);
+  Lo := Quot * 100 + Rem * 10 + BuildN;
+  Result := DWORD(Lo and $FFFF) or DWORD((Hi and $FFFF) shl 16);
 end;
 
 function TNppPlugin.GetApiLevel: TSciApiLevel;
@@ -411,8 +417,7 @@ begin
   NppVersion := GetNppVersion;
   HasQueryApi :=
     ((HIWORD(NppVersion) > 8) or
-     ((HIWORD(NppVersion) = 8) and
-        (((LOWORD(NppVersion) >= 41) and (not (LOWORD(NppVersion) in [191..193]))))));
+     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 410)));
   Result := (HasQueryApi and Boolean(SendNppMessage(NPPM_ISDARKMODEENABLED)));
 end;
 
@@ -437,11 +442,7 @@ begin
   NppVersion := GetNppVersion;
   Result :=
     (HIWORD(NppVersion) > 8) or
-    ((HIWORD(NppVersion) = 8) and
-      // 8.3 => 8,3 *not* 8,30
-      ((LOWORD(NppVersion) in [3..9]) or
-       // Also check for N++ versions 8.1.9.1, 8.1.9.2 and 8.1.9.3
-       ((LOWORD(NppVersion) > 21) and (not (LOWORD(NppVersion) in [191..193])))));
+    ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) > 210));
 end;
 
 /// since 8.4
@@ -462,9 +463,7 @@ begin
   NppVersion := GetNppVersion;
   Result :=
     (HIWORD(NppVersion) > 8) or
-    ((HIWORD(NppVersion) = 8) and
-        ((LOWORD(NppVersion) >= 4) and
-           (not (LOWORD(NppVersion) in [11..19, 21, 31..33, 191..193]))));
+    ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 400));
 end;
 
 /// since 8.4.3
