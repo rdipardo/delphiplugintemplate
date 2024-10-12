@@ -43,7 +43,7 @@ uses
 
   TNppPlugin = class(TObject)
   private
-    FClosingBufferID: THandle;
+    FClosingBufferID: NativeUInt;
     function GetCurrentScintilla: HWND;
   protected
     PluginName: nppString;
@@ -82,8 +82,8 @@ uses
     // hooks
     procedure DoNppnToolbarModification; virtual;
     procedure DoNppnShutdown; virtual;
-    procedure DoNppnBufferActivated(const BufferID: THandle); virtual;
-    procedure DoNppnFileClosed(const BufferID: THandle); virtual;
+    procedure DoNppnBufferActivated(const BufferID: NativeUInt); virtual;
+    procedure DoNppnFileClosed(const BufferID: NativeUInt); virtual;
     procedure DoUpdateUI(const hwnd: HWND; const updated: Integer); virtual;
     procedure DoModified(const hwnd: HWND; const modificationType: Integer); virtual;
 
@@ -92,6 +92,8 @@ uses
     function DoOpen(filename: String; Line: Sci_Position): Boolean; overload;
     procedure GetFileLine(var filename: String; var Line: Sci_Position);
     function GetWord: string;
+    function GetCurrentBufferPath(const BufferID: NativeUInt = 0): string;
+    function GetCurrentFileExt(const BufferID: NativeUInt = 0): string;
 
     // needs N++ 8.4.1 or later
     function IsDarkModeEnabled: Boolean;
@@ -104,6 +106,9 @@ uses
 implementation
 
 uses Math;
+
+const
+  MAX_WIDE_PATH = $7fff;
 
 { TNppPlugin }
 
@@ -179,13 +184,11 @@ end;
 
 procedure TNppPlugin.GetFileLine(var filename: String; var Line: Sci_Position);
 var
-  s: array [0..1001] of char;
   r: Sci_Position;
   editor: HWND;
 begin
   editor := CurrentScintilla;
-  SendNppMessage(NPPM_GETFULLCURRENTPATH, 0, @s[0]);
-  filename := string(s);
+  filename := GetCurrentBufferPath;
 
   r := SendMessageW(editor, SCI_GETCURRENTPOS, 0, 0);
   Line := SendMessageW(editor, SCI_LINEFROMPOSITION, r, 0);
@@ -204,11 +207,13 @@ end;
 
 function TNppPlugin.GetPluginsConfigDir: nppString;
 var
-  s: array [0..1001] of nppChar;
+  s: array [0..MAX_WIDE_PATH] of nppChar;
 begin
-  SendNppMessage(NPPM_GETPLUGINSCONFIGDIR, 1000, @s[0]);
+  SendNppMessage(NPPM_GETPLUGINSCONFIGDIR, MAX_WIDE_PATH - 1, @s[0]);
   Result := nppString(s);
 end;
+
+{$REGION 'Virtual procedures'}
 
 procedure TNppPlugin.BeNotified(sn: PSciNotification);
 begin
@@ -248,8 +253,6 @@ begin
    end;
 end;
 
-{$REGION 'Virtual procedures'}
-
 procedure TNppPlugin.MessageProc(var Msg: TMessage);
 var
   hm: HMENU;
@@ -285,12 +288,12 @@ begin
   // override
 end;
 
-procedure TNppPlugin.DoNppnBufferActivated(const BufferID: THandle);
+procedure TNppPlugin.DoNppnBufferActivated(const BufferID: NativeUInt);
 begin
   // override
 end;
 
-procedure TNppPlugin.DoNppnFileClosed(const BufferID: THandle);
+procedure TNppPlugin.DoNppnFileClosed(const BufferID: NativeUInt);
 begin
   // override
 end;
@@ -317,15 +320,41 @@ begin
   Result := s;
 end;
 
+function TNppPlugin.GetCurrentBufferPath(const BufferID: NativeUInt): string;
+var
+  NppMsg: Cardinal;
+  PathLen: Integer;
+  PathBuff: array of Char;
+begin
+  Result := '';
+  PathBuff := [#$0000];
+  if BufferID > 0 then begin
+    NppMsg := NPPM_GETFULLPATHFROMBUFFERID;
+    PathLen := SendNppMessage(NppMsg, BufferID, 0);
+    if PathLen <= 0 then
+      Exit;
+    SetLength(PathBuff, PathLen + 1);
+    SendNppMessage(NppMsg, BufferID, @PathBuff[0]);
+  end else begin
+    NppMsg := NPPM_GETFULLCURRENTPATH;
+    SetLength(PathBuff, MAX_WIDE_PATH);
+    SendNppMessage(NppMsg, MAX_WIDE_PATH - 1, @PathBuff[0]);
+  end;
+  SetString(Result, PChar(@PathBuff[0]), StrLen(PChar(@PathBuff[0])));
+end;
+
+function TNppPlugin.GetCurrentFileExt(const BufferID: NativeUInt): string;
+begin
+  Result := String(StrRScan(PChar(GetCurrentBufferPath(BufferID)), '.'));
+end;
+
 function TNppPlugin.DoOpen(filename: String): Boolean;
 var
   r: Integer;
-  s: array [0..1001] of char;
 begin
   // ask if we are not already opened
-  SendNppMessage(NPPM_GETFULLCURRENTPATH, 0, @s[0]);
   Result := true;
-  if {$ifdef FPC}WideSameText{$else}SameText{$endif}(string(s), filename) then
+  if {$ifdef FPC}WideSameText{$else}SameText{$endif}(GetCurrentBufferPath(), filename) then
     exit;
   r := SendNppMessage(WM_DOOPEN, 0, PChar(filename));
   Result := (r = 0);
