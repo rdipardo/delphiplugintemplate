@@ -14,7 +14,7 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.5.2                  |  8.7+                          |
+| *"default":default*      |  5.5.2/3                |  8.7+                          |
 | *"api-v5.5.0":v5.5.0*    |  5.5.0                  |  8.6.6 - 8.6.9                 |
 | *"api-v5.4.3":v5.4.3*    |  5.4.3                  |  8.6.5                         |
 | *"api-v5.4.1":v5.4.1*    |  5.4.1                  |  8.6.1 - 8.6.4 (all builds)    |
@@ -67,7 +67,7 @@ h2. Supported Features
 
 h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
-!{border: 0}https://i.ibb.co/GdYYz8c/npp-8-3-3-x64-dark-detail.png(npp_8.3.3_x64_dark_detail)!
+!{border: 0}https://i.ibb.co/H2B7cwq/npp-8-7-0-x64-dark-detail.png(npp-8-7-0-x64-dark-detail)!
 
 Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-680 :
 
@@ -173,6 +173,14 @@ Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppP
 * @TNppPlugin.SupportsDarkModeSubclassing@ - returns @true@ if the @NPPM_DARKMODESUBCLASSANDTHEME@ API is available; accessed through the @CanSubclass@ property
 
 
+h3. Menu Localization API (Notepad++ 8.7 and later)
+
+API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-870 :
+
+* @NPPM_GETNATIVELANGFILENAME@[12]
+* @NPPN_NATIVELANGCHANGED@[13]
+
+
 h3. 64-bit Scintilla APIs for Windows (Notepad++ 8.4.3 and later)
 
 Scintilla began supporting 64-bit character positions on the Windows platform in "version 5.2.3":sci523.
@@ -238,7 +246,7 @@ Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppP
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.5.2)[12]
+h3. Optional Scintilla Features (as of v5.5.3)[14]
 
 Use these compiler definitions to enable or disable features.
 
@@ -299,7 +307,11 @@ fn10. "NppDarkMode::dmfInit":dmfAPI
 
 fn11. "NppDarkMode::dmfHandleChange":dmfAPI
 
-fn12. "Scintilla 5.5.2 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/ad79718fc80d2330c4407fc15196c4b311522147/scintilla/include/Scintilla.h
+fn12. "NPPM_GETNATIVELANGFILENAME":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR983
+
+fn13. "NPPN_NATIVELANGCHANGED":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR1209
+
+fn14. "Scintilla 5.5.3 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/213e9135baa8f0177f29901be006fcf21853b6a0/scintilla/include/Scintilla.h
 
 
 

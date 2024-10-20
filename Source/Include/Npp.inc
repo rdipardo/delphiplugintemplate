@@ -865,6 +865,8 @@ const
   // wParam[in]: strLen is "language file name string" buffer length
   // lParam[out]: language file name string receives all copied native language file name string
   // Return the number of char copied/to copy
+  // since 8.7
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8
   NPPM_GETNATIVELANGFILENAME = (NPPMSG + 116);
 
   VAR_NOT_RECOGNIZED = 0;
@@ -1085,6 +1087,8 @@ const
   //scnNotification->nmhdr.code = NPPN_NATIVELANGCHANGED;
   //scnNotification->nmhdr.hwndFrom = hwndNpp
   //scnNotification->nmhdr.idFrom = 0; // preserved for the future use, must be zero
+  // since 8.7
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8
   NPPN_NATIVELANGCHANGED = (NPPN_FIRST + 31);
 
   MACRO_USER                = (WM_USER + 4000);
