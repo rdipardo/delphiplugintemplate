@@ -91,9 +91,9 @@ uses
     function DoOpen(filename: String): Boolean; overload;
     function DoOpen(filename: String; Line: Sci_Position): Boolean; overload;
     procedure GetFileLine(var filename: String; var Line: Sci_Position);
-    function GetWord: string;
-    function GetCurrentBufferPath(const BufferID: NativeUInt = 0): string;
-    function GetCurrentFileExt(const BufferID: NativeUInt = 0): string;
+    function GetWord: nppString;
+    function GetCurrentBufferPath(const BufferID: NativeUInt = 0): nppString;
+    function GetCurrentFileExt(const BufferID: NativeUInt = 0): nppString;
 
     // needs N++ 8.4.1 or later
     function IsDarkModeEnabled: Boolean;
@@ -310,21 +310,21 @@ end;
 {$ENDREGION}
 
 // utils
-function TNppPlugin.GetWord: string;
+function TNppPlugin.GetWord: nppString;
 var
-  s: string;
+  s: nppString;
 begin
   s := '';
   SetLength(s, 800);
-  SendNppMessage(NPPM_GETCURRENTWORD, 0, PChar(s));
+  SendNppMessage(NPPM_GETCURRENTWORD, 0, nppPChar(s));
   Result := s;
 end;
 
-function TNppPlugin.GetCurrentBufferPath(const BufferID: NativeUInt): string;
+function TNppPlugin.GetCurrentBufferPath(const BufferID: NativeUInt): nppString;
 var
   NppMsg: Cardinal;
   PathLen: Integer;
-  PathBuff: array of Char;
+  PathBuff: array of nppChar;
 begin
   Result := '';
   PathBuff := [#$0000];
@@ -340,12 +340,12 @@ begin
     SetLength(PathBuff, MAX_WIDE_PATH);
     SendNppMessage(NppMsg, MAX_WIDE_PATH - 1, @PathBuff[0]);
   end;
-  SetString(Result, PChar(@PathBuff[0]), StrLen(PChar(@PathBuff[0])));
+  SetString(Result, nppPChar(@PathBuff[0]), StrLen(nppPChar(@PathBuff[0])));
 end;
 
-function TNppPlugin.GetCurrentFileExt(const BufferID: NativeUInt): string;
+function TNppPlugin.GetCurrentFileExt(const BufferID: NativeUInt): nppString;
 begin
-  Result := String(StrRScan(PChar(GetCurrentBufferPath(BufferID)), '.'));
+  Result := nppString(StrRScan(nppPChar(GetCurrentBufferPath(BufferID)), '.'));
 end;
 
 function TNppPlugin.DoOpen(filename: String): Boolean;
@@ -356,7 +356,7 @@ begin
   Result := true;
   if {$ifdef FPC}WideSameText{$else}SameText{$endif}(GetCurrentBufferPath(), filename) then
     exit;
-  r := SendNppMessage(WM_DOOPEN, 0, PChar(filename));
+  r := SendNppMessage(WM_DOOPEN, 0, nppPChar(filename));
   Result := (r = 0);
 end;
 
@@ -377,8 +377,8 @@ end;
 
 function TNppPlugin.GetNppVersion: Cardinal;
 var
-  NppVersion, VersionWord, BuildN: Cardinal;
-  Quot, Rem, Hi, Lo: Word;
+  NppVersion, VersionWord: Cardinal;
+  Quot, Rem, Hi, Lo, BuildN: Word;
 begin
   NppVersion := SendNppMessage(NPPM_GETNPPVERSION);
   VersionWord := LOWORD(NppVersion) * 10;

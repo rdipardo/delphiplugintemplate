@@ -1121,9 +1121,9 @@ const
   FuncItemNameLen = 64;
 
 type
-  nppString = WideString;
-  nppChar = WChar;
-  nppPChar = PWChar;
+  nppString = {$ifdef FPC} UnicodeString {$else} WideString {$endif};
+  nppChar   = {$ifdef FPC} UnicodeChar   {$else} WChar      {$endif};
+  nppPChar  = {$ifdef FPC} PUnicodeChar  {$else} PWChar     {$endif};
 {$ENDREGION}
 
 type
