@@ -88,14 +88,17 @@ end;
 
 destructor TNppDockingForm.Destroy;
 begin
-  with (self.ToolbarData) do
-  begin
-    if Assigned(Title) then
-      Dispose(Title);
-    if Assigned(ModuleName) then
-      Dispose(ModuleName);
-    if Assigned(AdditionalInfo) then
-      Dispose(AdditionalInfo);
+  try
+    with (self.ToolbarData) do
+    begin
+      if Assigned(Title) then
+        Dispose(Title);
+      if Assigned(ModuleName) then
+        Dispose(ModuleName);
+      if Assigned(AdditionalInfo) then
+        Dispose(AdditionalInfo);
+    end;
+  finally
   end;
   inherited;
 end;

@@ -291,7 +291,8 @@ end;
 initialization
   { . . . }
 finalization
-  { NOTE: do not attempt to free docking forms; the application manages them }
+  if Assigned(HelloWorldDockingForm) then
+    FreeAndNil(HelloWorldDockingForm);
   if Assigned(HelloWorldModelessForm) then
     FreeAndNil(HelloWorldModelessForm);
 end.

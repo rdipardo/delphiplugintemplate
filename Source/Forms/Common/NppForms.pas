@@ -91,9 +91,12 @@ end;
 
 destructor TNppForm.Destroy;
 begin
-  if (Assigned(self.Npp)) then
-  begin
-    self.UnregisterForm();
+  try
+    if (Assigned(self.Npp)) then
+    begin
+      self.UnregisterForm();
+    end;
+  finally
   end;
   inherited;
 end;
