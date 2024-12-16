@@ -122,6 +122,7 @@ procedure THelloWorldDockingForm.ToggleDarkMode;
 var
   DarkModeColors: NppPlugin.TDarkModeColors;
 begin
+  inherited;
   self.ParentBackground := (not self.Npp.IsDarkModeEnabled);
   Memo1.ParentColor := self.ParentBackground;
   if (not self.ParentBackground) then begin
