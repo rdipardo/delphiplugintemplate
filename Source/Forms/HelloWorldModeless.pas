@@ -23,7 +23,7 @@ unit helloworldmodeless;
 interface
 
 uses
-  Classes, Windows, ShellApi, NppForms, NppPlugin,
+  Messages, Classes, Windows, ShellApi, NppForms, NppPlugin,
 {$IFNDEF FPC}
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls
 {$ELSE}
@@ -37,6 +37,9 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ToggleDarkMode; override;
+{$IFNDEF FPC}
+    procedure FormKeyPress(Sender: TObject; var Key: char);
+{$ENDIF}
   end;
 
 var
@@ -54,6 +57,7 @@ procedure TModelessForm.FormCreate(Sender: TObject);
 begin
   inherited;
   RegisterForm; // sends NPPM_MODELESSDIALOG
+  self.KeyPreview := true; // special hack for input forms
 end;
 
 procedure TModelessForm.Button1Click(Sender: TObject);
@@ -84,4 +88,18 @@ begin
     Memo1.Color := clWhite;
   end;
 end;
+
+{$IFNDEF FPC}
+// special hack for input forms
+// This is the best possible hack I could came up for
+// memo boxes that don't process enter keys for reasons
+// too complicated... Has something to do with Dialog Messages
+// I sends a Ctrl+Enter in place of Enter
+procedure TModelessForm.FormKeyPress(Sender: TObject; var Key: char);
+begin
+  inherited;
+  if (Key = #13) and (self.Memo1.Focused) then
+    self.Memo1.Perform(WM_CHAR, 10, 0);
+end;
+{$ENDIF}
 end.

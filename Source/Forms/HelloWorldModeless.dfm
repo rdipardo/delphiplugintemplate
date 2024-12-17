@@ -7,6 +7,7 @@ object HelloWorldModelessForm: TModelessForm
   Font.Color = clWindowText
   Font.Height = -11
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   ExplicitWidth = 226
   ExplicitHeight = 244
   TextHeight = 13
