@@ -1,10 +1,10 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.5.3
+  Object Pascal definitions for Scintilla 5.5.4
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
-  Copyright (c) 2024 Robert Di Pardo <dipardo.r@gmail.com>
+  Copyright (c) 2025 Robert Di Pardo <dipardo.r@gmail.com>
   Distributed under the terms of the GNU Lesser General Public License Version 3.0 or later
 }
 type

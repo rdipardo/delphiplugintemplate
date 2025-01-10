@@ -852,7 +852,7 @@ const
   NPPM_GETTABCOLORID = (NPPMSG + 114);
   // int NPPM_SETUNTITLEDNAME(BufferID id, const TCHAR* newName)
   // Rename the tab name for an untitled tab.
-  // wParam[in]: id - BufferID of the tab. -1 for currently active tab
+  // wParam[in]: id - BufferID of the tab.
   // lParam[in]: newName - the desired new name of the tab
   // Return TRUE upon success; FALSE upon failure
   // since 8.6.9
@@ -862,6 +862,7 @@ const
   // Get the Current native language file name string. Use it after getting NPPN_READY notification to find out which native language is used.
   // Users should call it with nativeLangFileName as NULL to get the required number of char (not including the terminating nul character),
   // allocate language file name string buffer with the return value + 1, then call it again to get the current native language file name string.
+  // If there's no localization file applied, the returned value is 0.
   // wParam[in]: strLen is "language file name string" buffer length
   // lParam[out]: language file name string receives all copied native language file name string
   // Return the number of char copied/to copy
