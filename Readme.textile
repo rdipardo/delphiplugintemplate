@@ -14,7 +14,8 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.5.4                  |  8.7.6                         |
+| *"default":default*      |  5.5.5                  |  8.7.9                         |
+| *"api-v5.5.4":v5.5.4*    |  5.5.4                  |  8.7.6 - 8.6.8                 |
 | *"api-v5.5.2-3":v5.5.2*  |  5.5.2/3                |  8.7 - 8.7.5                   |
 | *"api-v5.5.0":v5.5.0*    |  5.5.0                  |  8.6.6 - 8.6.9                 |
 | *"api-v5.4.3":v5.4.3*    |  5.4.3                  |  8.6.5                         |
@@ -30,6 +31,7 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
+[v5.5.4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.4.zip
 [v5.5.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.2-3.zip
 [v5.5.0]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.0.zip
 [v5.4.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.4.3.zip

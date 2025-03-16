@@ -41,6 +41,17 @@ uses
 {$I '..\..\Include\Npp.inc'}
 {$I '..\..\Include\DarkMode.inc'}
 
+const
+  // @seealso(NPPM_ADDSCNMODIFIEDFLAGS)
+  DEFAULT_SC_MOD_MASK =
+    SC_MOD_DELETETEXT or
+    SC_MOD_INSERTTEXT or
+    SC_PERFORMED_UNDO or
+    SC_PERFORMED_REDO or
+    SC_MOD_CHANGEINDICATOR
+  ;
+
+type
   TNppPlugin = class(TObject)
   private
     FClosingBufferID: NativeUInt;

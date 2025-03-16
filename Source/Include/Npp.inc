@@ -869,6 +869,16 @@ const
   // since 8.7
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8
   NPPM_GETNATIVELANGFILENAME = (NPPMSG + 116);
+  // BOOL NPPM_ADDSCNMODIFIEDFLAGS(0, unsigned long scnMotifiedFlags2Add)
+  // Add needed SCN_MODIFIED flags so your plugin will receive the notification SCN_MODIFIED of these events for your specific treatments.
+  // By default, Notepad++ only forwards SCN_MODIFIED with the 5 flags/events in @link(DEFAULT_SC_MOD_MASK).
+  // If your plugin need to process other events of SCN_MODIFIED, you should add the flags you need by sending this message to Notepad++, just after recieving NPPN_READY.
+  // wParam: 0 (not used)
+  // lParam[in]: scnMotifiedFlags2Add - Scintilla SCN_MODIFIED flags to add.
+  // Return TRUE
+  // since 8.7.7
+  // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/6fd3830
+  NPPM_ADDSCNMODIFIEDFLAGS = (NPPMSG + 117);
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
