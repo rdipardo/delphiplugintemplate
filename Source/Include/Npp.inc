@@ -71,7 +71,7 @@ const
   // since 8.6
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/72c5175b33cb3a06d0ece2a7700295b0c9647140
   NPPM_GETNBSESSIONFILES = (NPPMSG + 13);
-  // NPPM_GETSESSIONFILES (TCHAR** sessionFileArray, TCHAR* sessionFileName)
+  // BOOL NPPM_GETSESSIONFILES (TCHAR** sessionFileArray, TCHAR* sessionFileName)
   // the files' full path name from a session file.
   // wParam[out]: sessionFileArray is the array in which the files' full path of the same group are written. To allocate the array with the proper size, send message NPPM_GETNBSESSIONFILES.
   // lParam[in]: sessionFileName is XML session full path
@@ -850,7 +850,7 @@ const
   // since 8.6.8
   // https://github.com/notepad-plus-plus/notepad-plus-plus/commit/9244cd09430c82ecff805ea862c9133d5cb56ded
   NPPM_GETTABCOLORID = (NPPMSG + 114);
-  // int NPPM_SETUNTITLEDNAME(BufferID id, const TCHAR* newName)
+  // BOOL NPPM_SETUNTITLEDNAME(BufferID id, const TCHAR* newName)
   // Rename the tab name for an untitled tab.
   // wParam[in]: id - BufferID of the tab.
   // lParam[in]: newName - the desired new name of the tab
@@ -1111,7 +1111,7 @@ type
               L_MMIXAL, L_NIM, L_NNCRONTAB, L_OSCRIPT, L_REBOL,
               L_REGISTRY, L_RUST, L_SPICE, L_TXT2TAGS, L_VISUALPROLOG,
               L_TYPESCRIPT, L_JSON5, L_MSSQL, L_GDSCRIPT, L_HOLLYWOOD,
-              L_GOLANG, L_RAKU, L_TOML,
+              L_GOLANG, L_RAKU, L_TOML, L_SAS,
               // Don't use L_JS, use L_JAVASCRIPT instead
               // The end of enumerated language type, so it should be always at the end
               L_EXTERNAL);
