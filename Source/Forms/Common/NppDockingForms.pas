@@ -38,9 +38,12 @@ type
   TNppDockingForm = class(TNppForm)
   private
     { Private declarations }
+    FCmdId, FDlgId: Integer;
     FOnDock: TNotifyEvent;
     FOnFloat: TNotifyEvent;
-    procedure SetControlParent(control: TControl);
+    procedure AddControlParent;
+    procedure RemoveControlParent;
+    class procedure SetControlParent(wincontrol: TWinControl; wsExMask: NativeUInt);
   protected
     { Protected declarations }
     ToolbarData: TToolbarData;
@@ -51,7 +54,6 @@ type
     property OnFloat: TNotifyEvent read FOnFloat write FOnFloat;
   public
     { Public declarations }
-    CmdId, DlgId: Integer;
     constructor Create(const NppParent: TNppPlugin; const DlgId: Integer); reintroduce; overload; virtual;
     constructor Create(AOwner: TNppForm; const DlgId: Integer); reintroduce; overload; virtual;
     destructor Destroy; override;
@@ -65,6 +67,7 @@ type
     procedure RegisterDockingForm(MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
     procedure UpdateDisplayInfo; overload;
     procedure UpdateDisplayInfo(Info: String); overload;
+    property CmdId: Integer read FCmdId default 0;
   published
     { Published declarations }
   end;
@@ -74,15 +77,15 @@ implementation
 constructor TNppDockingForm.Create(const NppParent: TNppPlugin; const DlgId: Integer);
 begin
   inherited Create(NppParent);
-  self.DlgId := DlgId;
-  self.CmdId := self.Npp.CmdIdFromDlgId(DlgId);
+  self.FDlgId := DlgId;
+  self.FCmdId := self.Npp.CmdIdFromDlgId(DlgId);
   self.RegisterDockingForm(self.NppDefaultDockingMask);
 end;
 
 constructor TNppDockingForm.Create(AOwner: TNppForm; const DlgId: Integer);
 begin
   inherited Create(AOwner);
-  self.DlgId := DlgId;
+  self.FDlgId := DlgId;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
 end;
 
@@ -107,7 +110,7 @@ procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
 begin
   if (self.Npp.NppData.NppHandle <> msg.NMHdr.hwndFrom) then
   begin
-    self.SetControlParent(self);
+    self.AddControlParent;
     inherited;
     exit;
   end;
@@ -120,6 +123,7 @@ begin
   if ((msg.NMHdr.code and $FFFF) = DMN_FLOAT) then
   begin
     // msg.NMHdr.code shr 16 - container
+    self.RemoveControlParent;
     if Assigned(FOnFloat) then
       FOnFloat(self);
   end;
@@ -149,7 +153,7 @@ begin
 
   self.ToolbarData.ClientHandle := self.Handle;
 
-  self.ToolbarData.DlgId := self.DlgId;
+  self.ToolbarData.DlgId := self.FDlgId;
   self.ToolbarData.Mask := self.ToolbarData.Mask or DWS_ADDINFO;
 
   GetMem(self.ToolbarData.Title, MAX_PATH * sizeof(nppPChar));
@@ -184,8 +188,8 @@ procedure TNppDockingForm.Show(const Plugin: TNppPlugin; const DlgMenuId: intege
 begin
   with self do begin
     Npp := Plugin;
-    DlgId := DlgMenuId;
-    CmdId := Plugin.CmdIdFromDlgId(DlgMenuId);
+    FDlgId := DlgMenuId;
+    FCmdId := Plugin.CmdIdFromDlgId(DlgMenuId);
   end;
   self.RegisterDockingForm(self.NppDefaultDockingMask);
   self.Show;
@@ -206,34 +210,54 @@ end;
 // I still don't know why the pointer climbs up to the docking dialog that holds this one
 // but this works for now.
 // ==========================================================================================
-// Changed logic to *set* (not clear) the WS_EX_CONTROLPARENT flag:
+class procedure TNppDockingForm.SetControlParent(wincontrol: TWinControl; wsExMask: NativeUInt);
+var
+  control: TControl;
+  i: Integer;
+begin
+  Windows.SetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE, wsExMask);
+  control := wincontrol as TControl;
+  for i := control.ComponentCount - 1 downto 0 do
+  begin
+    if (control.Components[i] is TWinControl) then
+    begin
+      SetControlParent(control.Components[i] as TWinControl, wsExMask);
+    end;
+  end;
+end;
+// ==========================================================================================
+// Set the WS_EX_CONTROLPARENT flag, e.g., whenever the Windows runtime wants to redraw us:
 // https://github.com/kbilsted/NotepadPlusPlusPluginPack.Net/issues/17#issuecomment-683455467
 // ==========================================================================================
-procedure TNppDockingForm.SetControlParent(control: TControl);
+procedure TNppDockingForm.AddControlParent;
 var
   wincontrol: TWinControl;
-  i: Integer;
   r: NativeInt;
 begin
-  if (control is TWinControl) then
-  begin
-    wincontrol := control as TWinControl;
+    wincontrol := Self as TWinControl;
     wincontrol.HandleNeeded;
     r := Windows.GetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE);
     if (r and WS_EX_CONTROLPARENT <> WS_EX_CONTROLPARENT) then
     begin
-      Windows.SetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE,
-        r or WS_EX_CONTROLPARENT);
+      SetControlParent(wincontrol, r or WS_EX_CONTROLPARENT);
     end;
-  end;
-  if (control.ComponentCount > 0) then
-  begin
-    for i := control.ComponentCount - 1 downto 0 do
+end;
+// ==========================================================================================
+// Clear the WS_EX_CONTROLPARENT flag, e.g., when the Docking Manager sends DMN_FLOAT:
+// https://sourceforge.net/p/notepad-plus/discussion/482781/thread/ab626469/#4458
+// ==========================================================================================
+procedure TNppDockingForm.RemoveControlParent;
+var
+  wincontrol: TWinControl;
+  r: NativeInt;
+begin
+    wincontrol := Self as TWinControl;
+    wincontrol.HandleNeeded;
+    r := Windows.GetWindowLongPtr(wincontrol.Handle, GWL_EXSTYLE);
+    if (r and WS_EX_CONTROLPARENT = WS_EX_CONTROLPARENT) then
     begin
-      if (control.Components[i] is TControl) then
-        self.SetControlParent(control.Components[i] as TControl);
+      SetControlParent(wincontrol, r and (not WS_EX_CONTROLPARENT));
     end;
-  end;
 end;
 
 procedure TNppDockingForm.UpdateDisplayInfo;
