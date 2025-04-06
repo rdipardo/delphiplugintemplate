@@ -7,6 +7,7 @@
   You can obtain one at https://mozilla.org/MPL/2.0/.
 }
 
+//! Utilities for retrieving file version resources from DLL/EXE files
 unit VersionInfo;
 
 {$IFDEF FPC}
@@ -20,6 +21,7 @@ uses
   Windows, SysUtils;
 
 type
+  //! Provides read-only access to the [version information](https://learn.microsoft.com/windows/win32/menurc/version-information-structures) of a DLL/EXE file
   TFileVersionInfo = class
   private
     { Private declarations }
@@ -49,6 +51,8 @@ type
     { Protected declarations }
   public
     { Public declarations }
+    //! Creates a new @classname instance from the DLL/EXE with `AFileName`.
+    //! @param AFileName [in] the full path to a DLL/EXE file containing file version resources
     constructor Create(const AFileName: string);
     destructor  Destroy; override;
 

@@ -11,6 +11,7 @@
 *.local
 *.identcache
 *.otares
+*.pduc
 *.stat
 *.res
 *.exe
@@ -25,4 +26,7 @@ __recovery/
 out/
 [Ll]ib/
 [Bb]in/
+docs/*.*
+docs/cache/*.*
+docs/tipuesearch/*.*
 !HelloWorldResource.res

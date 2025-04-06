@@ -15,3 +15,5 @@
 *.bmp     binary
 *.ico     binary
 *.*res    binary
+*.ttf     binary
+*.woff*   binary

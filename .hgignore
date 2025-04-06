@@ -26,3 +26,6 @@ __recovery/
 out/
 [Ll]ib/
 [Bb]in/
+
+syntax: regexp
+^docs/(?!assets)

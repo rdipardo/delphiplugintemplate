@@ -17,6 +17,7 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 }
 
+//! Types and utilities for creating docked plugin dialogs
 unit NppDockingForms;
 
 {$IFDEF FPC}{$mode delphi}{$ENDIF}
@@ -35,6 +36,7 @@ uses
 {$I '..\..\Include\DockingResource.inc'}
 
 type
+   //! Default implementation of a docked plugin dialog
   TNppDockingForm = class(TNppForm)
   private
     { Private declarations }
@@ -49,8 +51,11 @@ type
     ToolbarData: TToolbarData;
     NppDefaultDockingMask: Cardinal;
     // @todo: change caption and stuff....
+    //! Handles the @link(DMM_FLOAT), @link(DMM_DOCK) and @link(DMM_CLOSE) Docking Manager messages.
     procedure OnWM_NOTIFY(var msg: TWMNotify); message WM_NOTIFY;
+    //! Optional handler for the @link(DMM_FLOAT) message
     property OnDock: TNotifyEvent read FOnDock write FOnDock;
+    //! Optional handler for the @link(DMM_FLOAT) message
     property OnFloat: TNotifyEvent read FOnFloat write FOnFloat;
   public
     { Public declarations }
@@ -61,12 +66,13 @@ type
     procedure Show(const Plugin: TNppPlugin; const DlgMenuId: integer); overload;
     procedure Hide;
     /// NOTE.
-    /// dock position is saved in config.xml as a GUIConfig element with the
-    /// DockingManager attribute; you should delete this between launches when
-    /// testing different configurations
+    //! Initializes the @link(ToolbarData) member and sends @link(NPPM_DMMREGASDCKDLG).
     procedure RegisterDockingForm(MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
     procedure UpdateDisplayInfo; overload;
     procedure UpdateDisplayInfo(Info: String); overload;
+    //! The menu ID of the plugin command associated with this @classname, assigned by Notepad++ during plugin initialization.
+    //! @note(It is @name -- *not* `DlgId` -- that identifies a plugin command when sending API messages to the Notepad++
+    //!       window. Using @link(TNppPlugin.CmdIdFromDlgId) wherever possible is recommended.)
     property CmdId: Integer read FCmdId default 0;
   published
     { Published declarations }
@@ -106,6 +112,17 @@ begin
   inherited;
 end;
 
+//! @note(Because the Docking Manager signals its "children" dialogs through `WM_NOTIFY`,
+//!       which is *also* broadcast by the Windows runtime, the likelihood of adverse
+//!       interactions is high. The necessity of hacking your docked dialog's window
+//!       attributes was discovered by this template's original developer in
+//!       [this discussion thread](https://sourceforge.net/p/notepad-plus/discussion/482781/thread/ab626469).
+//!       @br@br
+//!       Newer development has tried to improve on Damjan Cvetko's insights, but there
+//!       is probably no single solution for every use case. So, while many plugins
+//!       will work fine using this method as is, be prepared to debug and edit this code path
+//!       if your plugin starts freezing the editor in endless redraw loops.)
+//! @param msg [in, out] a `TWMNotify` structure (compatible with Windows' [NMHDR](https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-nmhdr))
 procedure TNppDockingForm.OnWM_NOTIFY(var msg: TWMNotify);
 begin
   if (self.Npp.NppData.NppHandle <> msg.NMHdr.hwndFrom) then
@@ -135,6 +152,25 @@ begin
   end;
 end;
 
+//! @br@br
+//! This sets the style bitmask of the @link(ToolbarData) member to the combination of
+//! @link(DWS_ADDINFO) and the given `MaskStyle`. If this form's
+//! [Icon](https://lazarus-ccr.sourceforge.io/docs/lcl/forms/tcustomform.icon.html)
+//! property is set, the @link(TToolbarData.IconTab) field is assigned from the icon's
+//! [Handle](https://lazarus-ccr.sourceforge.io/docs/lcl/graphics/ticon.handle.html),
+//! and the @link(DWS_ICONTAB) flag will be added to @link(TToolbarData.Mask).
+//! @note(The initial dock position is saved in `%AppData%\Notepad++\config.xml` as a `GUIConfig` element with the
+//!       `DockingManager` attribute; e.g.,
+//! @longCode(
+//! {
+//!     <GUIConfig name="DockingManager" leftWidth="200" rightWidth="582" topHeight="200" bottomHeight="200">
+//!         <PluginDlg pluginName="HelloWorld.dll" id="2" curr="1" prev="-1" isVisible="yes" />
+//!         <ActiveTabs cont="0" activeTab="-1" />
+//!         <!-- ... -->
+//!     </GUIConfig>
+//! })
+//! You should delete this between launches when testing different configurations.)
+//! @param MaskStyle [optional] one or more bit flags for the @link(TToolbarData.Mask) field
 procedure TNppDockingForm.RegisterDockingForm
   (MaskStyle: Cardinal = DWS_DF_CONT_LEFT);
 begin

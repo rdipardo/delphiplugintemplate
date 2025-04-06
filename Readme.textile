@@ -54,7 +54,7 @@ Run the install script with the name of a project directory, e.g.:
 bc. install %USERPROFILE%\projects\MyPlugin
 
 *Note*
-Remember to edit the DLL attach hook in "Source/Units/DLLExports.pas":Source/Units/DLLExports.pas#lines-38 with the actual name of your plugin class instance and type:
+Remember to edit the DLL attach hook in "$":Source/Units/DLLExports.pas with the actual name of your plugin class instance and type:
 
 bc[pascal]. case dwReason of
 DLL_PROCESS_ATTACH:
@@ -69,11 +69,13 @@ end;
 
 h2. Supported Features
 
+bq. See the "API documentation":https://rdipardo.bitbucket.io/projects/delphiplugintemplate for more details
+
 h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
 !{border: 0}https://i.ibb.co/H2B7cwq/npp-8-7-0-x64-dark-detail.png(npp-8-7-0-x64-dark-detail)!
 
-Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-680 :
+Plugin API messages provided by "$":Source/Include/Npp.inc:
 
 * @NPPM_ADDTOOLBARICON_FORDARKMODE@[1]
 * @NPPM_ADDTOOLBARICON_DEPRECATED@[2]
@@ -81,11 +83,11 @@ Plugin API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#
 *Note*
 @NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
-Types provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-1061 :
+Types provided by "$":Source/Include/Npp.inc:
 
 * @TTbIconsDarkMode@[3]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-398 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.SupportsDarkMode@ - returns @true@ if the running editor is at least version 8.0
 
@@ -127,21 +129,21 @@ bc[pascal]. {$IFDEF CPUx64}
 
 h3. Dark Mode Notification API (Notepad++ 8.4.1 and later)
 
-API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-722 :
+API messages provided by "$":Source/Include/Npp.inc:
 
 * @NPPM_ISDARKMODEENABLED@[4]
 * @NPPM_GETDARKMODECOLORS@[5]
 * @NPPN_DARKMODECHANGED@[6]
 
-Constants defined in "Source/Include/Docking.inc":Source/Include/Docking.inc#lines-35 :
+Constants defined in "$":Source/Include/Docking.inc:
 
 * @DWS_USEOWNDARKMODE@[7]
 
-Types provided by "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-25 :
+Types provided by "$":Source/Include/DarkMode.inc:
 
 * @TDarkModeColors@[8]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-406 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
 * @TNppPlugin.GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
@@ -152,34 +154,34 @@ h3. @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ (Notepad++ 8.4.8 and 
 Added to Scintilla 5.3.2 to minimize the visual impact of text replacement when "change history":https://scintilla.org/ScintillaDoc.html#ChangeHistory is enabled.
 @SCI_GETSTYLEDTEXTFULL@ was a late addition to the 64-bit APIs introduced in 5.2.3.
 
-Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-32 :
+Types provided by "$":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_GTE_532@ - the running editor's version of Scintilla is at least 5.3.2
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-488 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasMinimalReplacementApi@ - returns @true@ if the @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ APIs are available
 
 
 h3. Dark Mode Theme API (Notepad++ 8.5.4 and later)
 
-API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-808 :
+API messages provided by "$":Source/Include/Npp.inc:
 
 * @NPPM_DARKMODESUBCLASSANDTHEME@[9]
 
-Bit masks defined in "Source/Include/DarkMode.inc":Source/Include/DarkMode.inc#lines-20 :
+Bit masks defined in "$":Source/Include/DarkMode.inc:
 
 * @dmfInit@[10]
 * @dmfHandleChange@[11]
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-501 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.SupportsDarkModeSubclassing@ - returns @true@ if the @NPPM_DARKMODESUBCLASSANDTHEME@ API is available; accessed through the @CanSubclass@ property
 
 
 h3. Menu Localization API (Notepad++ 8.7 and later)
 
-API messages provided by "Source/Include/Npp.inc":Source/Include/Npp.inc#lines-870 :
+API messages provided by "$":Source/Include/Npp.inc:
 
 * @NPPM_GETNATIVELANGFILENAME@[12]
 * @NPPN_NATIVELANGCHANGED@[13]
@@ -202,17 +204,17 @@ Note that, "since Notepad++ 8.3":8.3, all of the _former_ APIs return 64-bit val
 
 Calling any of the six APIs above is functionally equivalent in Notepad++ 8.4.3 or later.
 However, a future version of Scintilla will "deprecate the former APIs":sciNext (the ones without the @*FULL@ suffix).
-For forward compatibility, the following types are provided by '"$":Source/Include/Scintilla.inc :
+For forward compatibility, the following types are provided by '"$":Source/Include/Scintilla.inc:
 
 * @TSciTextRangeFull@
 * @TSciTextToFindFull@
 * @TSciRangeToFormatFull@
 
-Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-27 :
+Types provided by "$":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_GTE_523@ - the running editor's version of Scintilla is at least 5.2.3
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-474 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
 
@@ -240,17 +242,17 @@ h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
 Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
 Code paths depending on the old implementation should add 1 to the return value.
 
-Types provided by "Source/Include/SciApi.inc":Source/Include/SciApi.inc#lines-17 :
+Types provided by "$":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_LT_5@ - the running editor's version of Scintilla is <= 4.4.6
 * @TSciApiLevel.sciApi_GTE_515@ - the Scintilla version is at least 5.1.5
 
-Methods provided by "Source/Units/Common/NppPlugin.pas":Source/Units/Common/NppPlugin.pas#lines-458 :
+Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.5.3)[14]
+h3. Optional Scintilla Features (as of v5.5.5)[14]
 
 Use these compiler definitions to enable or disable features.
 
@@ -289,33 +291,33 @@ SCI_SETBIDIRECTIONAL
 
 h2. Plugin API Reference
 
-fn1. "NPPM_ADDTOOLBARICON_FORDARKMODE":https://community.notepad-plus-plus.org/topic/21652/add-new-api-nppm_addtoolbaricon_fordarkmode-for-dark-mode
+fn1. "NPPM_ADDTOOLBARICON_FORDARKMODE":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_FORDARKMODE
 
-fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://github.com/notepad-plus-plus/npp-usermanual/blob/master/content/docs/plugin-communication.md#nppm_addtoolbaricon-nppm_addtoolbaricon_deprecated-in-v80
+fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_DEPRECATED
 
-fn3. "TTbIconsDarkMode":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/8a898bae3f84c03c44aaed25001e9fa1ddfa09aa
+fn3. "TTbIconsDarkMode":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.TTbIconsDarkMode.html
 
-fn4. "NPPM_ISDARKMODEENABLED":dmAPI
+fn4. "NPPM_ISDARKMODEENABLED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ISDARKMODEENABLED
 
-fn5. "NPPM_GETDARKMODECOLORS":dmAPI
+fn5. "NPPM_GETDARKMODECOLORS":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_GETDARKMODECOLORS
 
-fn6. "NPPN_DARKMODECHANGED":dmNotif
+fn6. "NPPN_DARKMODECHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_DARKMODECHANGED
 
-fn7. "DWS_USEOWNDARKMODE":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/d3b026bfeb96eb39e0402673d68dd04e640e2e1e#diff-13f08cb1430beb8369d6b0712fa5005d6fdd8c9d8d0c67d9a967a1cd76fc0f7b
+fn7. "DWS_USEOWNDARKMODE":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppDockingForms.html#DWS_USEOWNDARKMODE
 
-fn8. "TDarkModeColors":dmAPI
+fn8. "TDarkModeColors":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.TDarkModeColors.html
 
-fn9. "NPPM_DARKMODESUBCLASSANDTHEME":dmfAPI
+fn9. "NPPM_DARKMODESUBCLASSANDTHEME":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_DARKMODESUBCLASSANDTHEME
 
-fn10. "NppDarkMode::dmfInit":dmfAPI
+fn10. "NppDarkMode::dmfInit":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#dmfInit
 
-fn11. "NppDarkMode::dmfHandleChange":dmfAPI
+fn11. "NppDarkMode::dmfHandleChange":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#dmfHandleChange
 
-fn12. "NPPM_GETNATIVELANGFILENAME":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR983
+fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_GETNATIVELANGFILENAME
 
-fn13. "NPPN_NATIVELANGCHANGED":https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR1209
+fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
 
-fn14. "Scintilla 5.5.3 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/213e9135baa8f0177f29901be006fcf21853b6a0/scintilla/include/Scintilla.h
+fn14. "Scintilla 5.5.5 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/e38a0f2ec9c609451fd6670d1b430862e8722a78/scintilla/include/Scintilla.h
 
 
 
@@ -331,6 +333,3 @@ fn14. "Scintilla 5.5.3 definitions":https://github.com/notepad-plus-plus/notepad
 [8.4]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80
 [oneMatch]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/08128ee36a31fdb0b3d72d1d7342f50e8103ea47#diff-41f42d8960fb90330ea7a19c8e7f35d0575fe12eb976cb95f4971106c48329b4
 [docs]https://npp-user-manual.org/docs/plugins/#rules-for-adding-your-plugins-into-list
-[dmAPI]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ff
-[dmNotif]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ffR696
-[dmfAPI]https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f#diff-e92bb7b3dabd82dee68581eeef02e4dc9fc80b9927a1edfe248077afc32392ff

@@ -11,24 +11,32 @@ type
   { scintilla/include/Sci_Position.h }
 {$IF DEFINED(NPP_NO_HUGE_FILES) AND DEFINED(WIN64)}
 {$MESSAGE 'Plugin will be compatible with Npp <= 8.2.1 *only*'}
-  Sci_Position = LongInt;
-  Sci_PositionU = Cardinal;
+  Sci_Position = LongInt; deprecated;
+  Sci_PositionU = Cardinal; deprecated;
 {$ELSE}
 {$IFDEF WIN64}{$MESSAGE 'Plugin will be compatible with Npp 8.3+ *only*'}{$ENDIF}
+  //! Basic signed type used throughout interface
   Sci_Position = NativeInt;
+  //! Unsigned variant used, for example, by [ILexer::Lex](https://github.com/ScintillaOrg/lexilla/blob/master/lexlib/DefaultLexer.h)
   Sci_PositionU = NativeUInt;
 {$ENDIF}
 
  { scintilla/include/Scintilla.h }
+  //! An unsigned integer type large enough to hold a pointer
   uptr_t = NativeUInt;
+  //! A signed integer large enough to hold a pointer
   sptr_t = NativeInt;
   TScintillaMessageFnc = function(ptr : sptr_t; Msg: Cardinal; wParam: uptr_t; lParam : sptr_t) : sptr_t; cdecl;
   SciFnDirectStatus = function(ptr: sptr_t; Msg: Cardinal; wParam: uptr_t; lParam: sptr_t; pStatus: PInteger) : sptr_t; cdecl;
   SciFnDirect = TScintillaMessageFnc;
 
+  //! Compatible with Windows' [NMHDR](https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-nmhdr)
   TNotifyHeader = record
+    //! Environment specific window handle or pointer
     hwndFrom : HWND;
+    //! Control ID of the window issuing the notification
     idFrom : uptr_t;
+    //! A `SCN_*` notification code
     code : Cardinal;
   end;
 
@@ -77,24 +85,32 @@ type
   end;
 }
 
+  //! Range of a min and a max position
+{$IF DEFINED(WIN64) AND NOT DEFINED(NPP_NO_HUGE_FILES)}
+  //! -- supports 64-bit
+{$ENDIF}
   TSciCharacterRange = Record
     cpMin : Sci_Position;
     cpMax : Sci_Position;
   end;
+  //! Type alias for @link(TSciCharacterRange)
   TSciCharacterRangeFull = TSciCharacterRange;
 
+  //! @deprecated
   TSciTextRange = Record
     chrg : TSciCharacterRange;
     lpstrText : LPSTR;
   end;
   PSciTextRange = ^TSciTextRange;
 
+  //! Range of a min and a max position with an output string
   TSciTextRangeFull = Record
     chrg : TSciCharacterRangeFull;
     lpstrText : LPSTR;
   end;
   PSciTextRangeFull = ^TSciTextRangeFull;
 
+  //! @deprecated
   TSciTextToFind  = Record
     chrg : TSciCharacterRange;
     lpstrText : LPSTR;
@@ -102,6 +118,7 @@ type
   end;
   PSciTextToFind = ^TSciTextToFind;
 
+  //! Search range, text -> found position
   TSciTextToFindFull  = Record
     chrg : TSciCharacterRangeFull;
     lpstrText : LPSTR;
@@ -119,6 +136,7 @@ type
 
   // This structure is used in printing and requires some of the graphics types
   // from Platform.h.  Not needed by most client code.
+  //! @deprecated
   TSciRangeToFormat = Record
     hdc: TSciSurfaceID;
     hdcTarget: TSciSurfaceID;
@@ -127,6 +145,7 @@ type
     chrg: TSciCharacterRange;
   end;
 
+  //! Draw the document into a display context such as a printer
   TSciRangeToFormatFull = Record
     hdc: TSciSurfaceID;
     hdcTarget: TSciSurfaceID;

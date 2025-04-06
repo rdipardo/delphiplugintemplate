@@ -17,6 +17,7 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 }
 
+//! Types and utilities for creating basic plugin dialogs
 unit NppForms;
 
 {$IFDEF FPC}{$mode delphi}{$ENDIF}
@@ -32,9 +33,11 @@ uses
 {$ENDIF};
 
 type
+  //! Generic function type of a typical Win32 window message procedure
   TWinApiMsgProc = function(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
     _LParam: LPARAM): LRESULT; stdcall;
 
+   //! Default implementation of a basic (non-docking) plugin dialog
   TNppForm = class(TForm)
   private
     { Private declarations }
@@ -42,26 +45,38 @@ type
     FRegistered: Boolean;
     function CanRegister: Boolean;
   protected
+    //! Sends a plugin or Scintilla API message to a dialog window
     function SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: NativeInt = 0): LRESULT; overload;
+    //! Sends a plugin or Scintilla API message to a dialog window when the `LPARAM` is a pointer
     function SafeSendMessage(Hndl: HWND; Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: Pointer = nil): LRESULT; overload;
+    //! Sends @link(NPPM_MODELESSDIALOG) with @link(MODELESSDIALOGADD)
     procedure RegisterForm();
+    //! Sends @link(NPPM_MODELESSDIALOG) with @link(MODELESSDIALOGREMOVE)
     procedure UnregisterForm();
+    //! Allows this @classname instance to replace the given `TCloseAction` with @link(DefaultCloseAction)
     procedure DoClose(var Action: TCloseAction); override;
 {$ifdef FPC}
     { sent by clicking the 'X' on the title bar }
+    //! Added to ensure that Free Pascal plugin dialogs respond to the `X` close button after @link(ShowModal) is called.
+    //! @note(Not implemented for Delphi plugins.)
     procedure HandleCloseQuery({%H-}Sender: TObject; {%H-}var CanClose: Boolean); virtual;
 {$endif}
   public
     { Public declarations }
     Npp: TNppPlugin;
     DefaultCloseAction: TCloseAction;
+    //! Overrides the base constructor to create a new @classname instance.
     constructor Create(AOwner: TComponent); overload; override;
+    //! Creates a new @classname instance and initializes the @link(Npp) member.
+    //! @param Plugin [in] an instance of @link(TNppPlugin); it should be initialized when @link(DLLExports.DLLEntryPoint) receives `DLL_PROCESS_ATTACH`
     constructor Create(const Plugin: TNppPlugin); reintroduce; overload;
     destructor Destroy; override;
     function WantChildKey(Child: TControl; var Message: TMessage): Boolean; override;
     procedure ToggleDarkMode; virtual;
     procedure SubclassAndTheme(DmFlag: Cardinal); virtual;
 {$ifdef FPC}
+    //! Displays this @classname in its own message loop, but without disabling the parent window.
+    //! @note(Not implemented for Delphi plugins.)
     function ShowModal: Integer; override;
 {$endif}
   end;
@@ -70,6 +85,41 @@ implementation
 
 uses SysUtils;
 
+//! @note(This overload does __*not*__ initialize the @link(Npp) member. Two-phase initialization
+//!       is required when this constructor is called explicitly or implicitly, as, for example,
+//!       by calling @url(
+{$ifdef FPC}
+//! https://wiki.freepascal.org/TApplication
+{$else}
+//! https://docwiki.embarcadero.com/Libraries/Athens/en/Vcl.Forms.TApplication.CreateForm
+{$endif}
+//! Application.CreateForm); e.g.,
+//! @longCode(
+//!   interface
+//!
+//!   uses
+//!     NppPlugin, NppForms, Forms;
+//!
+//!   type
+//!     TPlugin = class(TNppPlugin)
+//!     // ...
+//!     end;
+//!
+//!     TPluginForm = class(TNppForm)
+//!     // ...
+//!     end;
+//!
+//!   var
+//!     MyForm: TPluginForm;
+//!
+//!   implementation
+//!
+//!   constructor TPlugin.Create;
+//!   begin
+//!     Application.CreateForm(TPluginForm, MyForm);
+//!     MyForm.Npp := Self;
+//!   end;
+//!))
 constructor TNppForm.Create(AOwner: TComponent);
 begin
   FThemeInitialized := False;
@@ -183,6 +233,15 @@ begin
 end;
 
 {$ifdef FPC}
+//! Whereas Delphi treats Notepad++ itself as the main application, and disables the editor as
+//! expected, the main application handle of an LCL program should **never** be reassigned after
+//! initialization. The LCL's default @name method attempts to hide the parent window. But if
+//! the main application handle belongs to Notepad++, hiding it makes the editor window
+//! disappear, with no user-accessible way to focus it again, requiring the Task Manager to
+//! ultimately shut it down.
+//! @warning(If the user does not explicitly close the modal form, the message loop created by
+//!          this method will continue running even after Notepad++ has been shut down. The Task
+//!          Manager can be used to kill the form in such cases.)
 function TNppForm.ShowModal: Integer;
 begin
   Exclude(FFormState, fsModal);

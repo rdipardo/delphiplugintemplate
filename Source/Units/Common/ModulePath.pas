@@ -8,6 +8,7 @@
   You can obtain one at https://mozilla.org/MPL/2.0/.
 }
 
+//! Utilities for retrieving DLL/EXE file paths
 unit ModulePath;
 
 {$IFDEF FPC}
@@ -18,6 +19,7 @@ unit ModulePath;
 interface
 
 type
+  //! Encapsulates the file path of the currently executing DLL/EXE
   TModulePath = class
   private
     class function GetModulePathName: string;
@@ -25,8 +27,11 @@ type
     class function GetDllDir: string; static; inline;
     class function GetDllBaseName: string; static; inline;
   public
+    //! The directory path of this DLL/EXE
     class property DLL: string                    read GetDllDir;
+    //! The full file path of this DLL/EXE
     class property DLLFullName: string            read GetDll;
+    //! The name of this DLL/EXE, without the file extension
     class property DLLBaseName: string            read GetDllBaseName;
   end;
 

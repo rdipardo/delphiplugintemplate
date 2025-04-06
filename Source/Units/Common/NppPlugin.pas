@@ -17,7 +17,8 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 }
 
-unit nppplugin;
+//! Core data types and definitions provided by the plugin interface
+unit NppPlugin;
 
 {$IFDEF FPC}
 {$mode delphiunicode}
@@ -52,12 +53,14 @@ const
   ;
 
 type
+  //! Default plugin implementation
   TNppPlugin = class(TObject)
   private
     FClosingBufferID: NativeUInt;
     function GetCurrentScintilla: HWND;
   protected
     PluginName: nppString;
+    //! Manager of @link(_TFuncItem) objects
     FuncArray: array of _TFuncItem;
     function SupportsDarkMode: Boolean; // needs N++ 8.0 or later
     function SupportsBigFiles: Boolean; // needs N++ 8.3 or later
@@ -68,13 +71,17 @@ type
     function GetNppVersion: Cardinal;
     function GetApiLevel: TSciApiLevel;
     function GetPluginsConfigDir: nppString;
+    //! Initializes a plugin command with no keyboard shortcut.
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer; overload;
+    //! Initializes a plugin command with a keyboard shortcut.
     function AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD;
       ShortcutKey: PShortcutKey): Integer; overload;
     function MakeShortcutKey(const Ctrl, Alt, Shift: Boolean; const AKey: UCHAR)
       : PShortcutKey;
     // wrappers for common API calls
+    //! Sends a plugin API message to the Notepad++ window
     function SendNppMessage(Msg: Cardinal; _WParam: NativeUInt = 0; _LParam: NativeInt = 0): LRESULT; overload;
+    //! Sends a plugin API message to the Notepad++ window when the `LPARAM` is a pointer
     function SendNppMessage(Msg: Cardinal; _WParam: NativeUInt; APParam: Pointer = nil): LRESULT; overload;
   public
     NppData: TNppData;
@@ -84,18 +91,29 @@ type
     function CmdIdFromDlgId(DlgId: Integer): Integer;
 
     // needed for DLL export.. wrappers are in the main dll file.
+    //! Exposes the @link(PluginName) member to @link(DLLExports.getName)
     function GetName: nppPChar;
+    //! Exposes the @link(FuncArray) member to @link(DLLExports.getFuncsArray)
     function GetFuncsArray(var FuncsCount: Integer): Pointer;
+    //! Performs plugin-specific logic when @link(DLLExports.beNotified) executes
     procedure BeNotified(sn: PSciNotification); virtual;
+    //! Performs plugin-specific logic when @link(DLLExports.messageProc) executes
     procedure MessageProc(var Msg: TMessage); virtual;
+    //! Performs plugin-specific logic when @link(DLLExports.setInfo) executes
     procedure SetInfo(NppData: TNppData); virtual;
 
     // hooks
+    //! Empty, customizable handler for the @link(NPPN_TBMODIFICATION) notification
     procedure DoNppnToolbarModification; virtual;
+    //! Empty, customizable handler for the @link(NPPN_SHUTDOWN) notification
     procedure DoNppnShutdown; virtual;
+    //! Empty, customizable handler for the @link(NPPN_BUFFERACTIVATED) notification
     procedure DoNppnBufferActivated(const BufferID: NativeUInt); virtual;
+    //! Empty, customizable handler for the @link(NPPN_FILECLOSED) notification
     procedure DoNppnFileClosed(const BufferID: NativeUInt); virtual;
+    //! Empty, customizable handler for the @link(SCN_UPDATEUI) notification
     procedure DoUpdateUI(const hwnd: HWND; const updated: Integer); virtual;
+    //! Empty, customizable handler for the @link(SCN_MODIFIED) notification
     procedure DoModified(const hwnd: HWND; const modificationType: Integer); virtual;
 
     // df
@@ -158,6 +176,9 @@ begin
   inherited;
 end;
 
+//! @param Name [in] the command name that you want to see in the plugin menu
+//! @param Func [in] a pointer of type @link(PFUNCPLUGINCMD)
+//! @br@br Returns the new size of this plugin's @link(FuncArray).
 function TNppPlugin.AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD): Integer;
 var
   i: Integer;
@@ -170,6 +191,9 @@ begin
   Result := i;
 end;
 
+//! @param Name [in] same as @link(AddFuncItem(nppString, PFUNCPLUGINCMD))
+//! @param Func [in] `...`
+//! @param ShortcutKey [in] a pointer to a @link(TShortcutKey)
 function TNppPlugin.AddFuncItem(Name: nppString; Func: PFUNCPLUGINCMD;
   ShortcutKey: PShortcutKey): Integer;
 var
@@ -438,17 +462,15 @@ begin
     Result := Self.NppData.ScintillaSecondHandle;
 end;
 
-/// since 8.0
-/// A return value of `true` means the NPPM_ADDTOOLBARICON_FORDARKMODE message is defined
-/// https://community.notepad-plus-plus.org/topic/21652/add-new-api-nppm_addtoolbaricon_fordarkmode-for-dark-mode
+//! Returns `true` if the @link(NPPM_ADDTOOLBARICON_FORDARKMODE) message is defined
+//! @br@br Since [8.0](https://community.notepad-plus-plus.org/topic/21652/add-new-api-nppm_addtoolbaricon_fordarkmode-for-dark-mode)
 function TNppPlugin.SupportsDarkMode: Boolean;
 begin
   Result := HIWORD(GetNppVersion) >= 8;
 end;
 
-/// since 8.4.1
-/// Returns `true` if the dark mode setting can be detected by sending the NPPM_ISDARKMODEENABLED message
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53
+//! Returns `true` if the dark mode setting can be detected by sending the @link(NPPM_ISDARKMODEENABLED) message
+//! @br@br Since [8.4.1](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53)
 function TNppPlugin.IsDarkModeEnabled: Boolean;
 var
   NppVersion: Cardinal;
@@ -461,20 +483,18 @@ begin
   Result := (HasQueryApi and Boolean(SendNppMessage(NPPM_ISDARKMODEENABLED)));
 end;
 
-/// since 8.4.1
-/// Initializes a TDarkModeColors instance with the editor's active dark mode styles
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53
+//! Initializes a @link(TDarkModeColors) instance with the editor's active dark mode styles
+//! @br@br Since [8.4.1](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10e41d7ab92b60aa32b28d4fe7739d15b53)
 procedure TNppPlugin.GetDarkModeColors(PColors: PDarkModeColors);
 begin
   if IsDarkModeEnabled then
     SendNppMessage(NPPM_GETDARKMODECOLORS, SizeOf(TDarkModeColors), PColors);
 end;
 
-/// since 8.3
 /// *** MAJOR BREAKING CHANGE ***
-/// A return value of `true` means that x64 editors return 64-bit character and line positions,
-/// i.e., sizeof(Sci_Position) == sizeof(NativeInt), and sizeof(Sci_PositionU) == sizeof(SIZE_T)
-/// https://community.notepad-plus-plus.org/topic/22471/recompile-your-x64-plugins-with-new-header
+//! Returns `true` if x64 editors return 64-bit character and line positions,
+//! i.e., `sizeof(Sci_Position) == sizeof(NativeInt)`, and `sizeof(Sci_PositionU) == sizeof(NativeUInt)`
+//! @br@br Since [8.3](https://community.notepad-plus-plus.org/topic/22471/recompile-your-x64-plugins-with-new-header)
 function TNppPlugin.SupportsBigFiles: Boolean;
 var
   NppVersion: Cardinal;
@@ -485,17 +505,18 @@ begin
     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) > 210));
 end;
 
-/// since 8.4
-/// A return value of `true` means the Scintilla API level is at least 5.2.1
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80
-///
-/// See https://www.scintilla.org/ScintillaHistory.html § 5.1.5
-/// > When calling SCI_GETTEXT, SCI_GETSELTEXT, and SCI_GETCURLINE with a NULL
-/// > buffer argument to discover the length that should be allocated, do not
-/// > include the terminating NUL in the returned value. The value returned is 1
-/// > less than previous versions of Scintilla. Applications should allocate a
-/// > buffer 1 more than this to accommodate the NUL. The wParam (length)
-/// > argument to SCI_GETTEXT and SCI_GETCURLINE also omits the NUL
+//! Returns `true` if the current Notepad++ version is >= 8.4 (the first to use a v5 Scintilla library)
+//! @note(See https://www.scintilla.org/ScintillaHistory.html § 5.1.5
+//! @longCode(
+//! {
+//!   When calling SCI_GETTEXT, SCI_GETSELTEXT, and SCI_GETCURLINE with a NULL
+//!   buffer argument to discover the length that should be allocated, do not
+//!   include the terminating NUL in the returned value. The value returned is 1
+//!   less than previous versions of Scintilla. Applications should allocate a
+//!   buffer 1 more than this to accommodate the NUL. The wParam (length)
+//!   argument to SCI_GETTEXT and SCI_GETCURLINE also omits the NUL
+//! }))
+//! Since [8.4](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/a61b03ea8887e21c6e1b7374068962f635b79b80)
 function TNppPlugin.HasV5Apis: Boolean;
 var
   NppVersion: Cardinal;
@@ -506,10 +527,8 @@ begin
     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 400));
 end;
 
-/// since 8.4.3
-/// A return value of `true` means the 64-bit APIs added in Scintilla 5.2.3 are available
-/// https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ed4bb1a93e763001aac842698fcde0856ba8b0bc
+//! Returns `true` if the 64-bit APIs added in [Scintilla 5.2.3](https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE) are available
+//! @br@br Since [8.4.3](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/ed4bb1a93e763001aac842698fcde0856ba8b0bc)
 function TNppPlugin.HasFullRangeApis: Boolean;
 var
   NppVersion: Cardinal;
@@ -520,10 +539,9 @@ begin
     ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 430));
 end;
 
-/// since 8.4.8
-/// A return value of `true` means the SCI_REPLACETARGETMINIMAL and SCI_GETSTYLEDTEXTFULL APIs added in Scintilla 5.3.2 are available
-/// https://groups.google.com/g/scintilla-interest/c/9OG2VdnWJ5I
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/fc61868cf2e317bfb7384502f80b6476fda6ddc8
+//! Returns `true` if the @link(SCI_REPLACETARGETMINIMAL) and @link(SCI_GETSTYLEDTEXTFULL) APIs added in
+//! [Scintilla 5.3.2](https://groups.google.com/g/scintilla-interest/c/9OG2VdnWJ5I) are available
+//! @br@br Since [8.4.8](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/fc61868cf2e317bfb7384502f80b6476fda6ddc8)
 function TNppPlugin.HasMinimalReplacementApi: Boolean;
 var
   NppVersion: Cardinal;
@@ -534,9 +552,8 @@ begin
      ((HIWORD(NppVersion) = 8) and (LOWORD(NppVersion) >= 480)));
 end;
 
-/// since 8.5.4
-/// A return value of `true` means the NPPM_DARKMODESUBCLASSANDTHEME API is available
-/// https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f
+//! Returns `true` if the @link(NPPM_DARKMODESUBCLASSANDTHEME) API is available
+//! @br@br Since [8.5.4](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/e7f321f21a2feae3669b286ae2b64e6e033f231f)
 function TNppPlugin.SupportsDarkModeSubclassing: Boolean;
 var
   NppVersion: Cardinal;

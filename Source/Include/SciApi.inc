@@ -2,7 +2,7 @@
 {$DEFINE SCIAPI_INC}
 {$Z4}
 {
-  Copyright (c) 2022, 2023 Robert Di Pardo <dipardo.r@gmail.com>
+  Copyright (c) 2022-2025 Robert Di Pardo <dipardo.r@gmail.com>
 
   This Source Code Form is subject to the terms of the Mozilla Public License,
   v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,6 +12,21 @@
   of the GNU Lesser General Public License Version 3.0 or later.
 }
 type
+  //! @abstract Scintilla API milestone versions
+  //! @definitionList(
+  //! @itemLabel(`sciApi_LT_5`)
+  //! @item(<= v4.4.6)
+  //! @itemLabel(`sciApi_GTE_515`)
+  //! @item(>= v5.1.5 -- SCI_GETTEXT, SCI_GETSELTEXT and SCI_GETCURLINE return a string length that  *does not* count the
+  //!       [terminating NULL](https://sourceforge.net/p/scintilla/bugs/2308))
+  //! @itemLabel(`sciApi_GTE_523`)
+  //! @item(>= v5.2.3 -- SCI_GETTEXTRANGEFULL, SCI_FINDTEXTFULL and SCI_FORMATRANGEFULL
+  //!       [introduced](https://groups.google.com/g/scintilla-interest/c/mPLwYdC0-FE))
+  //! @itemLabel(`sciApi_GTE_532`)
+  //! @item(>= v5.3.2 -- SCI_REPLACETARGETMINIMAL [introduced](https://groups.google.com/g/scintilla-interest/c/9OG2VdnWJ5I))
+  //! @itemLabel(`sciApi_GTE_541`)
+  //! @item(>= v5.4.1 -- SCI_CHANGESELECTIONMODE, SCI_SETMOVEEXTENDSSELECTION and SCI_SELECTIONFROMPOINT
+  //!        [introduced](https://groups.google.com/g/scintilla-interest/c/gb8mmFg64vg)))
   TSciApiLevel = (
     /// <= v4.4.6
     sciApi_LT_5,
@@ -29,6 +44,11 @@ type
     /// >= v5.3.2
     /// SCI_REPLACETARGETMINIMAL introduced
     /// https://groups.google.com/g/scintilla-interest/c/9OG2VdnWJ5I
-    sciApi_GTE_532
+    sciApi_GTE_532,
+
+    /// >= v5.4.1
+    /// SCI_CHANGESELECTIONMODE, SCI_SETMOVEEXTENDSSELECTION and SCI_SELECTIONFROMPOINT introduced
+    /// https://groups.google.com/g/scintilla-interest/c/gb8mmFg64vg
+    sciApi_GTE_541
   );
 {$ENDIF ~SCIAPI_INC}

@@ -1,3 +1,4 @@
+//! Utilities for managing UTF-8-encoded INI files
 unit Utf8IniFiles;
 
 (*
@@ -16,6 +17,14 @@ uses SysUtils, IniFiles;
 
 type
   EUtf8IniFileException = class(Exception);
+  //! Extends @url(
+{$IFDEF FPC}
+  //! https://www.freepascal.org/docs-html/fcl/inifiles/tinifile.html
+{$ELSE}
+  //! https://docwiki.embarcadero.com/Libraries/Athens/en/System.IniFiles.TIniFile
+{$ENDIF}
+  //! TIniFile)
+  //! with support for Unicode file paths and (in the Free Pascal implementation) enhaanced INI file parsing options
   TUtf8IniFile = class(TIniFile)
 {$IFNDEF FPC}
     constructor Create(const FilePath: string); reintroduce;
