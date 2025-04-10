@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.5.5
+  Object Pascal definitions for Scintilla 5.5.6
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2025 Robert Di Pardo <dipardo.r@gmail.com>
@@ -42,11 +42,25 @@ type
 
   TSciNotification = record
     nmhdr               : TNotifyHeader;
-    position            : NativeInt;    // SCN_STYLENEEDED, SCN_MODIFIED
-    ch                  : Integer;      // SCN_CHARADDED, SCN_KEY
-    modifiers           : Integer;      // SCN_KEY
+    // SCN_STYLENEEDED, SCN_DOUBLECLICK, SCN_MODIFIED, SCN_MARGINCLICK,
+    // SCN_MARGINRIGHTCLICK, SCN_NEEDSHOWN, SCN_DWELLSTART, SCN_DWELLEND,
+    // SCN_CALLTIPCLICK,
+    // SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, SCN_HOTSPOTRELEASECLICK,
+    // SCN_INDICATORCLICK, SCN_INDICATORRELEASE,
+    // SCN_USERLISTSELECTION, SCN_AUTOCCOMPLETED, SCN_AUTOCSELECTION,
+    // SCN_AUTOCSELECTIONCHANGE
+    position            : NativeInt;
+    // SCN_CHARADDED, SCN_KEY, SCN_AUTOCCOMPLETED, SCN_AUTOCSELECTION,
+    // SCN_USERLISTSELECTION
+    ch                  : Integer;
+    // SCN_KEY, SCN_DOUBLECLICK, SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK,
+    // SCN_HOTSPOTRELEASECLICK, SCN_INDICATORCLICK, SCN_INDICATORRELEASE,
+    // SCN_MARGINCLICK, SCN_MARGINRIGHTCLICK
+    modifiers           : Integer;
     modificationType    : Integer;      // SCN_MODIFIED
-    text                : PChar;        // SCN_MODIFIED
+    // SCN_MODIFIED, SCN_USERLISTSELECTION, SCN_URIDROPPED,
+    // SCN_AUTOCCOMPLETED, SCN_AUTOCSELECTION, SCN_AUTOCSELECTIONCHANGE
+    text                : PChar;
     length              : NativeInt;    // SCN_MODIFIED
     linesAdded          : NativeInt;    // SCN_MODIFIED
     message             : Integer;      // SCN_MACRORECORD
@@ -55,7 +69,7 @@ type
     line                : NativeInt;    // SCN_MODIFIED
     foldLevelNow        : Integer;      // SCN_MODIFIED
     foldLevelPrev       : Integer;      // SCN_MODIFIED
-    margin              : Integer;      // SCN_MARGINCLICK
+    margin              : Integer;      // SCN_MARGINCLICK, SCN_MARGINRIGHTCLICK
     listType            : Integer;      // SCN_USERLISTSELECTION
     x                   : Integer;      // SCN_DWELLSTART, SCN_DWELLEND
     y                   : Integer;      // SCN_DWELLSTART, SCN_DWELLEND

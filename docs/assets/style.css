@@ -109,7 +109,7 @@ table.classestable.wide_list td.itemdesc {
 tr.list,
 tr.list2 {
   background: inherit;
-  border-top: 2px solid lightgrey;
+  border-top: 2px solid #333;
 }
 
 tr.list:nth-child(2) {

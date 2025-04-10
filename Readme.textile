@@ -14,7 +14,8 @@ h2. Usage
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.5.5                  |  8.7.9                         |
+| *"default":default*      |  5.5.6                  |  8.8                           |
+| *"api-v5.5.5":v5.5.5*    |  5.5.5                  |  8.7.9                         |
 | *"api-v5.5.4":v5.5.4*    |  5.5.4                  |  8.7.6 - 8.6.8                 |
 | *"api-v5.5.2-3":v5.5.2*  |  5.5.2/3                |  8.7 - 8.7.5                   |
 | *"api-v5.5.0":v5.5.0*    |  5.5.0                  |  8.6.6 - 8.6.9                 |
@@ -31,6 +32,7 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
+[v5.5.5]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.5.zip
 [v5.5.4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.4.zip
 [v5.5.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.2-3.zip
 [v5.5.0]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.0.zip
@@ -252,7 +254,7 @@ Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.5.5)[14]
+h3. Optional Scintilla Features (as of v5.5.6)[14]
 
 Use these compiler definitions to enable or disable features.
 
@@ -317,7 +319,7 @@ fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.bitbucket.io/projects/delphi
 
 fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
 
-fn14. "Scintilla 5.5.5 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/e38a0f2ec9c609451fd6670d1b430862e8722a78/scintilla/include/Scintilla.h
+fn14. "Scintilla 5.5.6 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/5c1813185aa111d6247de39e3d7049ebef0960e0/scintilla/include/Scintilla.h
 
 
 

@@ -152,7 +152,7 @@ const
   //! @br Change the document encoding of the given view.
   //! @param inView [in] either @link(MAIN_VIEW) or @link(SUB_VIEW)
   //! @param lParam 0 (not used)
-  //! @br@br Returns the new UniMode, with the following value:.
+  //! @br@br Returns the new UniMode, with the following value:
   //! @orderedList(
   //!   @itemSpacing Compact
   //!   @itemSetNumber 0
@@ -361,7 +361,7 @@ const
   //! @br Get the visibility (hidden or visible) of the tab bar.
   //! @param wParam 0 (not used)
   //! @param lParam 0 (not used)
-  //! @br@br Returns @true if the toolbar is hidden, otherwise @false.
+  //! @br@br Returns @true if the tab bar is hidden, otherwise @false.
   NPPM_ISTABBARHIDDEN = (NPPMSG + 52);
   //! `int NPPM_GETPOSFROMBUFFERID(UINT_PTR bufferID, int priorityView)`
   //! @br Get the position of the document with `bufferID`, searching in `priorityView` first.
@@ -413,7 +413,7 @@ const
   //! @br Get the encoding of the document with the given `bufferID`.
   //! @param bufferID [in] buffer ID of the document
   //! @param lParam 0 (not used)
-  //! @br@br Returns -1 on error, otherwise UniMode, with the following value:.
+  //! @br@br Returns -1 on error, otherwise the UniMode, with the following value:
   //! @orderedList(
   //!   @itemSpacing Compact
   //!   @itemSetNumber 0
@@ -438,7 +438,7 @@ const
   //! @br Get the EOL format of the document with the given `bufferID`.
   //! @param bufferID [in] buffer ID of the document
   //! @param lParam 0 (not used)
-  //! @br@br Returns -1 on error, otherwise one of the following EOL formats:.
+  //! @br@br Returns -1 on error, otherwise one of the following EOL formats:
   //! @orderedList(
   //!   @itemSpacing Compact
   //!   @itemSetNumber 0
@@ -469,7 +469,7 @@ const
   //! `BOOL NPPM_HIDEMENU(0, BOOL hideOrNot)`
   //! @br Hide (or show) the menu bar.
   //! @param wParam 0 (not used)
-  //! @param hideOrNot [in] if @true the menu will be hidden, otherwise it will be shown
+  //! @param hideOrNot [in] if @true the menu bar will be hidden, otherwise it will be shown
   //! @br@br Returns the old status value.
   NPPM_HIDEMENU = (NPPMSG + 72);
   //! `BOOL NPPM_ISMENUHIDDEN(0, 0)`
@@ -609,7 +609,7 @@ const
   //! @br Get the currently active view.
   //! @param wParam 0 (not used)
   //! @param lParam 0 (not used)
-  //! @br@br Returns the current edit view of Notepad++: either @link(MAIN_VIEW) @link(SUB_VIEW).
+  //! @br@br Returns the current edit view: either @link(MAIN_VIEW) @link(SUB_VIEW).
   NPPM_GETCURRENTVIEW = (NPPMSG + 88);
   //! `BOOL NPPM_DOCLISTDISABLEEXTCOLUMN(0, BOOL disableOrNot)`
   //! @br Disable or enable the file extension column of the Document List.
@@ -719,7 +719,7 @@ const
   //! `BOOL NPPM_SETEXTERNALLEXERAUTOINDENTMODE(const wchar_t* languageName, ExternalLexerAutoIndentMode autoIndentMode)`
   //! @br Set the @link(TExternalLexerAutoIndentMode) of the external lexer identified by `languageName`.
   //! @param languageName [in] name of an external lexer provided by a plugin
-  //! @param(autoIndentMode [in] one of the following three values:
+  //! @param(autoIndentMode [in] one of the following values:
   //!   @unorderedList(
   //!   @itemSpacing Compact
   //!   @item @link(TExternalLexerAutoIndentMode.Standard) -- Notepad++ will keep the same TAB indentation between lines
@@ -740,7 +740,7 @@ const
   //! @br Get the current @link(TMacroStatus).
   //! @param wParam 0 (not used)
   //! @param lParam 0 (not used)
-  //! @br@br Returns a @link(TMacroStatus) value:.
+  //! @br@br Returns a @link(TMacroStatus) value:
   //!   @unorderedList(
   //!   @itemSpacing Compact
   //!   @item @link(TMacroStatus.Idle) -- macro is not in use and it's empty
@@ -847,7 +847,7 @@ const
   //! @br Get the color ID of the tab in the given view with the given tab index.
   //! @param view [in] 0 (@link(MAIN_VIEW)), 1 (@link(SUB_VIEW)), or -1 for the currently active view
   //! @param tabIndex [in] 0-based tab index, i.e., 0 for the first tab, 1 for the second tab, etc., or -1 for the currently active tab
-  //! @br@br Returns the tab color's id value, which is one of:.
+  //! @br@br Returns the tab color's id value, which is one of:
   //! @orderedList(
   //!   @itemSpacing Compact
   //!   @itemSetNumber -1
