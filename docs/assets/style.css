@@ -206,6 +206,10 @@ div#tipue_search_error {
   span.pascal_keyword {
     color: #f08080;
   }
+
+  table.detail {
+    border-color: #333;
+  }
 }
 
 @media only screen and (max-width: 600px) {
