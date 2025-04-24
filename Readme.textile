@@ -11,6 +11,8 @@ Compatibility with 64-bit Notepad++ has also been added (requires "Delphi XE2":D
 
 h2. Usage
 
+bq. Visit the "wiki":https://bitbucket.org/rdipardo/delphiplugintemplate/wiki for a guide to setting up your development environment
+
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |

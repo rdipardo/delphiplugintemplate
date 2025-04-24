@@ -109,7 +109,7 @@ table.classestable.wide_list td.itemdesc {
 tr.list,
 tr.list2 {
   background: inherit;
-  border-top: 2px solid #333;
+  border-top: 2px solid lightgrey;
 }
 
 tr.list:nth-child(2) {
@@ -207,7 +207,9 @@ div#tipue_search_error {
     color: #f08080;
   }
 
-  table.detail {
+  table.detail,
+  tr.list,
+  tr.list2 {
     border-color: #333;
   }
 }
