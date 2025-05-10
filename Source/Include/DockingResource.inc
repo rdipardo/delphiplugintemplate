@@ -40,18 +40,48 @@ const
   DMM_MOVE_SPLITTER              = (DMM_MSG + 11);
   DMM_CANCEL_MOVE                = (DMM_MSG + 12);
   DMM_LBUTTONUP                  = (DMM_MSG + 13);
+  //! Notification codes from @link(DMN_CLOSE) to @link(DMN_FLOATDROPPED) are sent to
+  //! docking dialogs in the `Code` field of the `NMHdr` member of a @url(
+  //! https://docwiki.embarcadero.com/Libraries/Athens/en/Winapi.Messages.TWMNotify TWMNotify) record.
+  //! @br@br For example:
+  //! @longCode(
+  //! procedure TMyDockingForm.OnWM_NOTIFY(var AMsg: TWMNotify);
+  //! begin
+  //!   case AMsg.NMHdr.Code and $ffff of
+  //!     { dialog is being docked }
+  //!     DMN_DOCK: begin
+  //!       // ...
+  //!     end;
+  //!     { dialog is being *un*docked }
+  //!     DMN_FLOAT: begin
+  //!       // ...
+  //!     end;
+  //!     { dialog is about to close }
+  //!     DMN_CLOSE: begin
+  //!       // ...
+  //!     end;
+  //!   end;
+  //!   AMsg.Result := 0;
+  //! end;)
+  //! @seeAlso(TNppDockingForm.OnWM_NOTIFY)
   DMN_FIRST                      = 1050;
+  //! See @link(DMN_FIRST)
   DMN_CLOSE                      = (DMN_FIRST + 1);
   //nmhdr.code = DWORD= (DMN_CLOSE, 0););;
   //nmhdr.hwndFrom = hwndNpp;
   //nmhdr.idFrom = ctrlIdNpp;
+  //! See @link(DMN_FIRST)
   DMN_DOCK                       = (DMN_FIRST + 2);
+  //! See @link(DMN_FIRST)
   DMN_FLOAT                      = (DMN_FIRST + 3);
   //nmhdr.code = DWORD= (DMN_XXX, int newContainer);;
   //nmhdr.hwndFrom = hwndNpp;
   //nmhdr.idFrom = ctrlIdNpp;
+  //! See @link(DMN_FIRST)
   DMN_SWITCHIN                   = (DMN_FIRST + 4);
+  //! See @link(DMN_FIRST)
   DMN_SWITCHOFF                  = (DMN_FIRST + 5);
+  //! See @link(DMN_FIRST)
   DMN_FLOATDROPPED               = (DMN_FIRST + 6);
   //nmhdr.code = DWORD= (DMN_XXX, 0);;
   //nmhdr.hwndFrom = DockingCont::_hself;

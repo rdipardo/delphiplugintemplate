@@ -303,7 +303,7 @@ const
   //! For example, plugin X can execute a command of plugin Y if plugin X knows the command ID and the file name of plugin Y.
   //! @param destModuleName [in] the complete module file name of the destination plugin (including the ".dll" file extension)
   //! @param communicationInfo [in] pointer to a @link(TCommunicationInfo) structure
-  //! @br@br Returns @true if Notepad++ found the plugin by its module name (`destModuleName`) and passed the info (via `communicationInfo`),.
+  //! @br@br Returns @true if Notepad++ found the plugin by its module name (`destModuleName`) and passed the info (via `communicationInfo`),
   //! or @false if the destination plugin is not found.
   NPPM_MSGTOPLUGIN = (NPPMSG + 47);
   //! `BOOL NPPM_MENUCOMMAND(0, int cmdID)`
@@ -368,7 +368,7 @@ const
   //! @param bufferID [in] buffer ID of the document
   //! @param(priorityView [in] the target view. If `bufferID` cannot be found in the target view, the other view will be searched.
   //!        If set to @link(SUB_VIEW), the sub view will be searched first.)
-  //! @br@br Returns -1 if no document with `bufferID` exists, otherwise `(VIEW << 30) | INDEX`,.
+  //! @br@br Returns -1 if no document with `bufferID` exists, otherwise `(VIEW << 30) | INDEX`,
   //! where `VIEW` is either @link(MAIN_VIEW) or @link(SUB_VIEW), and `INDEX` is the 0-based document index.
   NPPM_GETPOSFROMBUFFERID = (NPPMSG + 57);
   //! `int NPPM_GETFULLPATHFROMBUFFERID(UINT_PTR bufferID, wchar_t* fullFilePath)`
@@ -1138,7 +1138,7 @@ type
               L_MMIXAL, L_NIM, L_NNCRONTAB, L_OSCRIPT, L_REBOL,
               L_REGISTRY, L_RUST, L_SPICE, L_TXT2TAGS, L_VISUALPROLOG,
               L_TYPESCRIPT, L_JSON5, L_MSSQL, L_GDSCRIPT, L_HOLLYWOOD,
-              L_GOLANG, L_RAKU, L_TOML, L_SAS,
+              L_GOLANG, L_RAKU, L_TOML, L_SAS, L_ERRORLIST,
               // Don't use L_JS, use L_JAVASCRIPT instead
               // The end of enumerated language type, so it should be always at the end
               L_EXTERNAL);

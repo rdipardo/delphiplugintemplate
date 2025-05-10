@@ -16,9 +16,9 @@ bq. Visit the "wiki":https://bitbucket.org/rdipardo/delphiplugintemplate/wiki fo
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.5.6                  |  8.8                           |
+| *"default":default*      |  5.5.6                  |  8.8+                          |
 | *"api-v5.5.5":v5.5.5*    |  5.5.5                  |  8.7.9                         |
-| *"api-v5.5.4":v5.5.4*    |  5.5.4                  |  8.7.6 - 8.6.8                 |
+| *"api-v5.5.4":v5.5.4*    |  5.5.4                  |  8.7.6 - 8.7.8                 |
 | *"api-v5.5.2-3":v5.5.2*  |  5.5.2/3                |  8.7 - 8.7.5                   |
 | *"api-v5.5.0":v5.5.0*    |  5.5.0                  |  8.6.6 - 8.6.9                 |
 | *"api-v5.4.3":v5.4.3*    |  5.4.3                  |  8.6.5                         |

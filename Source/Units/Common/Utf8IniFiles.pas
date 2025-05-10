@@ -24,7 +24,7 @@ type
   //! https://docwiki.embarcadero.com/Libraries/Athens/en/System.IniFiles.TIniFile
 {$ENDIF}
   //! TIniFile)
-  //! with support for Unicode file paths and (in the Free Pascal implementation) enhaanced INI file parsing options
+  //! with support for Unicode file paths and (in the Free Pascal implementation) enhanced INI file parsing options
   TUtf8IniFile = class(TIniFile)
 {$IFNDEF FPC}
     constructor Create(const FilePath: string); reintroduce;

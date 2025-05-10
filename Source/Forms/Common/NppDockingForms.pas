@@ -51,7 +51,7 @@ type
     ToolbarData: TToolbarData;
     NppDefaultDockingMask: Cardinal;
     // @todo: change caption and stuff....
-    //! Handles the @link(DMM_FLOAT), @link(DMM_DOCK) and @link(DMM_CLOSE) Docking Manager messages.
+    //! Handles the @link(DMN_FLOAT), @link(DMN_DOCK) and @link(DMN_CLOSE) Docking Manager messages.
     procedure OnWM_NOTIFY(var msg: TWMNotify); message WM_NOTIFY;
     //! Optional handler for the @link(DMM_FLOAT) message
     property OnDock: TNotifyEvent read FOnDock write FOnDock;
