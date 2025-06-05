@@ -11,8 +11,8 @@ type
   { scintilla/include/Sci_Position.h }
 {$IF DEFINED(NPP_NO_HUGE_FILES) AND DEFINED(WIN64)}
 {$MESSAGE 'Plugin will be compatible with Npp <= 8.2.1 *only*'}
-  Sci_Position = LongInt; deprecated;
-  Sci_PositionU = Cardinal; deprecated;
+  Sci_Position = LongInt deprecated '32-bit character positions are not binary compatible with 64-bit Notepad++';
+  Sci_PositionU = Cardinal deprecated '32-bit character positions are not binary compatible with 64-bit Notepad++';
 {$ELSE}
 {$IFDEF WIN64}{$MESSAGE 'Plugin will be compatible with Npp 8.3+ *only*'}{$ENDIF}
   //! Basic signed type used throughout interface
