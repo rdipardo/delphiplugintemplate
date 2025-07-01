@@ -16,7 +16,8 @@ bq. Visit the "wiki":https://bitbucket.org/rdipardo/delphiplugintemplate/wiki fo
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.5.6                  |  8.8+                          |
+| *"default":default*      |  5.5.7                  |  8.8.2+                        |
+| *"api-v5.5.6":v5.5.6*    |  5.5.6                  |  8.8 - 8.8.1                   |
 | *"api-v5.5.5":v5.5.5*    |  5.5.5                  |  8.7.9                         |
 | *"api-v5.5.4":v5.5.4*    |  5.5.4                  |  8.7.6 - 8.7.8                 |
 | *"api-v5.5.2-3":v5.5.2*  |  5.5.2/3                |  8.7 - 8.7.5                   |
@@ -34,6 +35,7 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
+[v5.5.6]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.6.zip
 [v5.5.5]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.5.zip
 [v5.5.4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.4.zip
 [v5.5.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.2-3.zip
@@ -256,7 +258,7 @@ Methods provided by "$":Source/Units/Common/NppPlugin.pas:
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.5.6)[14]
+h3. Optional Scintilla Features (as of v5.5.7)[14]
 
 Use these compiler definitions to enable or disable features.
 
@@ -321,14 +323,14 @@ fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.bitbucket.io/projects/delphi
 
 fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
 
-fn14. "Scintilla 5.5.6 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/5c1813185aa111d6247de39e3d7049ebef0960e0/scintilla/include/Scintilla.h
+fn14. "Scintilla 5.5.7 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/e85c354135e62a18407280f58ddfcb4b45984d81/scintilla/include/Scintilla.h
 
 
 
 [upstream]https://sourceforge.net/projects/npp-plugins/files/DelphiPluginTemplate
 [DBGp]https://github.com/zobo/dbgpPlugin
 [D2009]https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
-[DXE2]https://community.embarcadero.com/blogs/entry/delphi-64bit-code
+[DXE2]https://delphi.fandom.com/wiki/Delphi_Release_Dates
 [sci]https://www.scintilla.org/ScintillaDoc.html#TextRetrievalAndModification
 [sci515]https://sourceforge.net/p/scintilla/code/ci/483efdbe6facf2d9a4f10a8ec1f049bfae7723ae/tree/doc/ScintillaHistory.html?diff=2a700fc24c59a47fa6b29b0bb6c556dcc39c5b31
 [sci523]https://sourceforge.net/p/scintilla/code/ci/241398a1d33bb7644596826f61639bdff477b32c/tree/doc/ScintillaHistory.html?diff=1c48196154f5d39fcd70f02d71344c6707543b8f

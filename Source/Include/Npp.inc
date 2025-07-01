@@ -46,12 +46,14 @@ const
   ALL_OPEN_FILES = 0;
   PRIMARY_VIEW = 1;
   SECOND_VIEW = 2;
-  //! `BOOL NPPM_GETOPENFILENAMES(wchar_t** fileNames, int nbFileNames)`
+  //! `BOOL NPPM_GETOPENFILENAMES_DEPRECATED(wchar_t** fileNames, int nbFileNames)`
   //! @br Get the full path names of all files currently open in both views. The user must allocate a big enough `fileNames` array using @link(NPPM_GETNBOPENFILES).
   //! @param fileNames [out] pre-allocated array of file paths
   //! @param nbFileNames [in] the number of file paths in `fileNames`
   //! @br@br Returns the number of files copied to the `fileNames` array.
-  NPPM_GETOPENFILENAMES = (NPPMSG + 8);
+  NPPM_GETOPENFILENAMES_DEPRECATED = (NPPMSG + 8);
+  //! See @link(NPPM_GETOPENFILENAMES_DEPRECATED)
+  NPPM_GETOPENFILENAMES = NPPM_GETOPENFILENAMES_DEPRECATED deprecated;
   //! `HWND NPPM_MODELESSDIALOG(int action, HWND hDlg)`
   //! @br Register (or unregister) the plugin dialog with the given handle.
   //! @param action [in] either @link(MODELESSDIALOGADD) (to register) or @link(MODELESSDIALOGREMOVE) (to unregister)
@@ -88,18 +90,22 @@ const
   //! @param sessionFileName [in] the XML session file's full path
   //! @br@br Returns a pointer to the `sessionFileName` buffer on success, @nil otherwise.
   NPPM_SAVECURRENTSESSION = (NPPMSG + 16);
-  //! `BOOL NPPM_GETOPENFILENAMESPRIMARY(wchar_t** fileNames, int nbFileNames)`
+  //! `BOOL NPPM_GETOPENFILENAMESPRIMARY_DEPRECATED(wchar_t** fileNames, int nbFileNames)`
   //! @br Get the full path names of all files currently open in the main view. The user must allocate a big enough `fileNames` array using @link(NPPM_GETNBOPENFILES).
   //! @param fileNames [out] pre-allocated array of file paths
   //! @param nbFileNames [in] the number of file paths in `fileNames`
   //! @br@br Returns the number of files copied to the `fileNames` array.
-  NPPM_GETOPENFILENAMESPRIMARY = (NPPMSG + 17);
-  //! `BOOL NPPM_GETOPENFILENAMESSECOND(wchar_t** fileNames, int nbFileNames)`
+  NPPM_GETOPENFILENAMESPRIMARY_DEPRECATED = (NPPMSG + 17);
+  //! See @link(NPPM_GETOPENFILENAMESPRIMARY_DEPRECATED)
+  NPPM_GETOPENFILENAMESPRIMARY = NPPM_GETOPENFILENAMESPRIMARY_DEPRECATED deprecated;
+  //! `BOOL NPPM_GETOPENFILENAMESSECOND_DEPRECATED(wchar_t** fileNames, int nbFileNames)`
   //! @br Get the full path names of all files currently open in the sub-view. The user must allocate a big enough `fileNames` array using @link(NPPM_GETNBOPENFILES).
   //! @param fileNames [out] pre-allocated array of file paths
   //! @param nbFileNames [in] the number of file paths in `fileNames`
   //! @br@br Returns the number of files copied to the `fileNames` array.
-  NPPM_GETOPENFILENAMESSECOND = (NPPMSG + 18);
+  NPPM_GETOPENFILENAMESSECOND_DEPRECATED = (NPPMSG + 18);
+  //! See @link(NPPM_GETOPENFILENAMESSECOND_DEPRECATED)
+  NPPM_GETOPENFILENAMESSECOND = NPPM_GETOPENFILENAMESSECOND_DEPRECATED deprecated;
   //! `HWND NPPM_CREATESCINTILLAHANDLE(0, HWND hParent)`
   //! @br Get a handle to the active Scintilla control.
   //! @param wParam 0 (not used)
@@ -900,6 +906,13 @@ const
   //!       Just ensure this message is sent only once.)
   //! Added in [8.7.7](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/6fd3830)
   NPPM_ADDSCNMODIFIEDFLAGS = (NPPMSG + 117);
+  //! `TToolBarStatusType NPPM_GETTOOLBARICONSETCHOICE(0, 0)`
+  //! @br Get the currently selected Notepad++ toolbar icon set.
+  //! @param wParam: 0 (not used)
+  //! @param lParam: 0 (not used)
+  //! @br@br Returns a @link(TToolBarStatusType) value.
+  //! @br@br Added in [8.8.2](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/5406b82)
+  NPPM_GETTOOLBARICONSETCHOICE = (NPPMSG + 118);
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
@@ -915,14 +928,27 @@ const
   GETFILENAMEATCURSOR = 11;
   CURRENT_LINESTR = 12;
   RUNCOMMAND_USER = (WM_USER + 3000);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETFULLCURRENTPATH = (RUNCOMMAND_USER + FULL_CURRENT_PATH);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETCURRENTDIRECTORY = (RUNCOMMAND_USER + CURRENT_DIRECTORY);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETFILENAME = (RUNCOMMAND_USER + FILE_NAME);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETNAMEPART = (RUNCOMMAND_USER + NAME_PART);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETEXTPART = (RUNCOMMAND_USER + EXT_PART);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETCURRENTWORD = (RUNCOMMAND_USER + CURRENT_WORD);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETNPPDIRECTORY = (RUNCOMMAND_USER + NPP_DIRECTORY);
+  //! See @link(NPPM_GETCURRENTLINESTR)
   NPPM_GETFILENAMEATCURSOR = (RUNCOMMAND_USER + GETFILENAMEATCURSOR);
+  //!`BOOL NPPM_GETCURRENTLINESTR(size_t strLen, wchar_t* str)`
+  //! @param str [in, out] the allocated `wchar_t` array
+  //! @param strLen [in] the allocated array size
+  //! @br@br Returns @true when copying to the string buffer succeeds, otherwise @false
+  //! (when, e.g., the allocated array size is too small).
   NPPM_GETCURRENTLINESTR = (RUNCOMMAND_USER + CURRENT_LINESTR);
   // BOOL NPPM_GETXXXXXXXXXXXXXXXX(size_t strLen, wchar_t* str);
   // where str is the allocated `wchar_t` array,
@@ -936,6 +962,7 @@ const
   // INT NPPM_GETCURRENTCOLUMN(0, 0);
   //!< Returns the caret's current position column.
   NPPM_GETNPPFULLFILEPATH = (RUNCOMMAND_USER + NPP_FULL_FILE_PATH);
+  //!< See @link(NPPM_GETCURRENTLINESTR)
 
 
 
@@ -1118,6 +1145,14 @@ const
   //scnNotification->nmhdr.idFrom = 0; // preserved for the future use, must be zero
   //! Added in [8.7](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/446cc980e871d04885f13055bb56acee820636c8)
   NPPN_NATIVELANGCHANGED = (NPPN_FIRST + 31);
+  //! To notify plugins that the toolbar icon set selection has changed
+  //scnNotification->nmhdr.code = NPPN_TOOLBARICONSETCHANGED;
+  //scnNotification->nmhdr.hwndFrom = hwndNpp;
+  //scnNotification->nmhdr.idFrom = iconSetChoice;
+  //! @note(The @link(TNotifyHeader.IdFrom) field will be set to the new @link(TToolBarStatusType) value.)
+  // 0 (Fluent UI: small), 1 (Fluent UI: large), 2 (Filled Fluent UI: small), 3 (Filled Fluent UI: large) and 4 (Standard icons: small).
+  //! Added in [8.8.2](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/76b1cba609bc04127a748ff24cea6434ab00fc86)
+  NPPN_TOOLBARICONSETCHANGED = (NPPN_FIRST + 32);
 
   MACRO_USER                = (WM_USER + 4000);
   WM_ISCURRENTMACRORECORDED = (MACRO_USER + 01);
@@ -1155,6 +1190,15 @@ type
 {$ENDREGION}
 
 type
+  //! Enumerates the available [toolbar icon sets](https://npp-user-manual.org/docs/preferences/#toolbar).
+  //! @value TB_SMALL Fluent UI (small)
+  //! @value TB_LARGE Fluent UI (large)
+  //! @value TB_SMALL2 Filled Fluent UI (small)
+  //! @value TB_LARGE2 Filled Fluent UI (large)
+  //! @value TB_STANDARD Standard bitmap icons (small)
+  //! @br@br Added in [8.8.2](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/5406b82)
+  TToolBarStatusType = ( TB_SMALL, TB_LARGE, TB_SMALL2, TB_LARGE2, TB_STANDARD );
+
   //! Added in [8.3.3](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/9cbd03c)
   TExternalLexerAutoIndentMode = ( Standard, C_Like, Custom );
 
