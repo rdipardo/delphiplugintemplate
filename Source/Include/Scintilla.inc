@@ -26,8 +26,62 @@ type
   uptr_t = NativeUInt;
   //! A signed integer large enough to hold a pointer
   sptr_t = NativeInt;
+  //! Function pointer through which a message can be sent directly to a Scintilla window.
+  //! On Windows, the message-passing scheme used to communicate between the container and Scintilla
+  //! is mediated by the operating system's [SendMessage](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-sendmessage)
+  //! function and can lead to bad performance when calling intensively.
+  //! To avoid this overhead, Scintilla provides messages that allow you to call the Scintilla message function directly.
+  //! For example:
+  //! @longCode(
+  //! unit ScintillaCall;
+  //! {$assertions on}
+  //! interface
+  //!
+  //! uses
+  //!  Messages, Windows;
+  //!
+  //! {$I 'Scintilla.inc'}
+  //!
+  //! // A wrapper to call Scintilla directly
+  //! function Call(iMessage: Cardinal; wParam: uptr_t = 0; lParam: sptr_t = 0): sptr_t;
+  //!
+  //! implementation
+  //!
+  //! const
+  //!   WindowClassName = 'SciTEWindow';
+  //!   ScintillaClassName = 'Scintilla';
+  //!
+  //! var
+  //!   PSciMsg: TScintillaMessageFnc;
+  //!   PSciWndData: sptr_t;
+  //!   HScintilla: HWND;
+  //!
+  //! function Call(iMessage: Cardinal; wParam: uptr_t; lParam: sptr_t): sptr_t;
+  //! begin
+  //!   Result := PSciMsg(PSciWndData, iMessage, wParam, lParam);
+  //! end;
+  //!
+  //! function EnumChildProc(_hwnd: HWND; _lParam: LPARAM): LongBool; stdcall;
+  //! begin
+  //!   HScintilla := FindWindowEx(_hwnd, 0, @ScintillaClassName[1], nil);
+  //!   Result := not (HScintilla > 0);
+  //! end;
+  //!
+  //! initialization
+  //!   EnumChildWindows(FindWindow(@WindowClassName[1], nil), @EnumChildProc, 0);
+  //!   SetLastError(0);
+  //!   Assert(HScintilla > 0, 'Scintilla window could not be found!');
+  //!   PSciMsg := SciFnDirect(SendMessage(HScintilla, SCI_GETDIRECTFUNCTION, 0, 0));
+  //!   PSciWndData := SendMessage(HScintilla, SCI_GETDIRECTPOINTER, 0, 0);
+  //! end.)
+  //! @warning(While faster, this direct calling will cause problems if performed from a different
+  //! thread to the native thread of the Scintilla window in which case `SendMessage(hSciWnd, SCI_*, wParam, lParam)`
+  //! should be used to synchronize with the window's thread.)
   TScintillaMessageFnc = function(ptr : sptr_t; Msg: Cardinal; wParam: uptr_t; lParam : sptr_t) : sptr_t; cdecl;
+  //! Similar to @link(TScintillaMessageFnc) but a function of this type also returns the status to the caller through an integer pointer.
+  //! This saves performing an extra call to retrieve the status in many situations so can be faster.
   SciFnDirectStatus = function(ptr: sptr_t; Msg: Cardinal; wParam: uptr_t; lParam: sptr_t; pStatus: PInteger) : sptr_t; cdecl;
+  //! Type alias for @link(TScintillaMessageFnc)
   SciFnDirect = TScintillaMessageFnc;
 
   //! Compatible with Windows' [NMHDR](https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-nmhdr)

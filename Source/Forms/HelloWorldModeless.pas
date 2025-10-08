@@ -63,7 +63,7 @@ end;
 procedure TModelessForm.Button1Click(Sender: TObject);
 begin
   ShellExecuteW(0, 'Open',
-    PWChar('https://npp-user-manual.org/docs/plugin-communication/#2036-nppm-modelessdialog'),
+    PWChar('https://npp-user-manual.org/docs/plugin-communication/#2036nppm_modelessdialog'),
     nil, nil, SW_SHOWNORMAL);
   self.Close;
 end;

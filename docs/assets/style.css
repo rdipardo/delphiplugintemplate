@@ -116,6 +116,10 @@ tr.list:nth-child(2) {
   border: 0;
 }
 
+span.pascal_compiler_comment {
+  color: #bc8f8f;
+}
+
 span.pascal_comment {
   color: #679d47;
 }
@@ -205,6 +209,10 @@ div#tipue_search_error {
 
   span.pascal_keyword {
     color: #f08080;
+  }
+
+  span.pascal_string {
+    color: #bf8ce1;
   }
 
   table.detail,

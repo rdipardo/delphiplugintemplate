@@ -22,7 +22,7 @@ const
   //! `BOOL NPPM_GETCURRENTSCINTILLA(0, int* iScintillaView)`
   //! @br Get the index of the currently active Scintilla view.
   //! @param wParam 0 (not used)
-  //! @param iScintillaView [out] either @link(MAIN_VIEW) or (@link(SUB_VIEW)
+  //! @param iScintillaView [out] either @link(MAIN_VIEW) or @link(SUB_VIEW)
   //! @br@br Returns @true.
   NPPM_GETCURRENTSCINTILLA = (NPPMSG + 4);
   //! `BOOL NPPM_GETCURRENTLANGTYPE(0, int* langType)`
@@ -109,7 +109,7 @@ const
   //! `HWND NPPM_CREATESCINTILLAHANDLE(0, HWND hParent)`
   //! @br Get a handle to the active Scintilla control.
   //! @param wParam 0 (not used)
-  //! @param hParent[in] if set (i.e., not @nil), it will be the parent window of this created Scintilla handle, otherwise the parent window is Notepad++
+  //! @param hParent [in] if set (i.e., not @nil), it will be the parent window of this created Scintilla handle, otherwise the parent window is Notepad++
   //! @br@br Returns the created Scintilla handle.
   NPPM_CREATESCINTILLAHANDLE = (NPPMSG + 20);
   //! `BOOL NPPM_DESTROYSCINTILLAHANDLE_DEPRECATED(0, HWND hScintilla)`
@@ -177,7 +177,7 @@ const
   //! @param lParam 0 (not used)
   //! @br@br Returns the old UniMode -- see @link(NPPM_ENCODESCI).
   NPPM_DECODESCI = (NPPMSG + 27);
-  //! `BOOL NPPM_ACTIVATEDOC(int , int index2Activate)`
+  //! `BOOL NPPM_ACTIVATEDOC(int inView, int index2Activate)`
   //! @br Switch to the document in the given view with the given `index2Activate`.
   //! @param inView [in] either @link(MAIN_VIEW) or @link(SUB_VIEW)
   //! @param index2Activate [in] index (in the given view) of the document to be activated
@@ -457,7 +457,7 @@ const
   //! `BOOL NPPM_SETBUFFERFORMAT(UINT_PTR bufferID, int format)`
   //! @br Set the EOL format of the document with the given `bufferID`.
   //! @param bufferID [in] buffer ID of the document
-  //! @param format[in] one of the EOL formats returned by @link(NPPM_GETBUFFERFORMAT)
+  //! @param format [in] one of the EOL formats returned by @link(NPPM_GETBUFFERFORMAT)
   //! @br@br Returns @true on success, @false otherwise.
   NPPM_SETBUFFERFORMAT = (NPPMSG + 69);
   //! `BOOL NPPM_HIDETOOLBAR(0, BOOL hideOrNot)`
@@ -686,7 +686,7 @@ const
   //! `int NPPM_GETSETTINGSONCLOUDPATH(size_t strLen, wchar_t* settingsOnCloudPath)`
   //! @br Get the user's cloud settings file path.
   //! @param strLen [in] buffer length of `settingsOnCloudPath`
-  //! @param settingsOnCloudPath[out] the allocated file path buffer
+  //! @param settingsOnCloudPath [out] the allocated file path buffer
   //! @br@br Returns the number of UTF-16 characters copied/to copy.
   //! The return value is 0 if this path is not set, or if `strLen` is not enough to copy the path
   //! @note(Users should first call this API with `settingsOnCloudPath` set to @nil to get the required number of UTF-16 characters
@@ -888,7 +888,7 @@ const
   //! `int NPPM_GETNATIVELANGFILENAME(size_t strLen, char* nativeLangFileName)`
   //! @br Get the name of the currently active XML localization file.
   //! @param strLen [in] buffer length of `nativeLangFileName`
-  //! @param[out] allocated language file name buffer
+  //! @param nativeLangFileName [out] allocated language file name buffer
   //! @br@br Returns the number of single-byte characters copied/to copy. If there's no localization file in use, 0 is returned.
   //! @note(Users should first call this API with `nativeLangFileName` set to @nil to get the required number of single-byte characters
   //!       (not including the terminating @nil character), allocate the `nativeLangFileName` buffer with the return value + 1, then
@@ -913,6 +913,24 @@ const
   //! @br@br Returns a @link(TToolBarStatusType) value.
   //! @br@br Added in [8.8.2](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/5406b82)
   NPPM_GETTOOLBARICONSETCHOICE = (NPPMSG + 118);
+  //! `int NPPM_GETNPPSETTINGSDIRPATH(size_t strLen, wchar_t *settingsDirPath)`
+  //! @br Get the Notepad++ application settings directory path.
+  //! @br@br Returns the number of UTF-16 characters copied/to copy. A return value of 0 may indicate that
+  //! `strLen` was less than the path's full length, or the settings path could not be determined.
+  //! @br@br The output buffer will be filled with the same path that was given to the `-settingsDir` start parameter, if any;
+  //! otherwise, it will be the same path as the @link(NPPM_GETSETTINGSONCLOUDPATH cloud settings directory), if any.
+  //! @br@br If neither a `-settingsDir` parameter nor a cloud settings directory is defined, the return value is the `%AppData%`
+  //! settings directory (for fully installed Notepad++ versions), or the portable installation path (for portable versions).
+  //! @param strLen [in] size of the allocated path buffer
+  //! @param settingsDirPath [out] allocated buffer for the settings directory path
+  //! @note(Users should first call this API with `settingsDirPath` set to @nil to get the required number of UTF-16 characters
+  //!      (not including the terminating @nil character), allocate the `settingsDirPath` buffer with the value + 1, then call it
+  //!       again to get the path.
+  //!       @br@br
+  //!       This API locates the Notepad++ *application* settings path. For the plugin settings path (i.e., `...\Plugins\Config`),
+  //!       use @link(NPPM_GETPLUGINSCONFIGDIR) instead.)
+  //! Added in [8.8.6](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/b3884c1)
+  NPPM_GETNPPSETTINGSDIRPATH = (NPPMSG + 119);
 
   VAR_NOT_RECOGNIZED = 0;
   FULL_CURRENT_PATH = 1;
@@ -1159,9 +1177,9 @@ const
   WM_MACRODLGRUNMACRO       = (MACRO_USER + 02);
 
 type
-  TNppLang = (L_TEXT = 0, L_PHP , L_C, L_CPP, L_CS, L_OBJC, L_JAVA, L_RC,
+  TNppLang = (L_TEXT = 0, L_PHP, L_C, L_CPP, L_CS, L_OBJC, L_JAVA, L_RC,
               L_HTML, L_XML, L_MAKEFILE, L_PASCAL, L_BATCH, L_INI, L_ASCII, L_USER,
-              L_ASP, L_SQL, L_VB, L_JS, L_CSS, L_PERL, L_PYTHON, L_LUA,
+              L_ASP, L_SQL, L_VB, L_JS_EMBEDDED, L_CSS, L_PERL, L_PYTHON, L_LUA,
               L_TEX, L_FORTRAN, L_BASH, L_FLASH, L_NSIS, L_TCL, L_LISP, L_SCHEME,
               L_ASM, L_DIFF, L_PROPS, L_PS, L_RUBY, L_SMALLTALK, L_VHDL, L_KIX, L_AU3,
               L_CAML, L_ADA, L_VERILOG, L_MATLAB, L_HASKELL, L_INNO, L_SEARCHRESULT,
@@ -1174,7 +1192,7 @@ type
               L_REGISTRY, L_RUST, L_SPICE, L_TXT2TAGS, L_VISUALPROLOG,
               L_TYPESCRIPT, L_JSON5, L_MSSQL, L_GDSCRIPT, L_HOLLYWOOD,
               L_GOLANG, L_RAKU, L_TOML, L_SAS, L_ERRORLIST,
-              // Don't use L_JS, use L_JAVASCRIPT instead
+              // Don't use L_JS_EMBEDDED, use L_JAVASCRIPT instead
               // The end of enumerated language type, so it should be always at the end
               L_EXTERNAL);
 
