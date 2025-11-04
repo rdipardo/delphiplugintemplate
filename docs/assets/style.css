@@ -124,6 +124,8 @@ span.pascal_comment {
   color: #679d47;
 }
 
+span.pascal_numeric,
+span.pascal_hex,
 span.pascal_keyword {
   color: #cd6000;
 }
@@ -209,6 +211,11 @@ div#tipue_search_error {
 
   span.pascal_keyword {
     color: #f08080;
+  }
+
+  span.pascal_numeric,
+  span.pascal_hex {
+    color: #ffc600;
   }
 
   span.pascal_string {
