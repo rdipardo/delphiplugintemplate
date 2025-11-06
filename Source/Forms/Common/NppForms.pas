@@ -247,6 +247,7 @@ begin
   Exclude(FFormState, fsModal);
   try
     try
+      FormStyle := fsSystemStayOnTop;
       Show;
       while (ModalResult = mrNone) do
       begin
@@ -254,6 +255,7 @@ begin
         Application.HandleMessage;
       end;
     finally
+      FormStyle := fsNormal;
       Result := ModalResult;
     end;
   except
