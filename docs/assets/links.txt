@@ -1,0 +1,18 @@
+@title(External links)
+@shorttitle(Source Code 🔗)
+
+@section(1 src Source)
+
+The [source code](https://bitbucket.org/rdipardo/delphiplugintemplate) and [wiki pages](https://bitbucket.org/rdipardo/delphiplugintemplate/wiki) for the Delphi/Lazarus plugin template are hosted on Bitbucket.
+
+@section(1 npp Notepad++)
+
+The [plugin API section](https://npp-user-manual.org/docs/plugin-communication) of the *Notepad++ User Manual* describes all currently supported messages and notifications.
+
+@section(1 scintilla Scintilla)
+
+See [Scintilla's documentation](https://www.scintilla.org/ScintillaDoc.html) to learn about the core editing component of Notepad++.
+
+@section(1 ilexer Lexilla)
+
+See [Lexilla's documentation](https://www.scintilla.org/LexillaDoc.html) to learn how to develop a custom lexer plugin.
