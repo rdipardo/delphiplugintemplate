@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.5.7
+  Object Pascal definitions for Scintilla 5.5.8
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2025 Robert Di Pardo <dipardo.r@gmail.com>
