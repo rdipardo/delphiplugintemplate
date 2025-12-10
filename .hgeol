@@ -3,20 +3,26 @@ native = CRLF
 
 [patterns]
 *.dfm     = native
+*.dpk     = native
 *.dpr     = native
-*.dproj   = native
+*.*proj   = native
 *.inc     = native
 *.lfm     = native
+*.lpk     = native
 *.lpr     = native
 *.lpi     = native
+*.lrs     = native
 *.pas     = native
+*.rc      = native
 *.cfg     = native
 *.dof     = native
 *.ini     = native
 *.bat     = native
 *.cmd     = native
 *.bmp     = BIN
+*.dcr     = BIN
 *.ico     = BIN
+*.png     = BIN
 *.*res    = BIN
 *.ttf     = BIN
 *.woff    = BIN

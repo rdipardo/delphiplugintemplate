@@ -1,19 +1,25 @@
 * text=auto
 *.dfm     text   eol=crlf
+*.dpk     text   eol=crlf
 *.dpr     text   eol=crlf
-*.dproj   text   eol=crlf
+*.*proj   text   eol=crlf
 *.inc     text   eol=crlf
 *.lfm     text   eol=crlf
+*.lpk     text   eol=crlf
 *.lpr     text   eol=crlf
 *.lpi     text   eol=crlf
+*.lrs     text   eol=crlf
 *.pas     text   eol=crlf
+*.rc      text   eol=crlf
 *.cfg     text   eol=crlf
 *.dof     text   eol=crlf
 *.ini     text   eol=crlf
 *.bat     text   eol=crlf
 *.cmd     text   eol=crlf
 *.bmp     binary
+*.dcr     binary
 *.ico     binary
+*.png     binary
 *.*res    binary
 *.ttf     binary
 *.woff*   binary

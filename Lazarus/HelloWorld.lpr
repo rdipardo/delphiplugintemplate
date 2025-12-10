@@ -37,11 +37,6 @@ uses
   LMessages,
   Forms,
   DLLExports in '..\Source\Units\DLLExports.pas',
-  ModulePath in '..\Source\Units\Common\ModulePath.pas',
-  VersionInfo in '..\Source\Units\Common\VersionInfo.pas',
-  NppPlugin in '..\Source\Units\Common\nppplugin.pas',
-  NppForms in '..\Source\Forms\Common\NppForms.pas' {NppForm} ,
-  NppDockingForms in '..\Source\Forms\Common\NppDockingForms.pas' {NppDockingForm} ,
   HelloworldDockingforms in '..\Source\Forms\helloworlddockingforms.pas' {HelloWorldDockingForm} ,
   HelloWorldPlugin in '..\Source\Units\HelloWorldPlugin.pas';
 

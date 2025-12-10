@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <PathDelim Value="\"/>
+    <Name Value="notepadplusplusplugin"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="(c) 2008 Damjan Zobo Cvetko, (c) 2022-2025 Robert Di Pardo"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <IncludeFiles Value="..\Source\Forms\Common;..\Source\Units\Common;..\Source\Units;..\Source\Include"/>
+        <OtherUnitFiles Value="..\Source\Forms\Common;..\Source\Units\Common;..\Source\Units"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+      <CodeGeneration>
+        <SmallerCode Value="True"/>
+      </CodeGeneration>
+    </CompilerOptions>
+    <Description Value="Notepad++ plugin template for Delphi and Lazarus"/>
+    <License Value="GPL-3.0+ AND LGPL-3.0+"/>
+    <Version Major="2025" Minor="12"/>
+    <Files Count="6">
+      <Item1>
+        <Filename Value="..\Source\Forms\Common\NppDockingForms.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="NppDockingForms"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\Source\Forms\Common\NppForms.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="NppForms"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\Source\Units\Common\ModulePath.pas"/>
+        <UnitName Value="ModulePath"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\Source\Units\Common\NppPlugin.pas"/>
+        <UnitName Value="NppPlugin"/>
+      </Item4>
+      <Item5>
+        <Filename Value="..\Source\Units\Common\Utf8IniFiles.pas"/>
+        <UnitName Value="Utf8IniFiles"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\Source\Units\Common\VersionInfo.pas"/>
+        <UnitName Value="VersionInfo"/>
+      </Item6>
+    </Files>
+    <CompatibilityMode Value="True"/>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+        <MinVersion Major="2" Minor="2" Valid="True"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

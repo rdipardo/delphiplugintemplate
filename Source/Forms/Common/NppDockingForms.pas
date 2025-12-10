@@ -29,13 +29,16 @@ uses
 {$IFNDEF FPC}
   Vcl.Forms, Vcl.Dialogs, Vcl.Controls
 {$ELSE}
-  Forms, Dialogs, Controls, LCLIntf, LCLType
+  Forms, Dialogs, Controls, LCLIntf, LCLType, LResources
 {$ENDIF};
 
 {$I '..\..\Include\Docking.inc'}
 {$I '..\..\Include\DockingResource.inc'}
 
 type
+{$IFNDEF FPC}
+  {$if CompilerVersion >= 23.0}[ComponentPlatformsAttribute(pidWin32 or pidWin64)]{$endif}
+{$ENDIF}
    //! Default implementation of a docked plugin dialog
   TNppDockingForm = class(TNppForm)
   private
@@ -77,6 +80,11 @@ type
   published
     { Published declarations }
   end;
+
+{$ifdef FPC}
+//! @exclude
+procedure Register;
+{$endif}
 
 implementation
 
@@ -310,5 +318,13 @@ begin
   SafeSendMessage(self.Npp.NppData.NppHandle, NPPM_DMMUPDATEDISPINFO, 0,
     LPARAM(self.Handle));
 end;
+
+{$ifdef FPC}
+procedure Register;
+begin
+  {$I resources/tnppdockingform.lrs}
+  RegisterComponents('N++ Plugin', [TNppDockingForm]);
+end;
+{$endif}
 
 end.

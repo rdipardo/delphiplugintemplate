@@ -1,17 +1,14 @@
 object NppForm: TNppForm
   Left = 647
+  Height = 442
   Top = 454
-  Width = 350
-  Height = 295
+  Width = 525
   BorderStyle = bsSizeToolWin
   Caption = 'NppForm'
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  DesignTimePPI = 144
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -17
   Font.Name = 'MS Sans Serif'
-  Font.Style = []
-  OldCreateOrder = False
-  PixelsPerInch = 96
-  TextHeight = 13
+  LCLVersion = '4.4.0.0'
 end

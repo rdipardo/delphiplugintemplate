@@ -29,7 +29,7 @@ uses
 {$IFNDEF FPC}
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs
 {$ELSE}
-  Graphics, Controls, Forms, Dialogs, LCLIntf, LCLType, LMessages
+  Graphics, Controls, Forms, Dialogs, LCLIntf, LCLType, LMessages, LResources
 {$ENDIF};
 
 type
@@ -37,6 +37,9 @@ type
   TWinApiMsgProc = function(Hndl: HWND; Msg: Cardinal; _WParam: WPARAM;
     _LParam: LPARAM): LRESULT; stdcall;
 
+{$IFNDEF FPC}
+  {$if CompilerVersion >= 23.0}[ComponentPlatformsAttribute(pidWin32 or pidWin64)]{$endif}
+{$ENDIF}
    //! Default implementation of a basic (non-docking) plugin dialog
   TNppForm = class(TForm)
   private
@@ -80,6 +83,11 @@ type
     function ShowModal: Integer; override;
 {$endif}
   end;
+
+{$ifdef FPC}
+//! @exclude
+procedure Register;
+{$endif}
 
 implementation
 
@@ -266,6 +274,12 @@ end;
 procedure TNppForm.HandleCloseQuery({%H-}Sender: TObject; {%H-}var CanClose: Boolean);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure Register;
+begin
+  {$I resources/tnppform.lrs}
+  RegisterComponents('N++ Plugin', [TNppForm]);
 end;
 {$endif}
 end.

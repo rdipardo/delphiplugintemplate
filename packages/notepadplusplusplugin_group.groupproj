@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{65260122-A7A9-4672-8FB2-1E12836A205C}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="notepadplusplusplugin.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="notepadplusplusplugin_design.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="notepadplusplusplugin">
+        <MSBuild Projects="notepadplusplusplugin.dproj"/>
+    </Target>
+    <Target Name="notepadplusplusplugin:Clean">
+        <MSBuild Projects="notepadplusplusplugin.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="notepadplusplusplugin:Make">
+        <MSBuild Projects="notepadplusplusplugin.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="notepadplusplusplugin_design">
+        <MSBuild Projects="notepadplusplusplugin_design.dproj"/>
+    </Target>
+    <Target Name="notepadplusplusplugin_design:Clean">
+        <MSBuild Projects="notepadplusplusplugin_design.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="notepadplusplusplugin_design:Make">
+        <MSBuild Projects="notepadplusplusplugin_design.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="notepadplusplusplugin;notepadplusplusplugin_design"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="notepadplusplusplugin:Clean;notepadplusplusplugin_design:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="notepadplusplusplugin:Make;notepadplusplusplugin_design:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

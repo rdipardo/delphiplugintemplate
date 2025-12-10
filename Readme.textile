@@ -13,6 +13,9 @@ h2. Usage
 
 bq. Visit the "wiki":https://bitbucket.org/rdipardo/delphiplugintemplate/wiki for a guide to setting up your development environment
 
+bq. *Note*
+To use the template's design time components in RAD Studio or Lazarus, download from the @default@ branch and "install":pkgs the appropriate package.
+
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
@@ -329,6 +332,7 @@ fn14. "Scintilla 5.5.8 definitions":https://github.com/notepad-plus-plus/notepad
 
 
 
+[pkgs]https://bitbucket.org/rdipardo/delphiplugintemplate/wiki/Home?iframe=true#markdown-header-installing-the-template-package
 [upstream]https://sourceforge.net/projects/npp-plugins/files/DelphiPluginTemplate
 [DBGp]https://github.com/zobo/dbgpPlugin
 [D2009]https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
