@@ -9,8 +9,8 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <IncludeFiles Value="..\Source\Forms\Common;..\Source\Units\Common;..\Source\Units;..\Source\Include"/>
-        <OtherUnitFiles Value="..\Source\Forms\Common;..\Source\Units\Common;..\Source\Units"/>
+        <IncludeFiles Value="..\Source\Forms\Common;..\Source\Units\Common;..\Source\Include"/>
+        <OtherUnitFiles Value="..\Source\Forms\Common;..\Source\Units\Common"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
