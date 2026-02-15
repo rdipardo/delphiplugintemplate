@@ -56,10 +56,6 @@ type
     // @todo: change caption and stuff....
     //! Handles the @link(DMN_FLOAT), @link(DMN_DOCK) and @link(DMN_CLOSE) Docking Manager messages.
     procedure OnWM_NOTIFY(var msg: TWMNotify); message WM_NOTIFY;
-    //! Optional handler for the @link(DMN_DOCK) message.
-    property OnDock: TNotifyEvent read FOnDock write FOnDock;
-    //! Optional handler for the @link(DMN_FLOAT) message.
-    property OnFloat: TNotifyEvent read FOnFloat write FOnFloat;
   public
     { Public declarations }
     constructor Create(const NppParent: TNppPlugin; const DlgId: Integer); reintroduce; overload; virtual;
@@ -78,7 +74,10 @@ type
     //!       window. Using @link(TNppPlugin.CmdIdFromDlgId) wherever possible is recommended.)
     property CmdId: Integer read FCmdId default 0;
   published
-    { Published declarations }
+    //! Optional handler for the @link(DMN_DOCK) message.
+    property OnDock: TNotifyEvent read FOnDock write FOnDock;
+    //! Optional handler for the @link(DMN_FLOAT) message.
+    property OnFloat: TNotifyEvent read FOnFloat write FOnFloat;
   end;
 
 {$ifdef FPC}
