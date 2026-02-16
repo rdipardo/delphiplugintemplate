@@ -37,22 +37,22 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
-[v5.5.7]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.7.zip
-[v5.5.6]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.6.zip
-[v5.5.5]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.5.zip
-[v5.5.4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.4.zip
-[v5.5.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.2-3.zip
-[v5.5.0]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.5.0.zip
-[v5.4.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.4.3.zip
-[v5.4.1]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.4.1.zip
-[v5.3.7]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.7-8.zip
-[v5.3.5]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.5-6.zip
-[v5.3.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.3-4.zip
-[v5.3.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.3.2.zip
-[v5.2.3]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.3.zip
-[v5.2.2]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v5.2.2.zip
-[v4]https://bitbucket.org/rdipardo/delphiplugintemplate/get/api-v4.zip
-[default]https://bitbucket.org/rdipardo/delphiplugintemplate/get/default.zip
+[v5.5.7]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.7.zip
+[v5.5.6]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.6.zip
+[v5.5.5]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.5.zip
+[v5.5.4]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.4.zip
+[v5.5.2]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.2-3.zip
+[v5.5.0]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.0.zip
+[v5.4.3]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.4.3.zip
+[v5.4.1]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.4.1.zip
+[v5.3.7]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.3.7-8.zip
+[v5.3.5]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.3.5-6.zip
+[v5.3.3]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.3.3-4.zip
+[v5.3.2]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.3.2.zip
+[v5.2.3]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.2.3.zip
+[v5.2.2]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.2.2.zip
+[v4]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v4.zip
+[default]https://github.com/rdipardo/delphiplugintemplate/archive/refs/heads/default.zip
 
 Or, clone the repository and check out a tag, for example:
 
@@ -63,7 +63,7 @@ Run the install script with the name of a project directory, e.g.:
 bc. install %USERPROFILE%\projects\MyPlugin
 
 *Note*
-Remember to edit the DLL attach hook in "$":Source/Units/DLLExports.pas with the actual name of your plugin class instance and type:
+Remember to edit the DLL attach hook in "DLLExports.pas":Source/Units/DLLExports.pas with the actual name of your plugin class instance and type:
 
 bc[pascal]. case dwReason of
 DLL_PROCESS_ATTACH:
@@ -78,13 +78,13 @@ end;
 
 h2. Supported Features
 
-bq. See the "API documentation":https://rdipardo.bitbucket.io/projects/delphiplugintemplate for more details
+bq. See the "API documentation":https://rdipardo.github.io/delphiplugintemplate for more details
 
 h3. Dark Mode Icons (Notepad++ 8.0 and later)
 
 !{border: 0}https://i.ibb.co/H2B7cwq/npp-8-7-0-x64-dark-detail.png(npp-8-7-0-x64-dark-detail)!
 
-Plugin API messages provided by "$":Source/Include/Npp.inc:
+Plugin API messages provided by "Npp.inc":Source/Include/Npp.inc:
 
 * @NPPM_ADDTOOLBARICON_FORDARKMODE@[1]
 * @NPPM_ADDTOOLBARICON_DEPRECATED@[2]
@@ -92,11 +92,11 @@ Plugin API messages provided by "$":Source/Include/Npp.inc:
 *Note*
 @NPPM_ADDTOOLBARICON_DEPRECATED@ is defined as an alias for the older @NPPM_ADDTOOLBARICON@ message, so standard toolbar icons will still work in versions of Notepad++ before 8.0. Your plugin can use either message interchangeably.
 
-Types provided by "$":Source/Include/Npp.inc:
+Types provided by "Npp.inc":Source/Include/Npp.inc:
 
 * @TTbIconsDarkMode@[3]
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.SupportsDarkMode@ - returns @true@ if the running editor is at least version 8.0
 
@@ -106,7 +106,7 @@ h3. Huge File Support (64-bit Notepad++ 8.3 and later)
 Since "version 8.3":8.3, x64 builds of Notepad++ can open files of >2GiB.
 To support these Notepad++ versions, 64-bit plugins that call any Scintilla APIs _*must*_ be able to handle 64-bit character positions.
 
-The definitions provided in "$":Source/Include/Scintilla.inc will support huge files without any configuration.
+The definitions provided in "Scintilla.inc":Source/Include/Scintilla.inc will support huge files without any configuration.
 
 h4. 64-bit DLLs compiled with the default Scintilla definitions are compatible with Notepad++ >= 8.3 _*ONLY!*_
 
@@ -138,21 +138,21 @@ bc[pascal]. {$IFDEF CPUx64}
 
 h3. Dark Mode Notification API (Notepad++ 8.4.1 and later)
 
-API messages provided by "$":Source/Include/Npp.inc:
+API messages provided by "Npp.inc":Source/Include/Npp.inc:
 
 * @NPPM_ISDARKMODEENABLED@[4]
 * @NPPM_GETDARKMODECOLORS@[5]
 * @NPPN_DARKMODECHANGED@[6]
 
-Constants defined in "$":Source/Include/Docking.inc:
+Constants defined in "Docking.inc":Source/Include/Docking.inc:
 
 * @DWS_USEOWNDARKMODE@[7]
 
-Types provided by "$":Source/Include/DarkMode.inc:
+Types provided by "DarkMode.inc":Source/Include/DarkMode.inc:
 
 * @TDarkModeColors@[8]
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.IsDarkModeEnabled@ - returns @true@ if the dark mode setting can be detected by sending the @NPPM_ISDARKMODEENABLED@ message
 * @TNppPlugin.GetDarkModeColors@ - initializes an instance of @TDarkModeColors@ with the editor's active dark mode styles; use them to dynamically style form components at runtime
@@ -163,34 +163,34 @@ h3. @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ (Notepad++ 8.4.8 and 
 Added to Scintilla 5.3.2 to minimize the visual impact of text replacement when "change history":https://scintilla.org/ScintillaDoc.html#ChangeHistory is enabled.
 @SCI_GETSTYLEDTEXTFULL@ was a late addition to the 64-bit APIs introduced in 5.2.3.
 
-Types provided by "$":Source/Include/SciApi.inc:
+Types provided by "SciApi.inc":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_GTE_532@ - the running editor's version of Scintilla is at least 5.3.2
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasMinimalReplacementApi@ - returns @true@ if the @SCI_REPLACETARGETMINIMAL@ and @SCI_GETSTYLEDTEXTFULL@ APIs are available
 
 
 h3. Dark Mode Theme API (Notepad++ 8.5.4 and later)
 
-API messages provided by "$":Source/Include/Npp.inc:
+API messages provided by "Npp.inc":Source/Include/Npp.inc:
 
 * @NPPM_DARKMODESUBCLASSANDTHEME@[9]
 
-Bit masks defined in "$":Source/Include/DarkMode.inc:
+Bit masks defined in "DarkMode.inc":Source/Include/DarkMode.inc:
 
 * @dmfInit@[10]
 * @dmfHandleChange@[11]
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.SupportsDarkModeSubclassing@ - returns @true@ if the @NPPM_DARKMODESUBCLASSANDTHEME@ API is available; accessed through the @CanSubclass@ property
 
 
 h3. Menu Localization API (Notepad++ 8.7 and later)
 
-API messages provided by "$":Source/Include/Npp.inc:
+API messages provided by "Npp.inc":Source/Include/Npp.inc:
 
 * @NPPM_GETNATIVELANGFILENAME@[12]
 * @NPPN_NATIVELANGCHANGED@[13]
@@ -213,24 +213,24 @@ Note that, "since Notepad++ 8.3":8.3, all of the _former_ APIs return 64-bit val
 
 Calling any of the six APIs above is functionally equivalent in Notepad++ 8.4.3 or later.
 However, a future version of Scintilla will "deprecate the former APIs":sciNext (the ones without the @*FULL@ suffix).
-For forward compatibility, the following types are provided by '"$":Source/Include/Scintilla.inc:
+For forward compatibility, the following types are provided by "Scintilla.inc":Source/Include/Scintilla.inc:
 
 * @TSciTextRangeFull@
 * @TSciTextToFindFull@
 * @TSciRangeToFormatFull@
 
-Types provided by "$":Source/Include/SciApi.inc:
+Types provided by "SciApi.inc":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_GTE_523@ - the running editor's version of Scintilla is at least 5.2.3
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasFullRangeApis@ - returns @true@ if the @SCI_FINDTEXTFULL@, @SCI_FORMATRANGEFULL@ and @SCI_GETTEXTRANGEFULL@ APIs are available
 
 
 h3. Breaking Changes in Notepad++ 8.4.3 and later
 
-"$":Source/Include/Scintilla.inc no longer provides the @TSearchResultMarking@ type.
+"Scintilla.inc":Source/Include/Scintilla.inc no longer provides the @TSearchResultMarking@ type.
 
 Notepad++ replaced the underlying Scintilla structure with "a custom type":oneMatch that can't be implemented in Object Pascal.
 
@@ -251,12 +251,12 @@ h4. @SCI_GETTEXT@, @SCI_GETSELTEXT@ and @SCI_GETCURLINE@
 Since Scintilla version "5.1.5":sci515, calling any of these three APIs with an empty buffer returns a string length that _does not count the final @NULL@ character_.
 Code paths depending on the old implementation should add 1 to the return value.
 
-Types provided by "$":Source/Include/SciApi.inc:
+Types provided by "SciApi.inc":Source/Include/SciApi.inc:
 
 * @TSciApiLevel.sciApi_LT_5@ - the running editor's version of Scintilla is <= 4.4.6
 * @TSciApiLevel.sciApi_GTE_515@ - the Scintilla version is at least 5.1.5
 
-Methods provided by "$":Source/Units/Common/NppPlugin.pas:
+Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
@@ -300,37 +300,37 @@ SCI_SETBIDIRECTIONAL
 
 h2. Plugin API Reference
 
-fn1. "NPPM_ADDTOOLBARICON_FORDARKMODE":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_FORDARKMODE
+fn1. "NPPM_ADDTOOLBARICON_FORDARKMODE":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_FORDARKMODE
 
-fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_DEPRECATED
+fn2. "NPPM_ADDTOOLBARICON_DEPRECATED":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_ADDTOOLBARICON_DEPRECATED
 
-fn3. "TTbIconsDarkMode":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.TTbIconsDarkMode.html
+fn3. "TTbIconsDarkMode":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.TTbIconsDarkMode.html
 
-fn4. "NPPM_ISDARKMODEENABLED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_ISDARKMODEENABLED
+fn4. "NPPM_ISDARKMODEENABLED":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_ISDARKMODEENABLED
 
-fn5. "NPPM_GETDARKMODECOLORS":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_GETDARKMODECOLORS
+fn5. "NPPM_GETDARKMODECOLORS":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_GETDARKMODECOLORS
 
-fn6. "NPPN_DARKMODECHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_DARKMODECHANGED
+fn6. "NPPN_DARKMODECHANGED":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPN_DARKMODECHANGED
 
-fn7. "DWS_USEOWNDARKMODE":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppDockingForms.html#DWS_USEOWNDARKMODE
+fn7. "DWS_USEOWNDARKMODE":https://rdipardo.github.io/delphiplugintemplate/NppDockingForms.html#DWS_USEOWNDARKMODE
 
-fn8. "TDarkModeColors":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.TDarkModeColors.html
+fn8. "TDarkModeColors":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.TDarkModeColors.html
 
-fn9. "NPPM_DARKMODESUBCLASSANDTHEME":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_DARKMODESUBCLASSANDTHEME
+fn9. "NPPM_DARKMODESUBCLASSANDTHEME":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_DARKMODESUBCLASSANDTHEME
 
-fn10. "NppDarkMode::dmfInit":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#dmfInit
+fn10. "NppDarkMode::dmfInit":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#dmfInit
 
-fn11. "NppDarkMode::dmfHandleChange":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#dmfHandleChange
+fn11. "NppDarkMode::dmfHandleChange":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#dmfHandleChange
 
-fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPM_GETNATIVELANGFILENAME
+fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPM_GETNATIVELANGFILENAME
 
-fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.bitbucket.io/projects/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
+fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
 
 fn14. "Scintilla 5.5.8 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/b06678d73801785f2457d12d1cf641546744c371/scintilla/include/Scintilla.h
 
 
 
-[pkgs]https://bitbucket.org/rdipardo/delphiplugintemplate/wiki/Home?iframe=true#markdown-header-installing-the-template-package
+[pkgs]https://github.com/rdipardo/delphiplugintemplate/wiki/Home#installing-the-template-package
 [upstream]https://sourceforge.net/projects/npp-plugins/files/DelphiPluginTemplate
 [DBGp]https://github.com/zobo/dbgpPlugin
 [D2009]https://www.embarcadero.com/rad-in-action/migration-upgrade-center#unicode
