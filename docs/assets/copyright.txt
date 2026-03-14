@@ -1,0 +1,6 @@
+<hr/>
+<div class="copyright">
+  <div>
+    <small><i>This documentation is in the public domain under the <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt" target="_blank">Creative Commons Zero v1.0 Universal</a> public license.</i></small>
+  </div>
+</div>

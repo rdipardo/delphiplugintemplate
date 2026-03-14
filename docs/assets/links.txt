@@ -3,7 +3,7 @@
 
 @section(1 src Source)
 
-The [source code](https://github.com/rdipardo/delphiplugintemplate) and [wiki pages](https://github.com/rdipardo/delphiplugintemplate/wiki) for the Delphi/Lazarus plugin template are hosted on Bitbucket.
+The [source code](https://github.com/rdipardo/delphiplugintemplate) and [wiki pages](https://github.com/rdipardo/delphiplugintemplate/wiki) for the Delphi/Lazarus plugin template are hosted on GitHub.
 
 @section(1 npp Notepad++)
 

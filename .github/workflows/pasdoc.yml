@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: Public Domain
+# SPDX-License-Identifier: CC0-1.0
+
+name: Website
+
+on:
+  push:
+    branches:
+      - default
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: 'Build API documentation with PasDoc'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write            # to deploy to Pages
+      id-token: write         # to verify the deployment originates from an appropriate source
+
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup PasDoc
+        run: |
+          irm -Uri https://github.com/pasdoc/pasdoc/releases/download/snapshot/pasdoc-0.17.0.snapshot-win64.zip -OutFile pasdoc.zip
+          7z x .\pasdoc.zip -o"$env:TEMP"
+
+      - name: Build
+        run: |
+          $env:PATH += ";$env:TEMP\pasdoc\bin"
+          cmd /c .\build_docs.cmd
+          if (Test-Path -Path .\docs\cache) { rm -r -force .\docs\cache }
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Upload static assets
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: './docs'
+          retention-days: 30
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
