@@ -1,10 +1,10 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.5.8
+  Object Pascal definitions for Scintilla 5.6.0
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
-  Copyright (c) 2025 Robert Di Pardo <dipardo.r@gmail.com>
+  Copyright (c) 2026 Robert Di Pardo <dipardo.r@gmail.com>
   Distributed under the terms of the GNU Lesser General Public License Version 3.0 or later
 }
 type
@@ -1385,6 +1385,8 @@ const
   SCI_RELEASELINECHARACTERINDEX = 2712;
   SCI_LINEFROMINDEXPOSITION = 2713;
   SCI_INDEXPOSITIONFROMLINE = 2714;
+  SCI_GETDRAGDROPENABLED = 2818;
+  SCI_SETDRAGDROPENABLED = 2819;
   SCI_STARTRECORD = 3001;
   SCI_STOPRECORD = 3002;
   SCI_GETLEXER = 4002;
