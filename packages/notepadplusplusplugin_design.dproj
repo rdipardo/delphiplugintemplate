@@ -68,7 +68,7 @@
         <VerInfo_Keys>CompanyName=;FileDescription=Notepad++ plugin template for Delphi and Lazarus (design time components);FileVersion=2015.12.0.0;InternalName=;LegalCopyright=(c) 2008 Damjan Zobo Cvetko, (c) 2022-2025 Robert Di Pardo;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=2015.12.0.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MajorVer>2026</VerInfo_MajorVer>
-        <VerInfo_MinorVer>03</VerInfo_MinorVer>
+        <VerInfo_MinorVer>04</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>

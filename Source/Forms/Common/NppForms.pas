@@ -263,7 +263,6 @@ begin
         Application.HandleMessage;
       end;
     finally
-      FormStyle := fsNormal;
       Result := ModalResult;
     end;
   except
