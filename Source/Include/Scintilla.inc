@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.6.0
+  Object Pascal definitions for Scintilla 5.6.1
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2026 Robert Di Pardo <dipardo.r@gmail.com>
@@ -282,6 +282,7 @@ const
   SCI_SETVIEWWS = 2021;
   SCTD_LONGARROW = 0;
   SCTD_STRIKEOUT = 1;
+  SCTD_CONTROLCHAR = 2;
   SCI_GETTABDRAWMODE = 2698;
   SCI_SETTABDRAWMODE = 2699;
   SCI_POSITIONFROMPOINT = 2022;

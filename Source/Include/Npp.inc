@@ -77,7 +77,7 @@ const
   //! @param sessionFileName [in] the XML session file's full path
   //! @br@br Returns @false on failure, @true on success.
   NPPM_GETSESSIONFILES = (NPPMSG + 14);
-  //! `wchar_t* NPPM_SAVESESSION(0, sessionInfo* si)`
+  //! `wchar_t* NPPM_SAVESESSION(0, @link(PSessionInfo) si)`
   //! @br Save a given set of file paths to a new session file.
   //! @param wParam 0 (not used)
   //! @param si [in] a pointer to a @link(TSessionInfo) structure
@@ -207,13 +207,13 @@ const
   //! @param hDlg [in] the handle of the dialog to redraw
   //! @br@br Returns @true.
   NPPM_DMMUPDATEDISPINFO = (NPPMSG + 32);
-  //! `BOOL NPPM_DMMREGASDCKDLG(0, tTbData* pData)`
+  //! `BOOL NPPM_DMMREGASDCKDLG(0, @link(PDockedWidgetData) pData)`
   //! @br Register a plugin dialog with the Docking Manager.
   //! @param wParam 0 (not used)
-  //! @param(pData [in] a pointer of type @link(PToolbarData).
-  //!        The fields which, at minimum, need to be filled out are @link(TToolbarData.ClientHandle), @link(TToolbarData.Title),
-  //!        @link(TToolbarData.DlgId), @link(TToolbarData.Mask) and @link(TToolbarData.ModuleName).
-  //!        Note that @link(TToolbarData.FloatRect) and @link(TToolbarData.PrevContainer) should **not** be filled. They are used internally.)
+  //! @param(pData [in] a pointer of type @link(PDockedWidgetData).
+  //!        The fields which, at minimum, need to be filled out are @link(TToolbarData.ClientHandle ClientHandle), @link(TToolbarData.Title Title),
+  //!        @link(TToolbarData.DlgId DlgId), @link(TToolbarData.Mask Mask) and @link(TToolbarData.ModuleName ModuleName).
+  //!        Note that @link(TToolbarData.FloatRect FloatRect) and @link(TToolbarData.PrevContainer PrevContainer) should **not** be filled. They are used internally.)
   //! @br@br Returns @true.
   NPPM_DMMREGASDCKDLG = (NPPMSG + 33);
   //! `BOOL NPPM_LOADSESSION(0, wchar_t* sessionFileName)`
@@ -225,7 +225,7 @@ const
   //! `BOOL NPPM_DMMVIEWOTHERTAB(0, wchar_t* name)`
   //! @br Show the docked dialog with the given `name` (or switch to the tab of that dialog in a docking group).
   //! @param wParam 0 (not used)
-  //! @param name [in] the name used to register the dialog (i.e., the @link(TToolbarData.Title) passed to @link(NPPM_DMMREGASDCKDLG))
+  //! @param name [in] the name used to register the dialog (i.e., the @link(TToolbarData.Title DockedWidgetData.Title) passed to @link(NPPM_DMMREGASDCKDLG))
   //! @br@br Returns @true.
   NPPM_DMMVIEWOTHERTAB = (NPPMSG + 35);
   //! `BOOL NPPM_RELOADFILE(BOOL withAlert, wchar_t* filePathName2Reload)`
@@ -304,7 +304,7 @@ const
   //!       (not including the terminating @nil character), allocate the `str` buffer with the return value + 1, then
   //!       call it again to get the directory path.)
   NPPM_GETPLUGINSCONFIGDIR = (NPPMSG + 46);
-  //! `BOOL NPPM_MSGTOPLUGIN(wchar_t* destModuleName, communicationInfo *info)`
+  //! `BOOL NPPM_MSGTOPLUGIN(wchar_t* destModuleName, @link(PCommunicationInfo) info)`
   //! @br Send a private message to the plugin with the given `destModuleName`.
   //! For example, plugin X can execute a command of plugin Y if plugin X knows the command ID and the file name of plugin Y.
   //! @param destModuleName [in] the complete module file name of the destination plugin (including the ".dll" file extension)
@@ -496,7 +496,7 @@ const
   //! @param lParam 0 (not used)
   //! @br@br Returns @true if the status bar is hidden, otherwise @false.
   NPPM_ISSTATUSBARHIDDEN = (NPPMSG + 75);
-  //! `BOOL NPPM_GETSHORTCUTBYCMDID(int cmdID, ShortcutKey* sk)`
+  //! `BOOL NPPM_GETSHORTCUTBYCMDID(int cmdID, @link(PShortcutKey) sk)`
   //! @br Get the shortcut mapped to the plugin command with the given `cmdID`.
   //! @param cmdID [in] plugin command ID
   //! @param sk [out] pre-allocated pointer to a @link(TShortcutKey)
@@ -708,7 +708,7 @@ const
   //! @param lParam 0 (not used)
   //! @br@br Returns the current line number margin width mode: either @link(LINENUMWIDTH_DYNAMIC) or @link(LINENUMWIDTH_CONSTANT).
   NPPM_GETLINENUMBERWIDTHMODE = (NPPMSG + 100);
-  //! `BOOL NPPM_ADDTOOLBARICON_FORDARKMODE(UINT pluginCmdID, toolbarIconsWithDarkMode* iconHandles)`
+  //! `BOOL NPPM_ADDTOOLBARICON_FORDARKMODE(UINT pluginCmdID, @link(PTbIconsDarkMode) iconHandles)`
   //! @param pluginCmdID [in] the plugin command ID corresponding to the toolbar item whose icon will be set; see @link(_TFuncItem.CmdID)
   //! @br Add an icon with a dark mode variant to the toolbar.
   //! @param iconHandles [in] a pointer to a @link(TTbIconsDarkMode) structure
@@ -763,7 +763,7 @@ const
   //! @br@br Returns @true if dark mode is enabled, otherwise @false.
   //! @br@br Added in [8.4.1](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/1eb5b10)
   NPPM_ISDARKMODEENABLED = (NPPMSG + 107);
-  //! `BOOL NPPM_GETDARKMODECOLORS (size_t cbSize, NppDarkMode::Colors* returnColors)`
+  //! `BOOL NPPM_GETDARKMODECOLORS (size_t cbSize, @link(PDarkModeColors) returnColors)`
   //! @br Get the color values of the active dark mode theme.
   //! @param cbSize [in] must be equal to `sizeof(TDarkModeColors)`
   //! @param returnColors [out] a pointer to a @link(TDarkModeColors) structure
@@ -1237,6 +1237,7 @@ type
     //! Array of file names (full path) to be saved in the session
     Files: array of nppPChar;
   end;
+  PSessionInfo = ^TSessionInfo;
 
   //! See @link(NPPM_ADDTOOLBARICON_DEPRECATED)
   //! @deprecated
@@ -1258,6 +1259,7 @@ type
     //! Fluent UI icon handle for dark mode
     ToolbarIconDarkMode: HICON;
   end;
+  PTbIconsDarkMode = ^TTbIconsDarkMode;
 
   //! See @link(NPPM_MSGTOPLUGIN)
   TCommunicationInfo = record
@@ -1268,6 +1270,7 @@ type
     //! Defined by plugin, the information to be exchanged between X and Y. It's a void pointer so it should be defined by plugin Y and known by plugin X.
     info: Pointer;
   end;
+  PCommunicationInfo = ^TCommunicationInfo;
 
   TNppData = packed record
     NppHandle: HWND;
@@ -1309,5 +1312,9 @@ type
     ModuleName:nppPChar; //! Name of module (including the ".dll" file extension). This can be obtained by [GetModuleFileName()](https://learn.microsoft.com/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulefilenamew)
   end;
   PToolbarData = ^TToolbarData;
+
+  //! Type alias for @link(TToolbarData) (added in [8.9.4](https://github.com/notepad-plus-plus/notepad-plus-plus/commit/7b7e621))
+  DockedWidgetData = TToolbarData;
+  PDockedWidgetData = ^DockedWidgetData;
 
 {$ENDIF ~NPP_INC}

@@ -17,7 +17,8 @@ To use the template's design time components in RAD Studio or Lazarus, download 
 Download one of these tagged revisions to target an appropriate API level:
 
 |_. Tag                    |_. Scintilla API version |_. Supported Notepad++ versions |
-| *"default":default*      |  5.6.0                  |  8.9.3+                        |
+| *"default":default*      |  5.6.1                  |  8.9.4+                        |
+| *"v2026.03":v2026.03*    |  5.6.0                  |  8.9.3                         |
 | *"v2026.02":v2026.02*    |  5.5.8                  |  8.8.9 - 8.9.2                 |
 | *"api-v5.5.7":v5.5.7*    |  5.5.7                  |  8.8.2 - 8.8.8                 |
 | *"api-v5.5.6":v5.5.6*    |  5.5.6                  |  8.8 - 8.8.1                   |
@@ -38,6 +39,7 @@ Download one of these tagged revisions to target an appropriate API level:
 |=. _or, with the @NPP_NO_HUGE_FILES@ compiler definition_                            |
 | * 7.9.4 - 8.2.1 (64-bit)                                                            |
 
+[v2026.03]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/v2026.03.zip
 [v2026.02]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/v2026.02.zip
 [v5.5.7]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.7.zip
 [v5.5.6]https://github.com/rdipardo/delphiplugintemplate/archive/refs/tags/api-v5.5.6.zip
@@ -263,7 +265,7 @@ Methods provided by "NppPlugin.pas":Source/Units/Common/NppPlugin.pas:
 * @TNppPlugin.HasV5Apis@ - returns @true@ if the running editor is at least version 8.4, "the first release":8.4 with a Scintilla v5 API
 
 
-h3. Optional Scintilla Features (as of v5.6.0)[14]
+h3. Optional Scintilla Features (as of v5.6.1)[14]
 
 Use these compiler definitions to enable or disable features.
 
@@ -328,7 +330,7 @@ fn12. "NPPM_GETNATIVELANGFILENAME":https://rdipardo.github.io/delphiplugintempla
 
 fn13. "NPPN_NATIVELANGCHANGED":https://rdipardo.github.io/delphiplugintemplate/NppPlugin.html#NPPN_NATIVELANGCHANGED
 
-fn14. "Scintilla 5.6.0 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/832fb5947176c09f69de2f786127176933e2b6c8/scintilla/include/Scintilla.h
+fn14. "Scintilla 5.6.1 definitions":https://github.com/notepad-plus-plus/notepad-plus-plus/blob/fa73138e58bfeb798fc95c7e9f4709e11d6a208e/scintilla/include/Scintilla.h
 
 
 
