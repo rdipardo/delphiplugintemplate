@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.6.1
+  Object Pascal definitions for Scintilla 5.6.2
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2026 Robert Di Pardo <dipardo.r@gmail.com>
@@ -1054,6 +1054,7 @@ const
   SC_STATUS_OK = 0;
   SC_STATUS_FAILURE = 1;
   SC_STATUS_BADALLOC = 2;
+  SC_STATUS_OUTSIDE_DOCUMENT = 3;
   SC_STATUS_WARN_START = 1000;
   SC_STATUS_WARN_REGEX = 1001;
   SCI_SETSTATUS = 2382;
