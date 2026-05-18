@@ -1,12 +1,10 @@
 h1. Notepad++ Plugin Template for Delphi & Lazarus
 
-<div align="center"
   <picture>
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/wiki/rdipardo/delphiplugintemplate/img/npp-895-x64-win11-25-H2.png">
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/wiki/rdipardo/delphiplugintemplate/img/dark/npp-895-x64-win11-25-H2.png">
     <img width="645" alt="Hello-world plugin demo" src="https://raw.githubusercontent.com/wiki/rdipardo/delphiplugintemplate/img/npp-895-x64-win11-25-H2.png">
   </picture>
-</div>
 
 An updated version of the "Delphi plugin template":upstream by "Damjan Zobo Cvetko":https://github.com/zobo, developer of the popular "DBGp":DBGp plugin for the Xdebug server.
 
