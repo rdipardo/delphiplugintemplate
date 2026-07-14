@@ -24,7 +24,7 @@
     </CompilerOptions>
     <Description Value="Notepad++ plugin template for Delphi and Lazarus"/>
     <License Value="GPL-3.0+ AND LGPL-3.0+"/>
-    <Version Major="2026" Minor="04"/>
+    <Version Major="2026" Minor="07"/>
     <Files Count="6">
       <Item1>
         <Filename Value="..\Source\Forms\Common\NppDockingForms.pas"/>

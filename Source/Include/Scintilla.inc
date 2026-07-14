@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.6.2
+  Object Pascal definitions for Scintilla 5.6.4
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2026 Robert Di Pardo <dipardo.r@gmail.com>
@@ -1527,6 +1527,10 @@ const
   SCN_FOLDINGSTATECHANGED = 2081;
 
 {$IFNDEF SCI_DISABLE_PROVISIONAL}
+  SCALE_TECHNIQUE_DEFAULT = 0;
+  SCALE_TECHNIQUE_PIXEL_ALIGNED = 1;
+  SCI_SETSCALETECHNIQUE = 2820;
+  SCI_GETSCALETECHNIQUE = 2821;
   SC_BIDIRECTIONAL_DISABLED = 0;
   SC_BIDIRECTIONAL_L2R = 1;
   SC_BIDIRECTIONAL_R2L = 2;
