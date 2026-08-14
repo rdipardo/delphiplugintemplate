@@ -1,7 +1,7 @@
 {$IFNDEF SCINTILLA_INC}
 {$DEFINE SCINTILLA_INC}
 {
-  Object Pascal definitions for Scintilla 5.6.4
+  Object Pascal definitions for Scintilla 5.6.6
   https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/scintilla/include/Scintilla.h
 
   Copyright (c) 2026 Robert Di Pardo <dipardo.r@gmail.com>
@@ -98,7 +98,7 @@ type
     nmhdr               : TNotifyHeader;
     // SCN_STYLENEEDED, SCN_DOUBLECLICK, SCN_MODIFIED, SCN_MARGINCLICK,
     // SCN_MARGINRIGHTCLICK, SCN_NEEDSHOWN, SCN_DWELLSTART, SCN_DWELLEND,
-    // SCN_CALLTIPCLICK,
+    // SCN_UPDATEUI, SCN_CALLTIPCLICK,
     // SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, SCN_HOTSPOTRELEASECLICK,
     // SCN_INDICATORCLICK, SCN_INDICATORRELEASE,
     // SCN_USERLISTSELECTION, SCN_AUTOCCOMPLETED, SCN_AUTOCSELECTION,
@@ -1453,6 +1453,8 @@ const
   SC_UPDATE_SELECTION = 2;
   SC_UPDATE_V_SCROLL = 4;
   SC_UPDATE_H_SCROLL = 8;
+  SC_UPDATE_TEXT = $10;
+  SC_UPDATE_LINE_COUNT = $20;
   SCEN_CHANGE = 768;
   SCEN_SETFOCUS = 512;
   SCEN_KILLFOCUS = 256;

@@ -60,10 +60,10 @@
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <SanitizedProjectName>notepadplusplusplugin</SanitizedProjectName>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=Notepad++ plugin template for Delphi and Lazarus (runtime package);FileVersion=2025.12.0.0;InternalName=;LegalCopyright=(c) 2008 Damjan Zobo Cvetko, (c) 2022-2025 Robert Di Pardo;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=2025.12.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=Notepad++ plugin template for Delphi and Lazarus (design time components);FileVersion=2026.8.0.0;InternalName=;LegalCopyright=(c) 2008 Damjan Zobo Cvetko, (c) 2022-2026 Robert Di Pardo;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=2026.8.0.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MajorVer>2026</VerInfo_MajorVer>
-        <VerInfo_MinorVer>07</VerInfo_MinorVer>
+        <VerInfo_MinorVer>08</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>

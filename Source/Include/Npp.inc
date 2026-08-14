@@ -658,7 +658,7 @@ const
   //! @br Save the (currently open) file with the given `fileNameToSave`.
   //! @param wParam 0 (not used)
   //! @param fileNameToSave [in] the full path of the file to be saved
-  //! @br@br Returns @true on success, @false on fileNameToSave is not found.
+  //! @br@br Returns @true on success, @false if the file is not found.
   NPPM_SAVEFILE = (NPPMSG + 94);
   //! `BOOL NPPM_DISABLEAUTOUPDATE(0, 0)`
   //! @br Disable automatic updates of Notepad++.
@@ -1177,6 +1177,7 @@ const
   WM_MACRODLGRUNMACRO       = (MACRO_USER + 02);
 
 type
+  //! @note Don't use @link(L_JS_EMBEDDED); use @link(L_JAVASCRIPT) instead.
   TNppLang = (L_TEXT = 0, L_PHP, L_C, L_CPP, L_CS, L_OBJC, L_JAVA, L_RC,
               L_HTML, L_XML, L_MAKEFILE, L_PASCAL, L_BATCH, L_INI, L_ASCII, L_USER,
               L_ASP, L_SQL, L_VB, L_JS_EMBEDDED, L_CSS, L_PERL, L_PYTHON, L_LUA,
@@ -1192,7 +1193,6 @@ type
               L_REGISTRY, L_RUST, L_SPICE, L_TXT2TAGS, L_VISUALPROLOG,
               L_TYPESCRIPT, L_JSON5, L_MSSQL, L_GDSCRIPT, L_HOLLYWOOD,
               L_GOLANG, L_RAKU, L_TOML, L_SAS, L_ERRORLIST, L_ESCSEQ,
-              // Don't use L_JS_EMBEDDED, use L_JAVASCRIPT instead
               // The end of enumerated language type, so it should be always at the end
               L_EXTERNAL);
 
