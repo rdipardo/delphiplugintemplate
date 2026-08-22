@@ -5,9 +5,7 @@ name: Website
 
 on:
   push:
-    branches:
-      - default
-    tags-ignore:
+    tags:
       - '**'
 
 permissions:
@@ -22,6 +20,9 @@ jobs:
     permissions:
       pages: write            # to deploy to Pages
       id-token: write         # to verify the deployment originates from an appropriate source
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref_name }}
+      cancel-in-progress: true
 
     runs-on: windows-latest
     steps:
